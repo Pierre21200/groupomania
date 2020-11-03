@@ -19,8 +19,17 @@ router.get("/", auth, postCtrl.getAllPosts);
 // Voir toutes les catégories
 router.get("/categories", auth, postCtrl.getCategories);
 
+// Voir une seule catégorie et ses posts
+router.get("/categorie", auth, postCtrl.getCategoriesPosts);
+
 // Voir un seul post
 router.get("/:id", auth, postCtrl.getOnePost);
+
+// Modifier un post
+router.patch("/:id", auth, postCtrl.updatePost);
+
+// Modifier un commentaire
+router.patch("/comment/:id", auth, postCtrl.updateComment);
 
 // Supprimer un post
 router.delete("/:id", auth, postCtrl.deletePost);

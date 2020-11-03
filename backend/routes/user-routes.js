@@ -10,6 +10,12 @@ const userCtrl = require("../controllers/user");
 // Voir un profil
 router.get("/:id", auth, userCtrl.getUserProfile);
 
+// Voir tous les posts d'un profil
+router.get("/:id/posts", auth, userCtrl.getUserProfilePosts);
+
+// Voir tous les commentaires d'un profil
+router.get("/:id/comments", auth, userCtrl.getUserProfileComments);
+
 // Modifier profil
 router.patch("/update", auth, multer, userCtrl.updateUserProfile);
 router.put("/update", auth, userCtrl.updatePassword);
