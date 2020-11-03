@@ -13,6 +13,12 @@ router.post("/", auth, multer, postCtrl.createPost);
 // Créer un commentaire
 router.post("/comment", auth, postCtrl.postComment);
 
+// like/dislike comment
+router.post("/comment/reaction", auth, postCtrl.commentReaction);
+
+// like/dislike post
+router.post("/reaction", auth, postCtrl.postReaction);
+
 // Voir tous les posts
 router.get("/", auth, postCtrl.getAllPosts);
 
@@ -20,7 +26,7 @@ router.get("/", auth, postCtrl.getAllPosts);
 router.get("/categories", auth, postCtrl.getCategories);
 
 // Voir une seule catégorie et ses posts
-router.get("/categorie", auth, postCtrl.getCategoriesPosts);
+router.get("/categorie", auth, postCtrl.getCategorie);
 
 // Voir un seul post
 router.get("/:id", auth, postCtrl.getOnePost);
