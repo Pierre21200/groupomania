@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 
 // Error message
-const HttpError = require("../models/http-error");
+const HttpError = require("../models/httpError");
 
 // Middleware config.
 module.exports = (req, res, next) => {

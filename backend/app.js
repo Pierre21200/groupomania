@@ -7,7 +7,7 @@ require("dotenv").config();
 const helmet = require("helmet");
 
 // Error Class
-const HttpError = require("./models/http-error");
+const HttpError = require("./models/httError");
 
 // App Routes
 const signupRoutes = require("./routes/signup-route");
