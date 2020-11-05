@@ -20,7 +20,7 @@ const decodeUid = authorization => {
 };
 
 // POST Create comment
-exports.postComment = (req, res) => {
+exports.createComment = (req, res) => {
   const user = decodeUid(req.headers.authorization);
   const { postId, message } = req.body;
 
@@ -43,21 +43,8 @@ exports.postComment = (req, res) => {
   });
 };
 
-exports.postComment = (req, res) => {
-  const user = decodeUid(req.headers.authorization);
-
-  const sauce = new Sauce({
-    ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-  });
-  sauce
-    .save()
-    .then(() => res.status(201).json({ message: "Sauce enregistré !" }))
-    .catch(error => res.status(400).json({ error }));
-};
-
 // GET All comments from a post
-exports.GetPostComment = (req, res) => {
+exports.getPostComments = (req, res) => {
   const user = decodeUid(req.headers.authorization);
   const { postId } = req.body;
 

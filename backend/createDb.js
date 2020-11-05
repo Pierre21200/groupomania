@@ -14,6 +14,8 @@ const db = mysql.createConnection({
   database: process.env.SQL_DB
 });
 
+const user = `CREATE USER ${process.env.SQL_USER} @ ${process.env.SQL_HOST} IDENTIFIED BY ${process.env.SQl_PASSWD} GRANT ALL PRIVILEGES ON ${process.env.SQl_DB}.* TO ${process.env.SQL_USER}@${process.env.SQL_HOST};`;
+
 // DB Creation
 const schema = `CREATE DATABASE ${process.env.SQL_DB}`;
 
