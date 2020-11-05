@@ -1,24 +1,24 @@
-// Middleware Imports
-const express = require("express");
-const router = express.Router();
-const auth = require("../middleware/auth");
-const multer = require("../middleware/multer-config");
+// // Middleware Imports
+// const express = require("express");
+// const router = express.Router();
+// const auth = require("../middleware/auth");
+// const multer = require("../middleware/multer-config");
 
-// Controller
-const userCtrl = require("../controllers/users");
+// // Controller
+// const userCtrl = require("../controllers/users");
 
-// Login
-router.post("/", userCtrl.login);
+// // Login
+// router.post("/", userCtrl.login);
 
-// Signup
-router.post("/", userCtrl.signup);
+// // Signup
+// router.post("/", userCtrl.signup);
 
-// Get a profil's user
-router.get("/:id", auth, userCtrl.getUserProfile);
+// // Get a profil's user
+// router.get("/:id", auth, userCtrl.getUserProfile);
 
-// Update a profil
-router.put("/:id", auth, multer, userCtrl.updateUserProfile);
-router.put("/:id", auth, userCtrl.updatePassword);
+// // Update a profil
+// router.put("/:id", auth, multer, userCtrl.updateUserProfile);
+// router.put("/:id", auth, userCtrl.updatePassword);
 
-// Execution
-module.exports = router;
+// // Execution
+// module.exports = router;
