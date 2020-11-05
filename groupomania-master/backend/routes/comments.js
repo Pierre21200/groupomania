@@ -11,6 +11,3 @@ router.post("/", auth, commentCtrl.createComment);
 
 // Get all comments from a post
 router.get("/post/:id", auth, commentCtrl.getPostComments);
-
-// Execution
-module.exports = router;
