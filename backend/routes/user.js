@@ -13,10 +13,10 @@ router.post("/", userCtrl.login);
 // Signup
 router.post("/", userCtrl.signup);
 
-// Voir un profil
+// Get a profil's user
 router.get("/:id", auth, userCtrl.getUserProfile);
 
-// Modifier profil
+// Update a profil
 router.patch("/update", auth, multer, userCtrl.updateUserProfile);
 router.put("/update", auth, userCtrl.updatePassword);
 

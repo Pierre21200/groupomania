@@ -32,12 +32,13 @@ exports.createPost = (req, res, next) => {
     return next(new HttpError("Veuillez choisir une image", 400));
   }
 
-  // Query
+  // Query Prepare
   const string =
     "INSERT INTO posts (Users_id, title, image_url) VALUES (?, ?, ? )";
   const inserts = [user.id, title, imageUrl];
   const sql = mysql.format(string, inserts);
 
+  // Query DB
   const createPost = db.query(sql, (error, post) => {
     if (!error) {
       res.status(201).json({ message: "Publication sauvegardée" });
@@ -54,9 +55,10 @@ exports.createPost = (req, res, next) => {
 
 // GET all posts
 exports.getAllPosts = (req, res, next) => {
+  // Query Prepare
   const sql = "SELECT * FROM posts";
 
-  // Requête
+  // Query DB
   const query = db.query(sql, (error, results) => {
     if (!error) {
       res.status(200).json(results);
@@ -75,11 +77,12 @@ exports.getAllPosts = (req, res, next) => {
 exports.getOnePost = (req, res, next) => {
   const { postId } = req.body;
 
+  // Query Prepare
   const string = "SELECT * FROM posts WHERE id = ?";
   const inserts = [postId];
   const sql = mysql.format(string, inserts);
 
-  // Requête
+  // Query DB
   const query = db.query(sql, (error, results) => {
     if (!error) {
       res.status(200).json(results);
@@ -97,11 +100,12 @@ exports.getOnePost = (req, res, next) => {
 // GET All User's Post
 exports.getAllUsersPosts = (req, res, next) => {
   const { userId } = req.body;
+  // Query Prepare
   const string = "SELECT * FROM posts WHERE Users_id = ?";
   const inserts = [userId];
   const sql = mysql.format(string, inserts);
 
-  // Requête
+  // Query DB
   const query = db.query(sql, (error, results) => {
     if (!error) {
       res.status(200).json(results);

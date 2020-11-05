@@ -24,13 +24,13 @@ exports.postComment = (req, res, next) => {
   const user = decodeUid(req.headers.authorization);
   const { postId, message } = req.body;
 
-  // Requête
+  // Query prepare
   const string =
     "INSERT INTO comments (Users_id, Posts_id, message) VALUES (?, ?, ?)";
   const inserts = [user.id, postId, message];
   const sql = mysql.format(string, inserts);
 
-  // Requête
+  // Query DB
   const returnComment = db.query(sql, (error, response) => {
     if (!error) {
       res.status(201).json(response);
@@ -47,12 +47,12 @@ exports.GetPostComment = (req, res, next) => {
   const user = decodeUid(req.headers.authorization);
   const { postId } = req.body;
 
-  // Requête
+  // Query Prepare
   const string = "SELECT * FROM comments WHERE Posts_id = ?";
   const inserts = [postId];
   const sql = mysql.format(string, inserts);
 
-  // Requête
+  // Query DB
   const returnComments = db.query(sql, (error, response) => {
     if (!error) {
       res.status(201).json(response);

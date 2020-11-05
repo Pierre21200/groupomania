@@ -7,20 +7,19 @@ const multer = require("../middleware/multer-config");
 // Controller
 const postCtrl = require("../controllers/post");
 
-// Créer un post
+// Create a post
 router.post("/", auth, multer, postCtrl.createPost);
-// joindre au user
 
-// Voir tous les posts
+// Get all the posts
 router.get("/", auth, postCtrl.getAllPosts);
 
-// Voir un seul post
+// Get one post
 router.get("/:id", auth, postCtrl.getOnePost);
 
-// Voir tous les posts d'un user
+// Get all user's posts
 router.get("/posts/:id", auth, postCtrl.getAllUsersPosts);
 
-// Modérer Post
+// Moderate a post
 router.patch("/:id", auth, postCtrl.updateOnePost);
 
 // Execution

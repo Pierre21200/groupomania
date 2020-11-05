@@ -4,8 +4,6 @@ const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const mysql = require("mysql");
 const validator = require("validator");
-// const passValid = require("secure-password-validator");
-// const passBlackList = require("secure-password-validator/build/main/blacklists/first10_000");
 
 // Error Message
 const HttpError = require("../models/httpError");
@@ -30,11 +28,12 @@ exports.login = (req, res, next) => {
     return next(new HttpError("Veuillez rentrer votre mot de passe", 400));
   }
 
-  // Query Database
+  // Query Prepare
   const string = "SELECT id, email, password FROM users WHERE email = ?";
   const inserts = [email];
   const sql = mysql.format(string, inserts);
 
+  // Query DB
   const query = db.query(sql, (error, user) => {
     // Check user in database
     if (user.length === 0) {
@@ -65,26 +64,6 @@ exports.login = (req, res, next) => {
   });
 };
 
-// Password Validator Options
-// const options = {
-//   // min password length, default = 8, cannot be less than 8
-//   minLength: 8,
-//   // max password length, default = 100, cannot be less than 50
-//   maxLength: 50,
-//   //array with blacklisted passwords default black list with first 1000 most common passwords
-//   blacklist: passBlackList,
-//   // password Must have numbers, default = false
-//   digits: true,
-//   // password Must have letters, default = false
-//   letters: true,
-//   // password Must have uppercase letters, default = false
-//   uppercase: true,
-//   // password Must have lowercase letters, default = false
-//   lowercase: true,
-//   // password Must have symbols letters, default = false
-//   symbols: false
-// };
-
 // POST Create/Signup User
 exports.signup = (req, res, next) => {
   const { firstName, lastName, email, password } = req.body;
@@ -102,12 +81,13 @@ exports.signup = (req, res, next) => {
   if (isFirstName && isLastName && isEmail && isPassword) {
     // Hash password
     bcrypt.hash(password, 10, (error, hash) => {
-      // Save data user in Database
+      // Query Prepare
       const string =
         "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
       const inserts = [firstName, lastName, email, hash];
       const sql = mysql.format(string, inserts);
 
+      // Query DB
       const signupUser = db.query(sql, (error, user) => {
         if (!error) {
           // Sign id and JWT
@@ -163,11 +143,11 @@ const decodeUid = authorization => {
 // GET User Profile
 exports.getUserProfile = (req, res, next) => {
   const { id } = req.params;
-
+  // Query Prepare
   const string = "SELECT firstName, lastName, email FROM users WHERE id = ?";
   const inserts = [id];
   const sql = mysql.format(string, inserts);
-
+  // Query DB
   const query = db.query(sql, (error, profile) => {
     if (!error) {
       res.status(200).json(profile[0]);
@@ -188,12 +168,13 @@ exports.updateUserProfile = (req, res, next) => {
   let isEmail = validator.isEmail(email);
 
   if (isFirstName && isLastName && isEmail) {
+    // Query Prepare
     const string =
       "UPDATE users SET firstName = ?, lastName = ?, email = ?, active = ? WHERE id = ?";
     const inserts = [firstName, lastName, email, active, user.id];
     const sql = mysql.format(string, inserts);
 
-    // Requête
+    // Query DB
     const query = db.query(sql, (error, profile) => {
       if (!error) {
         res.status(200).json({ message: "User Updated successfully!" });
@@ -234,11 +215,12 @@ exports.updatePassword = (req, res, next) => {
   if (passValid.validate(password, options).valid) {
     // Hash New Password
     bcrypt.hash(req.body.password, 10).then(hash => {
+      // Query Prepare
       const string = "UPDATE users SET password = ? WHERE id = ? ";
       const inserts = [hash, user.id];
       const sql = mysql.format(string, inserts);
 
-      // Requête
+      // Query DB
       const query = db.query(sql, (error, password) => {
         if (!error) {
           res.status(201).json({ message: "Password Updated successfully!" });
