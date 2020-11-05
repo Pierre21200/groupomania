@@ -10,5 +10,5 @@ const commentCtrl = require("../controllers/comment");
 // Post comment
 router.post("/", auth, postCtrl.createComment);
 
-// Get all comments from one post
-router.get("/post/:id", auth, postCtrl.getUserComments);
+// Get all comments from a post
+router.get("/post/:id", auth, postCtrl.getPostComments);

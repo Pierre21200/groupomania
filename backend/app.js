@@ -7,13 +7,14 @@ require("dotenv").config();
 const helmet = require("helmet");
 
 // Error Class
-const HttpError = require("./models/httError");
+const HttpError = require("./models/httpError");
 
 // App Routes
-const signupRoutes = require("./routes/signup-route");
-const loginRoutes = require("./routes/login-route");
-const userRoutes = require("./routes/user-routes");
-const postRoutes = require("./routes/posts-routes");
+const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post");
+const commentRoutes = require("./routes/comment");
+
+const app = express();
 
 // Helmet Middleware
 app.use(helmet());
@@ -38,10 +39,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Access Routes
 app.use("/images", express.static(path.join(__dirname, "images")));
-app.use("/signup", signupRoutes);
-app.use("/login", loginRoutes);
-app.use("/profile", userRoutes);
-app.use("/posts", postRoutes);
+app.use("/user", userRoutes);
+app.use("/post", postRoutes);
+app.use("/comment", commentRoutes);
 
 // Error Handling 404
 app.use((req, res, next) => {
