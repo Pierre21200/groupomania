@@ -4,7 +4,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 
 // Controller
-const commentCtrl = require("../controllers/comment");
+const commentCtrl = require("../controllers/comments");
 
 // Post comment
 router.post("/", auth, commentCtrl.createComment);

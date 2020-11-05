@@ -10,9 +10,9 @@ const helmet = require("helmet");
 const HttpError = require("./models/httpError");
 
 // App Routes
-const userRoutes = require("./routes/user");
-const postRoutes = require("./routes/post");
-const commentRoutes = require("./routes/comment");
+const userRoutes = require("./routes/users");
+const postRoutes = require("./routes/posts");
+const commentRoutes = require("./routes/comments");
 
 const app = express();
 

@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const multer = require("../middleware/multer-config");
 
 // Controller
-const userCtrl = require("../controllers/user");
+const userCtrl = require("../controllers/users");
 
 // Login
 router.post("/", userCtrl.login);
@@ -17,7 +17,7 @@ router.post("/", userCtrl.signup);
 router.get("/:id", auth, userCtrl.getUserProfile);
 
 // Update a profil
-router.patch("/:id", auth, multer, userCtrl.updateUserProfile);
+router.put("/:id", auth, multer, userCtrl.updateUserProfile);
 router.put("/:id", auth, userCtrl.updatePassword);
 
 // Execution

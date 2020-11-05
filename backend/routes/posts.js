@@ -5,7 +5,7 @@ const auth = require("../middleware/auth");
 const multer = require("../middleware/multer-config");
 
 // Controller
-const postCtrl = require("../controllers/post");
+const postCtrl = require("../controllers/posts");
 
 // Create a post
 router.post("/", auth, multer, postCtrl.createPost);
@@ -20,7 +20,7 @@ router.get("/:id", auth, postCtrl.getOnePost);
 router.get("/user/:id", auth, postCtrl.getAllUsersPosts);
 
 // Moderate a post
-router.patch("/:id", auth, postCtrl.updateOnePost);
+router.put("/:id", auth, postCtrl.updateOnePost);
 
 // Execution
 module.exports = router;
