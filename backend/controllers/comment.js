@@ -4,7 +4,7 @@ const mysql = require("mysql");
 const fs = require("fs");
 
 // Error Class
-const HttpError = require("../models/http-error");
+const HttpError = require("../models/httpError");
 
 // Database Route
 const db = require("../config/db");

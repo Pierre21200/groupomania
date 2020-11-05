@@ -20,7 +20,7 @@ router.get("/:id", auth, postCtrl.getOnePost);
 router.get("/user/:id", auth, postCtrl.getAllUsersPosts);
 
 // Moderate a post
-router.patch("/:id", auth, postCtrl.updateOnePost);
+// router.patch("/:id", auth, postCtrl.updateOnePost);
 
 // Execution
 module.exports = router;
