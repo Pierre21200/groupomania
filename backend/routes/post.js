@@ -17,7 +17,7 @@ router.get("/", auth, postCtrl.getAllPosts);
 router.get("/:id", auth, postCtrl.getOnePost);
 
 // Get all user's posts
-router.get("/posts/:id", auth, postCtrl.getAllUsersPosts);
+router.get("/user/:id", auth, postCtrl.getAllUsersPosts);
 
 // Moderate a post
 router.patch("/:id", auth, postCtrl.updateOnePost);

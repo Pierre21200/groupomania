@@ -17,8 +17,8 @@ router.post("/", userCtrl.signup);
 router.get("/:id", auth, userCtrl.getUserProfile);
 
 // Update a profil
-router.patch("/update", auth, multer, userCtrl.updateUserProfile);
-router.put("/update", auth, userCtrl.updatePassword);
+router.patch("/:id", auth, multer, userCtrl.updateUserProfile);
+router.put("/:id", auth, userCtrl.updatePassword);
 
 // Execution
 module.exports = router;
