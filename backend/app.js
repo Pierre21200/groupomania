@@ -9,6 +9,9 @@ const helmet = require("helmet");
 // Error Class
 const HttpError = require("./models/httpError");
 
+// Database Route
+const db = require("./config/db");
+
 // App Routes
 const userRoutes = require("./routes/users");
 const postRoutes = require("./routes/posts");
