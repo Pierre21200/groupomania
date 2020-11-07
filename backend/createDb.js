@@ -69,10 +69,6 @@ const runInstall = () => {
       try {
         const users = await runQuery(userTable);
         console.log("Tableau users créé correctement");
-        const categories = await runQuery(categoriesTable);
-        console.log("Tableau categories créé correctement");
-        const categoryValues = await runQuery(InsertCategories);
-        console.log("categories créées correctement");
         const post = await runQuery(postTable);
         console.log("Tableau posts créé correctement");
         const comments = await runQuery(commentsTable);
