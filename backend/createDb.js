@@ -18,14 +18,15 @@ const db = mysql.createConnection({
 const schema = `CREATE DATABASE ${process.env.SQL_DB}`;
 
 // Tables creations
+
 const userTable =
-  "CREATE TABLE `users` (`id` int UNSIGNED AUTO_INCREMENT, `firstName` varchar(45)  utf8_bin NOT NULL, `lastName` varchar(45)  utf8_bin NOT NULL, `email` varchar(45)  utf8_bin NOT NULL, `password` varchar(45)  utf8_bin NOT NULL, 'active' tinyint(1) utf8_bin NOT NULL DEFAULT 1, PRIMARY KEY (`id`), UNIQUE INDEX `email_UNIQUE` (`email`), ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 =utf8_bin;";
+  "CREATE TABLE users (id int UNSIGNED AUTO_INCREMENT, firstName VARCHAR(45) NOT NULL, lastName VARCHAR(45)NOT NULL, email VARCHAR(45)NOT NULL, password VARCHAR(45)NOT NULL, active TINYINT(1)NOT NULL DEFAULT 1, PRIMARY KEY (id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
 const postTable =
-  "CREATE TABLE `posts` (`id` int UNSIGNED AUTO_INCREMENT, `UsersId` int UNSIGNED, `title` varchar(100) utf8_bin NOT NULL, `image_url` text utf8_bin NOT NULL, PRIMARY KEY (`id`,`UsersId`), CONSTRAINT fk_usersId_id FOREIGN KEY (usersId) REFERENCES users(id), ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 =utf8_bin;";
+  "CREATE TABLE posts (id int UNSIGNED AUTO_INCREMENT, UsersId int UNSIGNED, title varchar(100) NOT NULL, image_url text NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
 const commentTable =
-  "CREATE TABLE `comments` ( `id` int UNSIGNED AUTO_INCREMENT, `PostsId` int UNSIGNED, `UsersId` int UNSIGNED, `message` varchar(255)  utf8_bin NOT NULL, PRIMARY KEY (`id`,`PostsId`,`UsersId'), CONSTRAINT fk_postsId_usersid_id FOREIGN KEY (postsId usersId) REFERENCES posts(id, usersId), ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 =utf8_bin;";
+  "CREATE TABLE comments ( id int UNSIGNED AUTO_INCREMENT, PostsId int UNSIGNED, UsersId int UNSIGNED, message varchar(255) NOT NULL, PRIMARY KEY (id)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
 
 const runQuery = query => {
   return new Promise((resolve, reject) => {
@@ -71,12 +72,8 @@ const runInstall = () => {
         console.log("Tableau users créé correctement");
         const post = await runQuery(postTable);
         console.log("Tableau posts créé correctement");
-        const comments = await runQuery(commentsTable);
+        const comments = await runQuery(commentTable);
         console.log("Tableau comments créé correctement");
-        const reactions = await runQuery(reactionsTable);
-        console.log("Tableaux reactions créé correctement");
-        const selectInfo = await runQuery(globalSelect);
-        console.log("option global select activée");
         console.log("Votre base de données a été bien configurée");
         console.log("--- Fin du programme ---");
         process.exit();

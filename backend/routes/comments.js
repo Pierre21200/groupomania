@@ -7,7 +7,7 @@ const auth = require("../middleware/auth");
 const commentCtrl = require("../controllers/comments");
 
 // Post comment
-router.post("/", auth, commentCtrl.createComment);
+router.post("/create", auth, commentCtrl.createComment);
 
 // Get all comments from a post
 router.get("/post/:id", auth, commentCtrl.getPostComments);

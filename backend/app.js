@@ -37,11 +37,11 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Access Routes
+// Access Routes : au pluriel !!
 app.use("/images", express.static(path.join(__dirname, "images")));
-app.use("/user", userRoutes);
-app.use("/post", postRoutes);
-app.use("/comment", commentRoutes);
+app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
+app.use("/comments", commentRoutes);
 
 // Error Handling 404
 app.use((req, res, next) => {

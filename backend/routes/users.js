@@ -8,17 +8,17 @@ const multer = require("../middleware/multer-config");
 const userCtrl = require("../controllers/users");
 
 // Login
-router.post("/", userCtrl.login);
+router.post("/login", userCtrl.login);
 
 // Signup
-router.post("/", userCtrl.signup);
+router.post("/signup", userCtrl.signup);
 
 // Get a profil's user
 router.get("/:id", auth, userCtrl.getUserProfile);
 
 // Update a profil
-router.put("/:id", auth, multer, userCtrl.updateUserProfile);
-router.put("/:id", auth, userCtrl.updatePassword);
+router.put("/:id/profil", auth, multer, userCtrl.updateUserProfile);
+router.put("/profil/:id/password", auth, userCtrl.updatePassword);
 
 // Execution
 module.exports = router;
