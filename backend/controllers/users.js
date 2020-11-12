@@ -1,9 +1,12 @@
+"use strict";
 // Middleware Imports
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const fs = require("fs");
 const mysql = require("mysql");
 const validator = require("validator");
+const model = require("../models/users");
+const Sequelize = require("sequelize");
 
 // Error Message
 const HttpError = require("../models/httpError");
@@ -131,71 +134,33 @@ exports.login = (req, res) => {
 //   }
 // };
 
-// POST Create/Signup User
 exports.signup = (req, res) => {
   console.log("signup");
   const { firstName, lastName, email, password } = req.body;
-  console.log(firstName);
+  console.log(firstName, lastName, email, password);
+  const hash = bcrypt.hash(password, 10);
 
-  // RegEx Text
-  const regExText = /^[A-ZÀÂÆÇÉÈÊËÏÎÔŒÙÛÜŸ \'\- ]+$/i;
+  // vérifier email unique
 
-  // Check data user
-  // let isFirstName = validator.matches(String(firstName), regExText);
-  // let isLastName = validator.matches(String(lastName), regExText);
-  // let isEmail = validator.isEmail(String(email));
-
-  // If check is ok
-  if (firstName && lastName && email && password) {
-    console.log("first name last name ok");
-    // Hash password
-    bcrypt.hash(password, 10, (error, hash) => {
-      // Query Prepare
-      const string =
-        "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
-      const inserts = [firstName, lastName, email, hash];
-      const sql = mysql.format(string, inserts);
-
-      // Query DB
-      const signupUser = db.query(sql, (error, user) => {
-        console.log(error, user);
-        if (!error) {
-          // Sign id and JWT
-          res.status(201).json({
-            message: "Utilisateur créé correctement",
-            userId: user.insertId,
-            account: "user",
-            token: jwt.sign(
-              {
-                userId: user.insertId,
-                account: "user"
-              },
-              process.env.JWT_SECRET,
-              {
-                expiresIn: process.env.JWT_EXPIRES
-              }
-            )
-          });
-        } else {
-          return new HttpError("Utilisateur déjà existant", 400);
-        }
-      });
+  model.User.create({
+    fisrtName: firstName,
+    lastName: lastName,
+    email: email,
+    password: password
+  })
+    .then(user => {
+      return user.destroy();
+    })
+    .then(destroy => {
+      //traitement terminé...
+    })
+    .catch(function (e) {
+      //gestion erreur
     });
-  } else if (!isFirstName || !isLastName || !isEmail) {
-    // Error Handling
-    let errorMessages = [];
 
-    let anws = !isFirstName ? errorMessages.push(" Prénom") : "";
-    anws = !isLastName ? errorMessages.push(" Nom") : "";
-    anws = !isEmail ? errorMessages.push(" E-mail") : "";
+  res.status(201).json({ message: "Utilisateur créé avec succès !" });
 
-    errorMessages = errorMessages.join();
-
-    return new HttpError(
-      "Veuillez vérifier les champs suivants :" + errorMessages,
-      400
-    );
-  }
+  // requête post
 };
 
 // UserID decoder
