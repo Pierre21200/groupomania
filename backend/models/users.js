@@ -15,7 +15,11 @@ const User = sequelize.define(
   "user",
   {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
-    firstName: { type: Sequelize.STRING(255), allowNull: false },
+    firstName: {
+      type: Sequelize.STRING(255),
+      allowNull: false,
+      notNull: { args: true, msg: "You must enter a name" }
+    },
     lastName: { type: Sequelize.STRING(255), allowNull: false },
     email: { type: Sequelize.STRING(255), allowNull: false },
     password: { type: Sequelize.STRING(255), allowNull: false }
