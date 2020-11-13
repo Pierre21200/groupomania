@@ -66,21 +66,41 @@ exports.login = (req, res) => {
 };
 
 exports.signup = (req, res) => {
+  // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
   console.log("signup");
   const { firstName, lastName, email, password } = req.body;
   console.log(firstName, lastName, email, password);
-  const hash = bcrypt.hash(password, 10);
 
-  // vérifier email unique
-  const nouveau = model.User.create({
-    fisrtName: firstName,
-    lastName: lastName,
-    email: email,
-    password: password
+  if (!firstName || !lastName || !email || !password) {
+    res.status(400).json({ error: "Un paramètre est manquant" });
+  }
+
+  model.User.findOne({
+    attributes: ["email"],
+    where: { email: email }
+  }).then(user => {
+    if (!user) {
+      bcrypt.hash(password, 10, function (err, bcryptPassword) {
+        // Création de l'user
+        const newUser = model.User.create({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: bcryptPassword
+        })
+          .then(newUser => {
+            res.status(201).json({ id: newUser.id });
+          })
+          .catch(err => {
+            res.status(500).json({ err });
+          });
+      });
+    } else {
+      res
+        .status(409)
+        .json({ error: "Cette adresse email est déjà lié à un utilisateur" });
+    }
   });
-
-  res.status(201).json({ message: "Utilisateur créé avec succès !" });
-  // requête post
 };
 
 // UserID decoder
