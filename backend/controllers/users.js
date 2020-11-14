@@ -14,57 +14,39 @@ const HttpError = require("../models/httpError");
 
 // POST Login User
 exports.login = (req, res) => {
+  console.log("login");
   const { email, password } = req.body;
+  console.log(email, password);
 
-  // Check Input
-  if (!email && !password) {
-    return new HttpError("Veuillez rentrer vos identifiants", 400);
+  if (!email || !password) {
+    res.status(400).json({ error: "Un paramètre est manquant" });
   }
 
-  if (!email) {
-    return new HttpError("Veuillez rentrer votre email", 400);
-  }
-
-  if (!password) {
-    return new HttpError("Veuillez rentrer votre mot de passe", 400);
-  }
-
-  // Query Prepare
-  const string = "SELECT id, email, password FROM users WHERE email = ?";
-  const inserts = [email];
-  const sql = mysql.format(string, inserts);
-
-  // Query DB
-  const query = db.query(sql, (error, user) => {
-    // Check user in database
-    if (user.length === 0) {
-      return new HttpError("Votre adresse e-mail n'est pas valide", 401);
-    }
-
-    // Compare hash and password
-    bcrypt.compare(password, user[0].password).then(valid => {
-      if (!valid) {
-        return new HttpError("Votre mot de passe n'est pas valide", 401);
-      }
-      // Sign id and JWT
-      res.status(200).json({
-        userId: user[0].id,
-        account: user[0].account,
-        token: jwt.sign(
-          {
-            userId: user[0].id,
-            account: user[0].account
-          },
-          process.env.JWT_SECRET,
-          {
-            expiresIn: process.env.JWT_EXPIRES
-          }
-        )
+  model.User.findOne({
+    where: { email: email }
+  }).then(user => {
+    if (!user) {
+      res.status(401).json({
+        error: "Utilisateur non trouvé"
       });
-    });
+    } else {
+      console.log(user.password);
+      bcrypt.compare(password, user.password).then(valid => {
+        if (!valid) {
+          return res.status(401).json({ error: "Mot de passe incorrect !" });
+        }
+        res.status(200).json({
+          userId: user._id,
+          token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+            expiresIn: "24h"
+          })
+        });
+      });
+    }
   });
 };
 
+// POST Signup User
 exports.signup = (req, res) => {
   // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
   console.log("signup");
