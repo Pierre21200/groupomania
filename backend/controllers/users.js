@@ -12,7 +12,7 @@ const HttpError = require("../models/httpError");
 
 // Database Route
 
-// POST Login User
+// POST Login User (à jour sequelize)
 exports.login = (req, res) => {
   console.log("login");
   const { email, password } = req.body;
@@ -46,7 +46,7 @@ exports.login = (req, res) => {
   });
 };
 
-// POST Signup User
+// POST Signup User (à jour sequelize)
 exports.signup = (req, res) => {
   // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
   console.log("signup");
@@ -95,24 +95,22 @@ const decodeUid = authorization => {
   };
 };
 
-// GET User Profile
+// GET User Profile (pas à jour)
 exports.getUserProfile = (req, res) => {
-  const { id } = req.params;
-  // Query Prepare
-  const string = "SELECT firstName, lastName, email FROM users WHERE id = ?";
-  const inserts = [id];
-  const sql = mysql.format(string, inserts);
-  // Query DB
-  const query = db.query(sql, (error, profile) => {
-    if (!error) {
-      res.status(200).json(profile[0]);
+  const { id } = req.params; // a voir si on prend l'id ici
+  model.User.findOne({
+    where: { id: id }
+  }).then(user => {
+    if (!user) {
+      res.status(401).json({
+        error: "Utilisateur non trouvé"
+      });
     } else {
-      return new HttpError("Utilisateur non trouvé", 404);
+      res.status(201).json({});
     }
   });
 };
-
-// PATCH User Profile
+// PATCH User Profile (pas à jour)
 exports.updateUserProfile = (req, res) => {
   const user = decodeUid(req.headers.authorization);
   const { firstName, lastName, email, active } = req.body;
@@ -157,7 +155,7 @@ exports.updateUserProfile = (req, res) => {
   }
 };
 
-// PUT User Password
+// PUT User Password (pas à jour)
 exports.updatePassword = (req, res) => {
   const user = decodeUid(req.headers.authorization);
   const { password } = req.body;
