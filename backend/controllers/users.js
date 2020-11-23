@@ -9,6 +9,7 @@ const model = require("../models/users");
 
 // Error Message
 const HttpError = require("../models/httpError");
+const { Console } = require("console");
 
 // Database Route
 
@@ -31,13 +32,14 @@ exports.login = (req, res) => {
       });
     } else {
       console.log(user.password);
+
       bcrypt.compare(password, user.password).then(valid => {
         if (!valid) {
           return res.status(401).json({ error: "Mot de passe incorrect !" });
         }
         res.status(200).json({
-          userId: user._id,
-          token: jwt.sign({ userId: user._id }, "RANDOM_TOKEN_SECRET", {
+          userId: user.id,
+          token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
             expiresIn: "24h"
           })
         });
@@ -61,6 +63,7 @@ exports.signup = (req, res) => {
     attributes: ["email"],
     where: { email: email }
   }).then(user => {
+    console.log(user);
     if (!user) {
       bcrypt.hash(password, 10, function (err, bcryptPassword) {
         // Création de l'user
@@ -95,8 +98,9 @@ const decodeUid = authorization => {
   };
 };
 
-// GET User Profile (pas à jour)
+// GET User Profile (à jour sequelize mais problème d'auth)
 exports.getUserProfile = (req, res) => {
+  console.log("ah");
   const { id } = req.params; // a voir si on prend l'id ici
   model.User.findOne({
     where: { id: id }
@@ -106,82 +110,84 @@ exports.getUserProfile = (req, res) => {
         error: "Utilisateur non trouvé"
       });
     } else {
-      res.status(201).json({});
+      res.status(201).json({ user });
     }
   });
 };
-// PATCH User Profile (pas à jour)
+
+// PATCH User Profile (à jour sequelize mais problème auth)
 exports.updateUserProfile = (req, res) => {
-  const user = decodeUid(req.headers.authorization);
-  const { firstName, lastName, email, active } = req.body;
+  const { firstName, lastName, email } = req.body;
 
-  // Validation des donnés
-  let isFirstName = validator.matches(firstName, regExText);
-  let isLastName = validator.matches(lastName, regExText);
-  let isEmail = validator.isEmail(email);
+  // attention , ici c'est bien decodeUid qu'il faut conserver, mais comme problème auth, on fait autrement pour tester sur postman
+  // const user = decodeUid(req.headers.authorization);
+  // User.update(
+  //   { firstName: firstName, lastName: lastName, email: email },
+  //   {
+  //     where: {
+  //       id: user.id
+  //     }
+  //   }
+  // );
 
-  if (isFirstName && isLastName && isEmail) {
-    // Query Prepare
-    const string =
-      "UPDATE users SET firstName = ?, lastName = ?, email = ?, active = ? WHERE id = ?";
-    const inserts = [firstName, lastName, email, active, user.id];
-    const sql = mysql.format(string, inserts);
+  const { id } = req.params;
+  console.log(firstName);
+  console.log(id);
 
-    // Query DB
-    const query = db.query(sql, (error, profile) => {
-      if (!error) {
-        res.status(200).json({ message: "User Updated successfully!" });
-      } else {
-        return new HttpError(
-          "Erreur de requête, la mise à jour du profil n'a pas été faite",
-          500
-        );
+  model.User.update(
+    { firstName: firstName, lastName: lastName, email: email },
+    {
+      where: {
+        id: id
       }
-    });
-  } else if (!isFirstName || !isLastName || !isEmail) {
-    // Error Handling
-    let errorMessages = [];
-    let answ;
-    answ = !isFirstName ? errorMessages.push(" Prénom") : "";
-    answ = !isLastName ? errorMessages.push(" Nom") : "";
-    answ = !isEmail ? errorMessages.push(" E-mail") : "";
-
-    errorMessages = errorMessages.join();
-
-    return new HttpError(
-      "Veuillez vérifier les champs suivants :" + errorMessages,
-      400
-    );
-  }
+    }
+  ).then(() => res.status(201).json({}));
 };
 
 // PUT User Password (pas à jour)
 exports.updatePassword = (req, res) => {
-  const user = decodeUid(req.headers.authorization);
-  const { password } = req.body;
+  console.log("updatePassword");
+  const { password, newPassword } = req.body;
+  // const user = decodeUid(req.headers.authorization);
+  // bcrypt.hash(password, 10).then(hash => {
+  //   model.User.update(
+  //     { password: hash },
+  //     {
+  //       where: {
+  //         id: user.id
+  //       }
+  //     }
+  //   );
+  // });
 
-  // Check New Password
-  if (passValid.validate(password, options).valid) {
-    // Hash New Password
-    bcrypt.hash(req.body.password, 10).then(hash => {
-      // Query Prepare
-      const string = "UPDATE users SET password = ? WHERE id = ? ";
-      const inserts = [hash, user.id];
-      const sql = mysql.format(string, inserts);
+  //comparer le password tapé avec celui du user connecté
 
-      // Query DB
-      const query = db.query(sql, (error, password) => {
-        if (!error) {
-          res.status(201).json({ message: "Password Updated successfully!" });
-        } else {
-          return new HttpError(
-            "Erreur de requête, la mise à jour du mot de passe n'a pas été faite",
-            500
+  const { id } = req.params;
+  model.User.findOne({
+    where: { id: id }
+  }).then(user => {
+    bcrypt.compare(password, user.password).then(valid => {
+      console.log(valid);
+      if (!valid) {
+        return res.status(401).json({ error: "Mot de passe incorrect !" });
+      } else if (password === newPassword) {
+        return res
+          .status(401)
+          .json({ error: "Nouveau mot de passe identique" });
+      }
+      bcrypt
+        .hash(newPassword, 10)
+        .then(hash => {
+          model.User.update(
+            { password: hash },
+            {
+              where: {
+                id: id
+              }
+            }
           );
-        }
-      });
+        })
+        .then(() => res.status(201).json({ user }));
     });
-  } else {
-    return new HttpError("Votre mot de passe n'est pas valide", 401);
-  }
+  });
 };

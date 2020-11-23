@@ -14,11 +14,11 @@ router.post("/login", userCtrl.login);
 router.post("/signup", userCtrl.signup);
 
 // Get a profil's user
-router.get("/:id", auth, userCtrl.getUserProfile);
+router.get("/:id", userCtrl.getUserProfile);
 
 // Update a profil
-router.put("/:id/profil", auth, multer, userCtrl.updateUserProfile);
-router.put("/profil/:id/password", auth, userCtrl.updatePassword);
+router.put("/:id/profil", multer, userCtrl.updateUserProfile);
+router.put("/:id/profil/password", userCtrl.updatePassword);
 
 // Execution
 module.exports = router;
