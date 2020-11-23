@@ -2,6 +2,7 @@
 const jwt = require("jsonwebtoken");
 const mysql = require("mysql");
 const fs = require("fs");
+const model = require("../models/users");
 
 // Error Class
 const HttpError = require("../models/httpError");
@@ -19,36 +20,28 @@ const decodeUid = authorization => {
   };
 };
 
-// POST Create Post
+// POST Create Post (à jour sans auth)
 exports.createPost = (req, res) => {
-  const user = decodeUid(req.headers.authorization);
-  const { title } = req.body;
-  const imageUrl = `${req.protocol}://${req.get("host")}/images/${
-    req.file.filename
-  }`;
+  const { title, content } = req.body;
+  const userId = req.params; // on utilisera plutôt decodeUid
 
-  // Check image
-  if (req.body.image === "null") {
-    return new HttpError("Veuillez choisir une image", 400);
+  // Check data
+  if (!title || !content || !userId) {
+    res.status(400).json({ error: "Un paramètre est manquant" });
   }
 
   // Query Prepare
-  const string =
-    "INSERT INTO posts (Users_id, title, image_url) VALUES (?, ?, ? )";
-  const inserts = [user.id, title, imageUrl];
-  const sql = mysql.format(string, inserts);
-
-  // Query DB
-  const createPost = db.query(sql, (error, post) => {
-    if (!error) {
-      res.status(201).json({ message: "Publication sauvegardée" });
-    } else {
-      return new HttpError(
-        "Erreur de requête, la publication n'a pas été créée",
-        500
-      );
-    }
-  });
+  model.Post.create({
+    titlePost: title,
+    content: content,
+    userId: userId
+  })
+    .then(newPost => {
+      res.status(201).json({ newPost });
+    })
+    .catch(err => {
+      res.status(500).json({ err });
+    });
 };
 
 // GET all posts

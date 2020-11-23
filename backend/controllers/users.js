@@ -2,16 +2,48 @@
 // Middleware Imports
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
-const mysql = require("mysql");
-const validator = require("validator");
 const model = require("../models/users");
 
-// Error Message
-const HttpError = require("../models/httpError");
-const { Console } = require("console");
-
 // Database Route
+
+// POST Signup User (à jour sequelize)
+exports.signup = (req, res) => {
+  // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
+  console.log("signup");
+  const { firstName, lastName, email, password } = req.body;
+  console.log(firstName, lastName, email, password);
+
+  if (!firstName || !lastName || !email || !password) {
+    res.status(400).json({ error: "Un paramètre est manquant" });
+  }
+
+  model.User.findOne({
+    attributes: ["email"],
+    where: { email: email }
+  }).then(user => {
+    console.log(user);
+    if (!user) {
+      bcrypt.hash(password, 10).then(hash => {
+        model.User.create({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          password: hash
+        })
+          .then(() => {
+            res.status(201).json({});
+          })
+          .catch(err => {
+            res.status(500).json({ err });
+          });
+      });
+    } else {
+      res
+        .status(409)
+        .json({ error: "Cette adresse email est déjà lié à un utilisateur" });
+    }
+  });
+};
 
 // POST Login User (à jour sequelize)
 exports.login = (req, res) => {
@@ -47,48 +79,7 @@ exports.login = (req, res) => {
     }
   });
 };
-
-// POST Signup User (à jour sequelize)
-exports.signup = (req, res) => {
-  // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
-  console.log("signup");
-  const { firstName, lastName, email, password } = req.body;
-  console.log(firstName, lastName, email, password);
-
-  if (!firstName || !lastName || !email || !password) {
-    res.status(400).json({ error: "Un paramètre est manquant" });
-  }
-
-  model.User.findOne({
-    attributes: ["email"],
-    where: { email: email }
-  }).then(user => {
-    console.log(user);
-    if (!user) {
-      bcrypt.hash(password, 10, function (err, bcryptPassword) {
-        // Création de l'user
-        const newUser = model.User.create({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: bcryptPassword
-        })
-          .then(newUser => {
-            res.status(201).json({ id: newUser.id });
-          })
-          .catch(err => {
-            res.status(500).json({ err });
-          });
-      });
-    } else {
-      res
-        .status(409)
-        .json({ error: "Cette adresse email est déjà lié à un utilisateur" });
-    }
-  });
-};
-
-// UserID decoder
+// UserID decoder (non utilisé car problème d'auth)
 const decodeUid = authorization => {
   const token = authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
@@ -149,19 +140,8 @@ exports.updatePassword = (req, res) => {
   console.log("updatePassword");
   const { password, newPassword } = req.body;
   // const user = decodeUid(req.headers.authorization);
-  // bcrypt.hash(password, 10).then(hash => {
-  //   model.User.update(
-  //     { password: hash },
-  //     {
-  //       where: {
-  //         id: user.id
-  //       }
-  //     }
-  //   );
-  // });
 
   //comparer le password tapé avec celui du user connecté
-
   const { id } = req.params;
   model.User.findOne({
     where: { id: id }
