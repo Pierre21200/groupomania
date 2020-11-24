@@ -83,6 +83,6 @@ Comment.associate = models => {
 };
 
 sequelize.sync({});
-exports.User = User;
 exports.Post = Post;
 exports.Comment = Comment;
+exports.User = User;

@@ -9,9 +9,7 @@ const model = require("../models/users");
 // POST Signup User (à jour sequelize)
 exports.signup = (req, res) => {
   // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
-  console.log("signup");
   const { firstName, lastName, email, password } = req.body;
-  console.log(firstName, lastName, email, password);
 
   if (!firstName || !lastName || !email || !password) {
     res.status(400).json({ error: "Un paramètre est manquant" });
@@ -31,7 +29,7 @@ exports.signup = (req, res) => {
           password: hash
         })
           .then(() => {
-            res.status(201).json({});
+            res.status(201).json({ email });
           })
           .catch(err => {
             res.status(500).json({ err });
@@ -64,7 +62,6 @@ exports.login = (req, res) => {
       });
     } else {
       console.log(user.password);
-
       bcrypt.compare(password, user.password).then(valid => {
         if (!valid) {
           return res.status(401).json({ error: "Mot de passe incorrect !" });
