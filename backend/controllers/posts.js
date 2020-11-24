@@ -22,9 +22,8 @@ const decodeUid = authorization => {
 
 // POST Create Post (à jour sans auth)
 exports.createPost = (req, res) => {
+  const { userId } = req.body; // avec decodeUid quand auth
   const { title, content } = req.body;
-  const userId = req.params; // on utilisera plutôt decodeUid
-
   // Check data
   if (!title || !content || !userId) {
     res.status(400).json({ error: "Un paramètre est manquant" });
@@ -32,9 +31,9 @@ exports.createPost = (req, res) => {
 
   // Query Prepare
   model.Post.create({
+    userId: userId,
     titlePost: title,
-    content: content,
-    userId: userId
+    content: content
   })
     .then(newPost => {
       res.status(201).json({ newPost });
@@ -44,64 +43,58 @@ exports.createPost = (req, res) => {
     });
 };
 
-// GET all posts
 exports.getAllPosts = (req, res) => {
-  // Query Prepare
-  const sql = "SELECT * FROM posts";
-
-  // Query DB
-  const query = db.query(sql, (error, results) => {
-    if (!error) {
-      res.status(200).json(results);
-    } else {
-      return new HttpError(
-        "Erreur de requête, les posts n'ont pas pu être récupérés",
-        500
-      );
-    }
+  model.Post.findAll({
+    order: [["id", "DESC"]]
+  }).then(allPosts => {
+    res.status(201).json({ allPosts });
   });
 };
 
 // GET one post
 exports.getOnePost = (req, res) => {
-  const { postId } = req.body;
+  const { id } = req.params;
 
   // Query Prepare
-  const string = "SELECT * FROM posts WHERE id = ?";
-  const inserts = [postId];
-  const sql = mysql.format(string, inserts);
-
-  // Query DB
-  const query = db.query(sql, (error, results) => {
-    if (!error) {
-      res.status(200).json(results);
-    } else {
-      return new HttpError(
-        "Erreur de requête, le post n'a pas pu être récupéré",
-        500
-      );
-    }
+  model.Post.findOne({
+    where: { id: id }
+  }).then(post => {
+    res.status(201).json({ post });
   });
 };
 
 // GET All User's Post
+// exports.getAllUsersPosts = (req, res) => {
+//   const { userId } = req.body;
+//   // Query Prepare
+//   const string = "SELECT * FROM posts WHERE Users_id = ?";
+//   const inserts = [userId];
+//   const sql = mysql.format(string, inserts);
+
+//   // Query DB
+//   const query = db.query(sql, (error, results) => {
+//     if (!error) {
+//       res.status(200).json(results);
+//     } else {
+//       return new HttpError(
+//         "Erreur de requête, les posts de cette utilisateur n'ont pas pu être récupérées",
+//         500
+//       );
+//     }
+//   });
+// };
+
 exports.getAllUsersPosts = (req, res) => {
-  const { userId } = req.body;
+  const { id } = req.params; // avec decodeUid
   // Query Prepare
-  const string = "SELECT * FROM posts WHERE Users_id = ?";
-  const inserts = [userId];
-  const sql = mysql.format(string, inserts);
 
   // Query DB
-  const query = db.query(sql, (error, results) => {
-    if (!error) {
-      res.status(200).json(results);
-    } else {
-      return new HttpError(
-        "Erreur de requête, les posts de cette utilisateur n'ont pas pu être récupérées",
-        500
-      );
+  model.Post.findAll({
+    where: {
+      user_id: id
     }
+  }).then(allPosts => {
+    res.status(201).json({ allPosts });
   });
 };
 

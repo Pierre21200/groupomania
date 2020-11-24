@@ -28,17 +28,14 @@ const User = sequelize.define(
 );
 
 User.associate = models => {
-  User.hasMany(
-    models.Posts,
-    { foreignKey: "user_id" },
-    { onDelete: "cascade" }
-  );
+  User.hasMany(models.Post, { foreignKey: "userId" }, { onDelete: "cascade" });
 };
 
 const Post = sequelize.define(
   "post",
   {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+    userId: { type: Sequelize.INTEGER, allowNull: false },
     titlePost: {
       type: Sequelize.STRING(255),
       allowNull: false,
@@ -57,7 +54,7 @@ Post.associate = models => {
   });
   Post.hasMany(
     models.Comments,
-    { foreignKey: "post_id" },
+    { foreignKey: "postId" },
     { onDelete: "cascade" }
   );
 };
