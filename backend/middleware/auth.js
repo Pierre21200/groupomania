@@ -10,6 +10,9 @@ module.exports = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decodedToken.userId;
+    console.log(token);
+    console.log("decodedToken ", decodedToken);
+
     if (req.body.userId && req.body.userId !== userId) {
       throw next(new HttpError("Non authorisé", 401));
     } else {

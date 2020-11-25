@@ -6,77 +6,104 @@ const model = require("../models/users");
 
 // Database Route
 
-// POST Signup User (à jour sequelize)
-exports.signup = (req, res) => {
-  // couvrir toutes les possibilités : email existant, champ non rempli, (regex?)
-  const { firstName, lastName, email, password } = req.body;
+// POST Signup User
+exports.signup = async (req, res) => {
+  try {
+    const { firstName, lastName, email, password } = await req.body;
 
-  if (!firstName || !lastName || !email || !password) {
-    res.status(400).json({ error: "Un paramètre est manquant" });
-  }
-
-  model.User.findOne({
-    attributes: ["email"],
-    where: { email: email }
-  }).then(user => {
-    console.log(user);
-    if (!user) {
-      bcrypt.hash(password, 10).then(hash => {
-        model.User.create({
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          password: hash
-        })
-          .then(() => {
-            res.status(201).json({ email });
-          })
-          .catch(err => {
-            res.status(500).json({ err });
-          });
-      });
-    } else {
-      res
-        .status(409)
-        .json({ error: "Cette adresse email est déjà lié à un utilisateur" });
+    if (!firstName || !lastName || !email || !password) {
+      throw new Error({ message: "Un paramêtre est manquant !" });
     }
-  });
+
+    const userFound = await model.User.findOne({
+      attributes: ["email"],
+      where: { email: email }
+    });
+
+    if (userFound) {
+      throw new Error({ message: "Cet email est déjà utilisé !" });
+    }
+
+    const hash = await bcrypt.hash(password, 10);
+
+    if (!hash) {
+      throw new Error({ message: "pas de hash" });
+    }
+
+    const newUser = await model.User.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: hash
+    });
+
+    if (!newUser) {
+      throw new Error({ message: "L'inscription a échoué" });
+    }
+
+    res.status(201).json({ message: "L'utilisateur a bien été créé" });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
-// POST Login User (à jour sequelize)
-exports.login = (req, res) => {
-  console.log("login");
-  const { email, password } = req.body;
-  console.log(email, password);
+// POST Login User
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = await req.body;
+    if (!email || !password) {
+      throw new Error({ message: "Un paramêtre est manquant !" });
+    }
 
-  if (!email || !password) {
-    res.status(400).json({ error: "Un paramètre est manquant" });
+    const userFound = await model.User.findOne({
+      where: { email: email }
+    });
+    if (!userFound) {
+      throw new Error({ message: "Utilisateur inexistant" });
+    }
+
+    const compare = await bcrypt.compare(password, userFound.password);
+    if (!compare) {
+      throw new Error({ message: "Mot de passe incorrect !" });
+    }
+    res.status(200).json({
+      userId: userFound.id,
+      token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
+        expiresIn: "24h"
+      })
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(401).json({ error: error.message });
   }
+};
 
-  model.User.findOne({
-    where: { email: email }
-  }).then(user => {
-    if (!user) {
-      res.status(401).json({
-        error: "Utilisateur non trouvé"
-      });
-    } else {
-      console.log(user.password);
-      bcrypt.compare(password, user.password).then(valid => {
-        if (!valid) {
-          return res.status(401).json({ error: "Mot de passe incorrect !" });
-        }
-        res.status(200).json({
-          userId: user.id,
-          token: jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-            expiresIn: "24h"
-          })
-        });
+// GET User Profile
+exports.getUserProfile = async (req, res) => {
+  try {
+    const { id } = await req.params;
+    if (!id) {
+      throw new Error({
+        message: "Un problème est survenu avec l'id de ce profil"
       });
     }
-  });
+
+    const userFound = await model.User.findOne({
+      where: { id: id }
+    });
+    if (!userFound) {
+      throw new Error({
+        message: "Un problème est survenu avec cet utilisateur"
+      });
+    }
+
+    res.status(200).json({ userFound });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
-// UserID decoder (non utilisé car problème d'auth)
+
+// UserID decoder
 const decodeUid = authorization => {
   const token = authorization.split(" ")[1];
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
@@ -86,85 +113,92 @@ const decodeUid = authorization => {
   };
 };
 
-// GET User Profile (à jour sequelize mais problème d'auth)
-exports.getUserProfile = (req, res) => {
-  console.log("ah");
-  const { id } = req.params; // a voir si on prend l'id ici
-  model.User.findOne({
-    where: { id: id }
-  }).then(user => {
+// PUT User Profile
+exports.updateUserProfile = async (req, res) => {
+  try {
+    const user = await decodeUid(req.headers.authorization);
     if (!user) {
-      res.status(401).json({
-        error: "Utilisateur non trouvé"
+      throw new Error({
+        message: "Problème d'autorisation !"
       });
-    } else {
-      res.status(201).json({ user });
     }
-  });
+
+    const { firstName, lastName, email } = await req.body;
+
+    if (!firstName || !lastName || !email) {
+      throw new Error({ message: "Un paramêtre est manquant !" });
+    }
+
+    const updateProfile = await model.User.update(
+      { firstName: firstName, lastName: lastName, email: email },
+      {
+        where: {
+          id: user.id
+        }
+      }
+    );
+
+    if (!updateProfile) {
+      throw new Error({ message: "Le profil n'a pas été mis à jour" });
+    }
+
+    res.status(200).json({ updateProfile });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
-// PATCH User Profile (à jour sequelize mais problème auth)
-exports.updateUserProfile = (req, res) => {
-  const { firstName, lastName, email } = req.body;
-
-  // attention , ici c'est bien decodeUid qu'il faut conserver, mais comme problème auth, on fait autrement pour tester sur postman
-  // const user = decodeUid(req.headers.authorization);
-  // User.update(
-  //   { firstName: firstName, lastName: lastName, email: email },
-  //   {
-  //     where: {
-  //       id: user.id
-  //     }
-  //   }
-  // );
-
-  const { id } = req.params;
-  console.log(firstName);
-  console.log(id);
-
-  model.User.update(
-    { firstName: firstName, lastName: lastName, email: email },
-    {
-      where: {
-        id: id
-      }
+// PUT User Password
+exports.updatePassword = async (req, res) => {
+  try {
+    const user = await decodeUid(req.headers.authorization);
+    console.log(user.id);
+    if (!user) {
+      throw new Error({ message: "Problème d'autorisation !" });
     }
-  ).then(() => res.status(201).json({}));
-};
-
-// PUT User Password (pas à jour)
-exports.updatePassword = (req, res) => {
-  console.log("updatePassword");
-  const { password, newPassword } = req.body;
-  // const user = decodeUid(req.headers.authorization);
-
-  //comparer le password tapé avec celui du user connecté
-  const { id } = req.params;
-  model.User.findOne({
-    where: { id: id }
-  }).then(user => {
-    bcrypt.compare(password, user.password).then(valid => {
-      console.log(valid);
-      if (!valid) {
-        return res.status(401).json({ error: "Mot de passe incorrect !" });
-      } else if (password === newPassword) {
-        return res
-          .status(401)
-          .json({ error: "Nouveau mot de passe identique" });
-      }
-      bcrypt
-        .hash(newPassword, 10)
-        .then(hash => {
-          model.User.update(
-            { password: hash },
-            {
-              where: {
-                id: id
-              }
-            }
-          );
-        })
-        .then(() => res.status(201).json({ user }));
+    const { password, newPassword } = await req.body;
+    if (!password || !newPassword) {
+      throw new Error({ message: "Un paramètre est manquant!" });
+    }
+    const meUser = await model.User.findOne({
+      where: { id: user.id }
     });
-  });
+    if (!meUser) {
+      throw new Error({ message: "Problème d'autorisation !" });
+    }
+    const compare = await bcrypt.compare(password, meUser.password);
+    if (!compare) {
+      throw new Error({ message: "Mot de passe d'origine incorrect !" });
+    }
+
+    if (password === newPassword) {
+      throw new Error({
+        message: "Mot de passe d'origine identique au nouveau mot de passe !"
+      });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, 10);
+    if (!newHash) {
+      throw new Error({
+        message: "Problème avec Bcrypt !"
+      });
+    }
+
+    const newMe = model.User.update(
+      { password: newHash },
+      {
+        where: {
+          id: meUser.id
+        }
+      }
+    );
+    if (!newMe) {
+      throw new Error({
+        message: "Le profile n'a pas été mis a jour ! "
+      });
+    }
+    res.status(200).json({ newMe });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };

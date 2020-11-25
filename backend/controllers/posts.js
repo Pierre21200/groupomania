@@ -1,14 +1,6 @@
 // Middleware Imports
 const jwt = require("jsonwebtoken");
-const mysql = require("mysql");
-const fs = require("fs");
 const model = require("../models/users");
-
-// Error Class
-const HttpError = require("../models/httpError");
-
-// Database Route
-const db = require("../config/db");
 
 // UserID decoder
 const decodeUid = authorization => {
@@ -20,82 +12,96 @@ const decodeUid = authorization => {
   };
 };
 
-// POST Create Post (à jour sans auth)
-exports.createPost = (req, res) => {
-  const { userId } = req.body; // avec decodeUid quand auth
-  const { title, content } = req.body;
-  // Check data
-  if (!title || !content || !userId) {
-    res.status(400).json({ error: "Un paramètre est manquant" });
-  }
+// POST Create Post
+exports.createPost = async (req, res) => {
+  try {
+    const user = await decodeUid(req.headers.authorization);
+    if (!user) {
+      throw new Error({
+        message: "Problème d'autorisation !"
+      });
+    }
+    const { title, content } = await req.body;
 
-  // Query Prepare
-  model.Post.create({
-    userId: userId,
-    titlePost: title,
-    content: content
-  })
-    .then(newPost => {
-      res.status(201).json({ newPost });
-    })
-    .catch(err => {
-      res.status(500).json({ err });
+    if (!title || !content) {
+      throw new Error({ message: "Un paramêtre est manquant !" });
+    }
+    const newPost = await model.Post.create({
+      userId: user.id,
+      titlePost: title,
+      content: content
     });
+    if (!newPost) {
+      throw new Error({ message: "Le nouveau post n'a pas été créé !" });
+    }
+    res.status(200).json({ newPost });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
-exports.getAllPosts = (req, res) => {
-  model.Post.findAll({
-    order: [["id", "DESC"]]
-  }).then(allPosts => {
-    res.status(201).json({ allPosts });
-  });
+// GET All Posts
+exports.getAllPosts = async (req, res) => {
+  try {
+    const allPosts = await model.Post.findAll({
+      order: [["id", "DESC"]]
+    });
+    if (!allPosts) {
+      throw new Error({
+        message: "Un problème est survenu lors du chargement des posts !"
+      });
+    }
+    res.status(200).json({ allPosts });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
 // GET one post
-exports.getOnePost = (req, res) => {
-  const { id } = req.params;
-
-  // Query Prepare
-  model.Post.findOne({
-    where: { id: id }
-  }).then(post => {
-    res.status(201).json({ post });
-  });
+exports.getOnePost = async (req, res) => {
+  try {
+    const { id } = await req.params;
+    if (!id) {
+      throw new Error({ message: "Ce post n'existe plus ou est illisible !" });
+    }
+    const onePost = await model.Post.findOne({
+      where: { id: id }
+    });
+    if (!onePost) {
+      throw new Error({ message: "Problème" });
+    }
+    res.status(200).json({ onePost });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
-// GET All User's Post
-// exports.getAllUsersPosts = (req, res) => {
-//   const { userId } = req.body;
-//   // Query Prepare
-//   const string = "SELECT * FROM posts WHERE Users_id = ?";
-//   const inserts = [userId];
-//   const sql = mysql.format(string, inserts);
-
-//   // Query DB
-//   const query = db.query(sql, (error, results) => {
-//     if (!error) {
-//       res.status(200).json(results);
-//     } else {
-//       return new HttpError(
-//         "Erreur de requête, les posts de cette utilisateur n'ont pas pu être récupérées",
-//         500
-//       );
-//     }
-//   });
-// };
-
-exports.getAllUsersPosts = (req, res) => {
-  const { id } = req.params; // avec decodeUid
-  // Query Prepare
-
-  // Query DB
-  model.Post.findAll({
-    where: {
-      user_id: id
+// GET all user's posts
+exports.getAllUsersPosts = async (req, res) => {
+  try {
+    const { id } = await req.params;
+    if (!id) {
+      throw new Error({
+        message: "Cet utilisateur n'existe plus ou est illisible"
+      });
     }
-  }).then(allPosts => {
-    res.status(201).json({ allPosts });
-  });
+
+    const allPosts = await model.Post.findAll({
+      where: {
+        user_id: id
+      }
+    });
+
+    if (!allPosts) {
+      throw new Error({
+        message:
+          "Les posts de cet utilisateur n'existent ou ne sont pas lisibles"
+      });
+    }
+    res.status(200).json({ allPosts });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
 };
 
 // PATCH Moderate Post
