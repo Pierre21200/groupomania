@@ -1,7 +1,5 @@
-const bcrypt = require("bcrypt");
-const model = require("./models/users");
-
 const { Sequelize } = require("sequelize");
+
 const sequelize = new Sequelize("", "root", "password", {
   dialect: "mysql",
   host: "localhost"
@@ -20,25 +18,3 @@ const createDb = async () => {
 };
 
 createDb();
-
-// const firstName = "Pierre";
-// const lastName = "Potin";
-// const email = "Pierrepotin21@gmail.com";
-// const password = "Titicaca21200";
-
-// fillUser = (req, res) => {
-//   bcrypt.hash(password, 10).then(hash => {
-//     model.User.create({
-//       firstName: firstName,
-//       lastName: lastName,
-//       email: email,
-//       password: hash
-//     })
-//       .then(() => {
-//         res.status(201).json({});
-//       })
-//       .catch(err => {
-//         res.status(500).json({ err });
-//       });
-//   });
-// };

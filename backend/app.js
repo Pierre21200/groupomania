@@ -1,4 +1,6 @@
 // Middleware Imports
+let Sequelize = require("sequelize");
+
 const express = require("express");
 const path = require("path");
 require("dotenv").config();
@@ -6,15 +8,16 @@ require("dotenv").config();
 // App security
 const helmet = require("helmet");
 
-// Error Class
-const HttpError = require("./models/httpError");
-
 // App Routes
 const userRoutes = require("./routes/users");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
+const sequelize = require("./models/index");
 
 const app = express();
+
+// Sequelize
+app.use(Sequelize);
 
 // Helmet Middleware
 app.use(helmet());
@@ -45,8 +48,7 @@ app.use("/comments", commentRoutes);
 
 // Error Handling 404
 app.use((req, res, next) => {
-  const error = new HttpError("Route non trouvée", 404);
-  throw error;
+  throw new error("Route non trouvée", 404);
 });
 
 // Error Handling App
