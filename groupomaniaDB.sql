@@ -41,7 +41,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (195,4,2,'2020-09-12 13:57:43','LOL'),(196,5,2,'2020-09-12 14:02:34','ça m\'arrive aussi jajaja');
+INSERT INTO `comments` VALUES (4,2,'LOL'),(5,2,'ça m\''arrive aussi jajaja');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -69,7 +69,7 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (1,1,2,'2020-07-23 10:35:01','jajajajajaja','https://petcube.com/blog/content/images/2017/07/comic-cat-biting.jpg'),(2,2,6,'2020-07-24 09:37:01','Quand ta journée n\'est pas la meilleur et tu trouve rien sur 9gag','https://img-9gag-fun.9cache.com/photo/az9pe1b_700bwp.webp'),(3,2,1,'2020-07-23 09:35:01','BA DUM TSSSS !','https://img-9gag-fun.9cache.com/photo/aAeXpG9_460swp.webp'),(4,1,4,'2020-07-26 07:35:01','Trop Mignon !','https://img-9gag-fun.9cache.com/photo/aeMqjmq_700bwp.webp'),(5,3,3,'2020-07-27 06:35:01','Tout à fait !','https://img-comment-fun.9cache.com/media/aG1bm35/am0XnRwP_700w_0.jpg'),(43,49,1,'2020-09-07 12:28:58','Quand ta bouche est en pâte à modeler :P','https://jnews.io/gag/wp-content/uploads/sites/9/2017/03/wow.gif');
+INSERT INTO `posts` VALUES (1,1,2,'2020-07-23 10:35:01','jajajajajaja','https://petcube.com/blog/content/images/2017/07/comic-cat-biting.jpg'),(2,2,6,'2020-07-24 09:37:01','Quand ta journée n\''est pas la meilleur et tu trouve rien sur 9gag','https://img-9gag-fun.9cache.com/photo/az9pe1b_700bwp.webp'),(3,2,1,'2020-07-23 09:35:01','BA DUM TSSSS !','https://img-9gag-fun.9cache.com/photo/aAeXpG9_460swp.webp'),(4,1,4,'2020-07-26 07:35:01','Trop Mignon !','https://img-9gag-fun.9cache.com/photo/aeMqjmq_700bwp.webp'),(5,3,3,'2020-07-27 06:35:01','Tout à fait !','https://img-comment-fun.9cache.com/media/aG1bm35/am0XnRwP_700w_0.jpg'),(43,49,1,'2020-09-07 12:28:58','Quand ta bouche est en pâte à modeler :P','https://jnews.io/gag/wp-content/uploads/sites/9/2017/03/wow.gif');
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
