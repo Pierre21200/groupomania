@@ -1,0 +1,90 @@
+@font-face /* permet d'utiliser une police personnalisée, avec notemment fontsquirrel.com. */ {
+  font-family: "bright"; /* c'est le nom du fichier qu'on va chercher, on peut le faire en relatif s'il se trouve dans un sous dossier. PLus bas, on utilise plusieurs formats pour être sur que l'un soit lu par le navigateur, car tout les navigateur ne lisent pas tout les formats. */
+  src: 
+    /*  OpenType Font. Ne fonctionne pas sur Internet Explorer. */
+    /* Embedded OpenType. Fonctionne sur Internet Explorer uniquement, toutes versions. Ce format est propriétaire, produit par Microsoft. */
+      url("fonts/bright.ttf") format("truetype")
+    /* TrueType Font. Fonctionne sur IE9 et tous les autres navigateurs. */
+}
+
+@font-face /* permet d'utiliser une police personnalisée, avec notemment fontsquirrel.com. */ {
+  font-family: "cookies"; /* c'est le nom du fichier qu'on va chercher, on peut le faire en relatif s'il se trouve dans un sous dossier. PLus bas, on utilise plusieurs formats pour être sur que l'un soit lu par le navigateur, car tout les navigateur ne lisent pas tout les formats. */
+  src: 
+    /*  OpenType Font. Ne fonctionne pas sur Internet Explorer. */
+    /* Embedded OpenType. Fonctionne sur Internet Explorer uniquement, toutes versions. Ce format est propriétaire, produit par Microsoft. */
+      url("fonts/cookies.ttf") format("truetype")
+    /* TrueType Font. Fonctionne sur IE9 et tous les autres navigateurs. */
+}
+
+
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+#root {
+  height:100%;
+  width:100%;
+}
+
+h1 {
+  position:absolute;
+  top: 80px; 
+  font-family: "cookies";
+  color: blue;
+  font-size: 80px;
+} 
+
+.home {
+  width: 100%;
+  height: 100%;
+}
+
+.form {
+  margin:auto;
+  align-items: center;
+  width: 70%;
+  border: solid 5px blue;
+  padding: 30px;
+  background-color: white;
+  border-radius: 30px;
+}
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

@@ -1,0 +1,16 @@
+header {
+  height: 80px;
+  font-size:20px;
+}
+
+.navbar-brand {
+  font-size:25px
+}
+
+.sidebarMenu {
+height:100%;
+}
+
+.card {
+  margin-top: 20px;
+}

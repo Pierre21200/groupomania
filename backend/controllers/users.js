@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
     });
 
     if (userFound) {
-      throw new Error({ message: "Cet email est déjà utilisé !" });
+      throw new Error("Cet email est déjà utilisé !");
     }
 
     const hash = await bcrypt.hash(password, 10);
