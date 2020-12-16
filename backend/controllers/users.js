@@ -52,19 +52,19 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = await req.body;
     if (!email || !password) {
-      throw new Error({ message: "Un paramêtre est manquant !" });
+      throw new Error("Un paramêtre est manquant !");
     }
 
     const userFound = await model.User.findOne({
       where: { email: email }
     });
     if (!userFound) {
-      throw new Error({ message: "Utilisateur inexistant" });
+      throw new Error("Utilisateur inexistant");
     }
 
     const compare = await bcrypt.compare(password, userFound.password);
     if (!compare) {
-      throw new Error({ message: "Mot de passe incorrect !" });
+      throw new Error("Mot de passe incorrect !");
     }
     res.status(200).json({
       userId: userFound.id,

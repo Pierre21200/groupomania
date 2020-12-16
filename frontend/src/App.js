@@ -1,7 +1,7 @@
-import Form from "./Form";
+import PersonList from "./Form.jsx";
 
 function App() {
-  return <Form />;
+  return <PersonList />;
 }
 
 export default App;

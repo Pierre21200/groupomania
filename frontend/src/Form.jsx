@@ -1,49 +1,90 @@
-import React from "react"
+import React, {useState} from "react"
 import "./Form.css";
 
-function Form() {
-  return <div className="home row">
-  <h1>Groupomania</h1>
-   <div className="form row align-self-center">
-   <main className="form-signin  align-self-start">
-  <form>
-    <h2 className="h3 mb-3 fw-normal">Please Sign-up </h2>
-    <label htmlFor="inputFirstname" className="visually-hidden">Firstname</label>
-    <input type="text" id="inputLastname" className="form-control" placeholder="Firstname" required/>
-    <label htmlFor="inputLastname" className="visually-hidden">Lastname</label>
-    <input type="text" id="inputLastname" className="form-control" placeholder="Lastname" required/>
-    <label htmlFor="inputEmail" className="visually-hidden">Email address</label>
-    <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required/>
-    <label htmlFor="inputPassword" className="visually-hidden">Password</label>
-    <input type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
-    <div className="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"/> Remember me
-      </label>
-    </div>
-    <button className="w-100 btn btn-lg btn-primary" type="submit">Sign-up</button>
-  </form>
-</main>
-  <main className="form-signin align-self-start">
-  <form>
-    <h2 className="h3 mb-3 fw-normal">Please Log-in</h2>
-    <label htmlFor="inputEmail" className="visually-hidden">Email address</label>
-    <input type="email" id="inputEmail" className="form-control" placeholder="Email address" required autoFocus/>
-    <label htmlFor="inputPassword" className="visually-hidden">Password</label>
-    <input type="password" id="inputPassword" className="form-control" placeholder="Password" required/>
-    <div className="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"/> Remember me
-      </label>
-    </div>
-    <button className="w-100 btn btn-lg btn-primary" type="submit">Log-in</button>
-  </form>
-</main>
-</div>
+import axios from 'axios';
 
-</div>
+function PersonList () {
 
+
+  const [newEmail, setNewEmail] = useState();
+  const [newPassword, setNewPassword] = useState();
+
+
+  function handleChangeEmail (event) {
+    setNewEmail = event.target.value;
+  }
+
+  function handleChangePassword (event) {
+    setNewPassword = event.target.value;
+  }
+
+
+    return (
+      <div>
+        <form>
+          <label>
+            Person email:
+            <input type="text" email="email" onClick={handleChangeEmail} />
+          </label>
+          <label>
+            Person password:
+            <input type="text" email="password"  />
+          </label>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+    )
 }
 
+export default PersonList;
 
-export default Form;
+
+
+// export default class PersonList extends React.Component {
+//   state = {
+//     email: '',
+//     password: ''
+//   }
+
+//   handleChangeEmail = event => {
+//     this.setState({ email: event.target.value });
+//   }
+
+//   handleChangePassword= event => {
+//     this.setState({ password: event.target.value });
+//   }
+
+//   handleSubmit = event => {
+//     event.preventDefault();
+
+//     const email = this.state.email;
+//     const password = this.state.password;
+    
+
+//     axios.post(`http://localhost:4200/users/login`, { email, password })
+//       .then(res => {
+//         console.log(res);
+//         console.log(res.data);
+//       })
+    
+      
+//   }
+
+//   render() {
+//     return (
+//       <div>
+//         <form onSubmit={this.handleSubmit}>
+//           <label>
+//             Person email:
+//             <input type="text" email="email" onChange={this.handleChangeEmail} />
+//           </label>
+//           <label>
+//             Person password:
+//             <input type="text" email="password" onChange={this.handleChangePassword} />
+//           </label>
+//           <button type="submit">Add</button>
+//         </form>
+//       </div>
+//     )
+//   }
+// }
