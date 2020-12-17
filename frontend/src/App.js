@@ -1,10 +1,10 @@
-import Form from "./Form.jsx";
+import Form from "./Form.js";
 
 function App() {
   return (
     <div className="home">
       <Form signIn={false} />
-      <Form />
+      <Form signIn={true} />
     </div>
   );
 }
