@@ -17,24 +17,23 @@ const Form = ({signIn=true}) => {
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+
  function handleChangeFirstname (event) {
-   setNewFirstname = event.target.value;
+   setNewFirstname(event.target.value);
  }
  function handleChangeLastname (event) {
-  setNewLastname = event.target.value;
-
+  setNewLastname(event.target.value);
 }
 function handleChangeEmail (event) {
-  setNewEmail = event.target.value;
-
+  setNewEmail(event.target.value);
 }
 function handleChangePassword(event) {
-  setNewPassword = event.target.value;
-
+  setNewPassword(event.target.value);
 }
 
   return <form>
     <INPUT hidden={hide} htmlFor="inputFirstname" placeholder='Firstname' onChange={handleChangeFirstname} value={newFirstname}/>
+    {/* Losqu'on fait un value={newFirstname} et un appel à la fonction handleChange, on modifie deux fois notre newFirstname ? quel intérêt d'utiliser les deux ?  */}
     <INPUT hidden={hide} htmlFor="inputLastname" placeholder='Lastname' onChange={handleChangeLastname} value={newLastname}/>
     <INPUT htmlFor="inputEmail" placeholder='Email' onChange={handleChangeEmail} value={newEmail}/>
     <INPUT htmlFor="inputPassword" placeholder='Password' onChange={handleChangePassword} value={newPassword}/>
