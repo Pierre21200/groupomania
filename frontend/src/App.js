@@ -2,7 +2,7 @@ import Form from "./Form.jsx";
 
 function App() {
   return (
-    <div>
+    <div className="home">
       <Form signIn={false} />
       <Form />
     </div>
