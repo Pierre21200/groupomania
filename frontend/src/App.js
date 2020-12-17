@@ -1,7 +1,12 @@
-import PersonList from "./Form.jsx";
+import Form from "./Form.jsx";
 
 function App() {
-  return <PersonList />;
+  return (
+    <div>
+      <Form signIn={false} />
+      <Form />
+    </div>
+  );
 }
 
 export default App;

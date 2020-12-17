@@ -1,0 +1,57 @@
+import PersonList from "./Form.jsx";
+
+function App() {
+  const data = {
+    email: "email@gmail.com",
+    password: "123456"
+  };
+  return <PersonList email={true} data={data} />;
+}
+
+export default App;
+
+function PersonList(props) {
+
+  const { email, data } = props;
+  const [newEmail, setNewEmail] = useState("");
+  const [emailValid, setEmailValid] = useState(true);
+  const [newPassword, setNewPassword] = useState();
+
+  useEffect(() => {
+    if (data.email) {
+      setNewEmail(data.email);
+    }
+  }, [data]);
+
+  const handleChangeEmail = event => {
+    setNewEmail(event.target.value);
+
+    setEmailValid(false);
+  };
+return (
+    <div>
+      <form>
+        {email && (
+          <div>
+            <label>Person email:</label>
+            <input
+              type="text"
+              email="email"
+              value={newEmail}
+              onChange={handleChangeEmail}
+              className={!emailValid ? "not-valid" : ""}
+            />
+          </div>
+        )}
+
+        <label>
+          Person password:
+          <input type="text" email="password" />
+        </label>
+        <button type="submit">Add</button>
+      </form>
+    </div>
+  );
+}
+
+export default PersonList;
