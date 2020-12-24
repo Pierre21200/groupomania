@@ -17,14 +17,12 @@ exports.createPost = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
     if (!user) {
-      throw new Error({
-        message: "Problème d'autorisation !"
-      });
+      throw new Error("Problème d'autorisation !");
     }
     const { title, content } = await req.body;
 
     if (!title || !content) {
-      throw new Error({ message: "Un paramêtre est manquant !" });
+      throw new Error("Un paramêtre est manquant !");
     }
     const newPost = await model.Post.create({
       userId: user.id,
@@ -32,7 +30,7 @@ exports.createPost = async (req, res) => {
       content: content
     });
     if (!newPost) {
-      throw new Error({ message: "Le nouveau post n'a pas été créé !" });
+      throw new Error("Le nouveau post n'a pas été créé !");
     }
     res.status(200).json({ newPost });
   } catch (error) {
@@ -47,9 +45,7 @@ exports.getAllPosts = async (req, res) => {
       order: [["id", "DESC"]]
     });
     if (!allPosts) {
-      throw new Error({
-        message: "Un problème est survenu lors du chargement des posts !"
-      });
+      throw new Error("Un problème est survenu lors du chargement des posts !");
     }
     res.status(200).json({ allPosts });
   } catch (error) {
@@ -62,13 +58,13 @@ exports.getOnePost = async (req, res) => {
   try {
     const { id } = await req.params;
     if (!id) {
-      throw new Error({ message: "Ce post n'existe plus ou est illisible !" });
+      throw new Error("Ce post n'existe plus ou est illisible !");
     }
     const onePost = await model.Post.findOne({
       where: { id: id }
     });
     if (!onePost) {
-      throw new Error({ message: "Problème" });
+      throw new Error("Problème");
     }
     res.status(200).json({ onePost });
   } catch (error) {
@@ -81,9 +77,7 @@ exports.getAllUsersPosts = async (req, res) => {
   try {
     const { id } = await req.params;
     if (!id) {
-      throw new Error({
-        message: "Cet utilisateur n'existe plus ou est illisible"
-      });
+      throw new Error("Cet utilisateur n'existe plus ou est illisible");
     }
 
     const allPosts = await model.Post.findAll({
@@ -93,10 +87,9 @@ exports.getAllUsersPosts = async (req, res) => {
     });
 
     if (!allPosts) {
-      throw new Error({
-        message:
-          "Les posts de cet utilisateur n'existent ou ne sont pas lisibles"
-      });
+      throw new Error(
+        "Les posts de cet utilisateur n'existent ou ne sont pas lisibles"
+      );
     }
     res.status(200).json({ allPosts });
   } catch (error) {

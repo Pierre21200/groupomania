@@ -17,22 +17,16 @@ exports.createComment = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
     if (!user) {
-      throw new Error({
-        message: "Problème d'autorisation !"
-      });
+      throw new Error("Problème d'autorisation !");
     }
     const { id } = await req.params;
     if (!id) {
-      throw new Error({
-        message: "Problème id params !"
-      });
+      throw new Error("Problème id params !");
     }
 
     const { comm } = await req.body;
     if (!comm) {
-      throw new Error({
-        message: "Contenu du commentaire inexistant !"
-      });
+      throw new Error("Contenu du commentaire inexistant !");
     }
 
     const newComm = await model.Comment.create({
@@ -42,9 +36,7 @@ exports.createComment = async (req, res) => {
     });
 
     if (!newComm) {
-      throw new Error({
-        message: "Le commentaire n'a pas été enregistré !"
-      });
+      throw new Error("Le commentaire n'a pas été enregistré !");
     }
     res.status(200).json({ newComm });
   } catch (error) {
@@ -57,14 +49,14 @@ exports.getPostComments = async (req, res) => {
   try {
     const { id } = await req.params;
     if (!id) {
-      throw new Error({ message: "Problème id params" });
+      throw new Error("Problème id params");
     }
     const postComments = await model.Comment.findAll({
       where: { postId: id },
       order: [["id", "DESC"]]
     });
     if (!postComments) {
-      throw new Error({ message: "Pas de commentaires pour ce post" });
+      throw new Error("Pas de commentaires pour ce post");
     }
     res.status(200).json({ postComments });
   } catch (error) {

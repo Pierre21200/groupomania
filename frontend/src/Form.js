@@ -32,13 +32,13 @@ const Form = ({ signIn }) => {
   }
 
   return (
-    <form>
+    <form className={signIn ? "form-sign" : "form-log"}>
       {signIn ? (
         <div>
           <INPUT
             type="text"
             value={newFirstname}
-            name={signIn ? "inputFirstnameSign" : "inputFirstnameLog"}
+            name="inputFirstname"
             onChange={handleChangeFirstname}
             placeholder="Firstname"
           />
@@ -46,7 +46,7 @@ const Form = ({ signIn }) => {
           <INPUT
             type="text"
             value={newLastname}
-            name={signIn ? "inputLastnameSign" : "inputLastnameLog"}
+            name="inputLastname"
             onChange={handleChangeLastname}
             placeholder="Lastname"
           />

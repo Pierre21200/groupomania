@@ -11,7 +11,7 @@ const postCtrl = require("../controllers/posts");
 router.post("/create", auth, multer, postCtrl.createPost);
 
 // Get all the posts
-router.get("/allposts", auth, postCtrl.getAllPosts);
+router.get("/allposts", postCtrl.getAllPosts);
 
 // Get one post
 router.get("/:id", auth, postCtrl.getOnePost);

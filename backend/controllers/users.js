@@ -12,7 +12,7 @@ exports.signup = async (req, res) => {
     const { firstName, lastName, email, password } = await req.body;
 
     if (!firstName || !lastName || !email || !password) {
-      throw new Error({ message: "Un paramêtre est manquant !" });
+      throw new Error("Un paramêtre est manquant !");
     }
 
     const userFound = await model.User.findOne({
@@ -27,7 +27,7 @@ exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     if (!hash) {
-      throw new Error({ message: "pas de hash" });
+      throw new Error("pas de hash");
     }
 
     const newUser = await model.User.create({
@@ -38,10 +38,10 @@ exports.signup = async (req, res) => {
     });
 
     if (!newUser) {
-      throw new Error({ message: "L'inscription a échoué" });
+      throw new Error("L'inscription a échoué");
     }
 
-    res.status(201).json({ message: "L'utilisateur a bien été créé" });
+    res.status(201).json("L'utilisateur a bien été créé");
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
@@ -83,18 +83,14 @@ exports.getUserProfile = async (req, res) => {
   try {
     const { id } = await req.params;
     if (!id) {
-      throw new Error({
-        message: "Un problème est survenu avec l'id de ce profil"
-      });
+      throw new Error("Un problème est survenu avec l'id de ce profil");
     }
 
     const userFound = await model.User.findOne({
       where: { id: id }
     });
     if (!userFound) {
-      throw new Error({
-        message: "Un problème est survenu avec cet utilisateur"
-      });
+      throw new Error("Un problème est survenu avec cet utilisateur");
     }
 
     res.status(200).json({ userFound });
@@ -118,15 +114,13 @@ exports.updateUserProfile = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
     if (!user) {
-      throw new Error({
-        message: "Problème d'autorisation !"
-      });
+      throw new Error("Problème d'autorisation !");
     }
 
     const { firstName, lastName, email } = await req.body;
 
     if (!firstName || !lastName || !email) {
-      throw new Error({ message: "Un paramêtre est manquant !" });
+      throw new Error("Un paramêtre est manquant !");
     }
 
     const updateProfile = await model.User.update(
@@ -139,7 +133,7 @@ exports.updateUserProfile = async (req, res) => {
     );
 
     if (!updateProfile) {
-      throw new Error({ message: "Le profil n'a pas été mis à jour" });
+      throw new Error("Le profil n'a pas été mis à jour");
     }
 
     res.status(200).json({ updateProfile });
@@ -154,34 +148,32 @@ exports.updatePassword = async (req, res) => {
     const user = await decodeUid(req.headers.authorization);
     console.log(user.id);
     if (!user) {
-      throw new Error({ message: "Problème d'autorisation !" });
+      throw new Error("Problème d'autorisation !");
     }
     const { password, newPassword } = await req.body;
     if (!password || !newPassword) {
-      throw new Error({ message: "Un paramètre est manquant!" });
+      throw new Error("Un paramètre est manquant!");
     }
     const meUser = await model.User.findOne({
       where: { id: user.id }
     });
     if (!meUser) {
-      throw new Error({ message: "Problème d'autorisation !" });
+      throw new Error("Problème d'autorisation !");
     }
     const compare = await bcrypt.compare(password, meUser.password);
     if (!compare) {
-      throw new Error({ message: "Mot de passe d'origine incorrect !" });
+      throw new Error("Mot de passe d'origine incorrect !");
     }
 
     if (password === newPassword) {
-      throw new Error({
-        message: "Mot de passe d'origine identique au nouveau mot de passe !"
-      });
+      throw new Error(
+        "Mot de passe d'origine identique au nouveau mot de passe !"
+      );
     }
 
     const newHash = await bcrypt.hash(newPassword, 10);
     if (!newHash) {
-      throw new Error({
-        message: "Problème avec Bcrypt !"
-      });
+      throw new Error("Problème avec Bcrypt !");
     }
 
     const newMe = model.User.update(
@@ -193,9 +185,7 @@ exports.updatePassword = async (req, res) => {
       }
     );
     if (!newMe) {
-      throw new Error({
-        message: "Le profile n'a pas été mis a jour ! "
-      });
+      throw new Error("Le profile n'a pas été mis a jour ! ");
     }
     res.status(200).json({ newMe });
   } catch (error) {

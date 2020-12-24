@@ -16,15 +16,26 @@ body {
 .home {
   height: 100%;
   width: 100%;
-  align-items: center;
+}
+
+.title {
+  padding: 80px;
+  height: 20%;
+}
+
+h1 {
+  font-size: 60px;
+}
+
+.form-container {
+  padding-left: 150px;
+  padding-right: 150px;
   display: flex;
+  height: 80%;
 }
 
 form {
   margin: auto;
-  width: 20%;
-}
-
-.input {
-  margin-bottom: 20px;
+  padding: 20px;
+  border: 2px solid rgb(71, 196, 228);
 }
