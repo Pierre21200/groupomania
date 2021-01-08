@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Form.css";
-import INPUT from "./input.js";
-import BUTTON from "./button.js";
+import Input from "./Input.js";
+import Button from "./Button.js";
 
 const Form = ({ signIn }) => {
   const [newFirstname, setNewFirstname] = useState("");
@@ -35,7 +35,7 @@ const Form = ({ signIn }) => {
     <form className={signIn ? "form-sign" : "form-log"}>
       {signIn ? (
         <div>
-          <INPUT
+          <Input
             type="text"
             value={newFirstname}
             name="inputFirstname"
@@ -43,7 +43,7 @@ const Form = ({ signIn }) => {
             placeholder="Firstname"
           />
 
-          <INPUT
+          <Input
             type="text"
             value={newLastname}
             name="inputLastname"
@@ -55,7 +55,7 @@ const Form = ({ signIn }) => {
         ""
       )}
 
-      <INPUT
+      <Input
         type="email"
         value={newEmail}
         name={signIn ? "inputEmailSign" : "inputEmailLog"}
@@ -63,7 +63,7 @@ const Form = ({ signIn }) => {
         placeholder="Email"
       />
 
-      <INPUT
+      <Input
         type="password"
         value={newPassword}
         name={signIn ? "inputPasswordSign" : "inputPasswordLog"}
@@ -73,7 +73,7 @@ const Form = ({ signIn }) => {
       />
 
       {signIn ? (
-        <BUTTON
+        <Button
           disabled={
             validPassword &&
             validEmail &&
@@ -84,7 +84,7 @@ const Form = ({ signIn }) => {
           }
         />
       ) : (
-        <BUTTON
+        <Button
           disabled={validPassword && validEmail === true ? "" : "disabled"}
         />
       )}

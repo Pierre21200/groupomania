@@ -1,13 +1,8 @@
-const INPUT = ({
-  type,
-  value,
-  name,
-  onChange,
-  placeholder,
-  autoComplete = ""
-}) => {
+import React from "react";
+
+const Input = ({ type, value, name, onChange, placeholder, autoComplete }) => {
   return (
-    <div className="input">
+    <div>
       <label htmlFor={name}></label>
       <input
         className="form-control"
@@ -19,9 +14,12 @@ const INPUT = ({
         placeholder={placeholder}
         autoComplete={autoComplete}
         required
-      ></input>
+      />
     </div>
   );
 };
 
-export default INPUT;
+export default Input;
+
+// problème de couleur dans mon code
+// faire des faux data au format json, copier la réponse de postman

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Fil.css";
-import INPUT from "./input.js";
+import Input from "../Form/Input.js";
+import Button from "../Form/Button.js";
+
 import axios from "axios";
 
 const Fil = () => {
@@ -14,7 +16,7 @@ const Fil = () => {
 
   return (
     <div>
-      <button onClick={fetchData}></button>
+      <Button onClick={fetchData} />
       {dataDb.map(element => (
         <div className="card">
           <div className="card-body">
@@ -24,6 +26,7 @@ const Fil = () => {
           </div>
         </div>
       ))}
+      <Input />
     </div>
   );
 };

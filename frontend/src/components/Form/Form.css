@@ -18,24 +18,20 @@ body {
   width: 100%;
 }
 
-.title {
-  padding: 80px;
+header {
   height: 20%;
 }
 
-h1 {
-  font-size: 60px;
+.logo-home {
+  width: 300px;
 }
 
 .form-container {
-  padding-left: 150px;
-  padding-right: 150px;
   display: flex;
   height: 80%;
 }
 
 form {
   margin: auto;
-  padding: 20px;
   border: 2px solid rgb(71, 196, 228);
 }
