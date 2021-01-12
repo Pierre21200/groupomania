@@ -2,7 +2,7 @@ import React from "react";
 
 const Input = ({ type, value, name, onChange, placeholder, autoComplete }) => {
   return (
-    <div>
+    <div className="input">
       <label htmlFor={name}></label>
       <input
         className="form-control"

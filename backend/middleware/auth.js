@@ -9,11 +9,11 @@ module.exports = (req, res, next) => {
     const userId = decodedToken.userId;
 
     if (req.body.userId && req.body.userId !== userId) {
-      throw new Error({ message: "Non authorisé" });
+      throw new Error("Non authorisé");
     } else {
       next();
     }
   } catch (e) {
-    throw new Error({ message: "Non identifié" });
+    throw new Error("Non identifié");
   }
 };

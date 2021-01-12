@@ -1,0 +1,22 @@
+html,
+body,
+#root,
+.home,
+.section {
+  width: 100%;
+  height: 100%;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-container {
+  width: 60%;
+  height: 80%;
+  margin: auto;
+  border: 2px solid rgb(71, 157, 228);
+  border-radius: 10%;
+}

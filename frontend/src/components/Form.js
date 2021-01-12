@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./Form.css";
 import Input from "./Input.js";
 import Button from "./Button.js";
 
@@ -35,6 +34,12 @@ const Form = ({ signIn }) => {
     <form className={signIn ? "form-sign" : "form-log"}>
       {signIn ? (
         <div>
+          <div>
+            <p>
+              Vous n'avez pas encore de compte ?<br />
+              Inscrivez-vous !
+            </p>
+          </div>
           <Input
             type="text"
             value={newFirstname}
@@ -52,7 +57,12 @@ const Form = ({ signIn }) => {
           />
         </div>
       ) : (
-        ""
+        <div>
+          <p>
+            Vous êtes déjà inscrit ?<br />
+            Connectez-vous !
+          </p>
+        </div>
       )}
 
       <Input

@@ -1,0 +1,57 @@
+html,
+body {
+  height: 100%;
+  background-image: url("C:\Users\pierr\Desktop\groupomania-show\frontend\src\icons\icon-c.png");
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: 500px;
+}
+
+body {
+  display: flex;
+  align-items: center;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.home {
+  height: 100%;
+  width: 100%;
+}
+
+header {
+  height: 20%;
+  padding: 60px;
+}
+
+h1 {
+  font-size: 60px;
+  color: rgb(45, 145, 226);
+}
+
+.logo-home {
+  width: 50px;
+}
+
+.form-container {
+  display: flex;
+  height: 80%;
+  padding: 0px 50px 50px 50px;
+}
+
+form {
+  width: 300px;
+  padding: 20px;
+  margin: auto;
+  margin-top: 150px;
+  border: 2px solid rgb(71, 157, 228);
+  border-radius: 10%;
+}
+
+.btn {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}

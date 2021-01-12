@@ -1,0 +1,32 @@
+[
+      {
+          "id": 1,
+          "postId": 1,
+          "userId": 1,
+          "comm": "Salut les jeunes !"
+      },
+      {
+        "id": 2,
+        "postId": 1,
+        "userId": 1,
+        "comm": "Salut les jeunes !"
+    },
+    {
+      "id": 3,
+      "postId": 1,
+      "userId": 1,
+      "comm": "Salut les jeunes !"
+  },
+  {
+    "id": 4,
+    "postId": 1,
+    "userId": 1,
+    "comm": "Salut les jeunes !"
+},
+{
+  "id": 5,
+  "postId": 1,
+  "userId": 1,
+  "comm": "Salut les jeunes !"
+}
+  ]

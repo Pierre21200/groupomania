@@ -99,6 +99,26 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
+// // GET All Users
+// exports.getAllUsers = async (req, res) => {
+//   try {
+//     if (!id) {
+//       throw new Error("Un problème est survenu avec l'id de ce profil");
+//     }
+
+//     const userFound = await model.User.findOne({
+//       where: { id: id }
+//     });
+//     if (!userFound) {
+//       throw new Error("Un problème est survenu avec cet utilisateur");
+//     }
+
+//     res.status(200).json({ userFound });
+//   } catch (error) {
+//     res.status(401).json({ error: error.message });
+//   }
+// };
+
 // UserID decoder
 const decodeUid = authorization => {
   const token = authorization.split(" ")[1];
