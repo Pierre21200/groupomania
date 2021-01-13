@@ -8,10 +8,10 @@ const multer = require("../middleware/multer-config");
 const postCtrl = require("../controllers/posts");
 
 // Create a post
-router.post("/create", auth, multer, postCtrl.createPost);
+router.post("/create", auth, multer, postCtrl.createPost); // a modifier en enlevant create
 
 // Get all the posts
-router.get("/allposts", postCtrl.getAllPosts);
+router.get("/allposts", postCtrl.getAllPosts); // a modifier en enlevant allposts
 
 // Get one post
 router.get("/:id", auth, postCtrl.getOnePost);

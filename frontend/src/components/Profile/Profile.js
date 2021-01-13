@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from "react";
-import fakeusers from "../fakedata/users.json";
+import fakeusers from "../../fakedata/users.json";
+import "./Profile.css";
+
+// Page Profil
+// import "./profile.css";
+// function App() {
+//   return (
+//     <div className="home">
+//       <Profile />
+//     </div>
+//   );
+// }
 
 const Profile = () => {
   const [users, setUsers] = useState([]);
 
   const fetchData = async () => {
     setUsers(fakeusers);
+    console.log(fakeusers);
   };
 
   useEffect(() => {
