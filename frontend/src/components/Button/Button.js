@@ -16,6 +16,8 @@ const Button = ({ type, className, value, disabled, onClick }) => {
 Button.defaultProps = {
   type: "button",
   className: "btn btn-outline-primary",
+  disabled: "disabled",
+  onClick: null,
   value: "Envoyer"
 };
 

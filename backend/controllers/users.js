@@ -100,24 +100,21 @@ exports.getUserProfile = async (req, res) => {
 };
 
 // // GET All Users
-// exports.getAllUsers = async (req, res) => {
-//   try {
-//     if (!id) {
-//       throw new Error("Un problème est survenu avec l'id de ce profil");
-//     }
-
-//     const userFound = await model.User.findOne({
-//       where: { id: id }
-//     });
-//     if (!userFound) {
-//       throw new Error("Un problème est survenu avec cet utilisateur");
-//     }
-
-//     res.status(200).json({ userFound });
-//   } catch (error) {
-//     res.status(401).json({ error: error.message });
-//   }
-// };
+exports.getAllUsers = async (req, res) => {
+  try {
+    const allUsers = await model.User.findAll({
+      order: [["id", "DESC"]]
+    });
+    if (!allUsers) {
+      throw new Error(
+        "Un problème est survenu lors du chargement des utilisateurs !"
+      );
+    }
+    res.status(200).json({ allUsers });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
 
 // UserID decoder
 const decodeUid = authorization => {

@@ -41,19 +41,15 @@ const Form = ({ signIn }) => {
             </p>
           </div>
           <Input
-            type="text"
             value={newFirstname}
-            name="inputFirstname"
+            name="Firstname"
             onChange={handleChangeFirstname}
-            placeholder="Firstname"
           />
 
           <Input
-            type="text"
             value={newLastname}
-            name="inputLastname"
+            name="Lastname"
             onChange={handleChangeLastname}
-            placeholder="Lastname"
           />
         </div>
       ) : (
@@ -68,18 +64,15 @@ const Form = ({ signIn }) => {
       <Input
         type="email"
         value={newEmail}
-        name={signIn ? "inputEmailSign" : "inputEmailLog"}
+        name="Email"
         onChange={handleChangeEmail}
-        placeholder="Email"
       />
 
       <Input
         type="password"
         value={newPassword}
-        name={signIn ? "inputPasswordSign" : "inputPasswordLog"}
+        name="Password"
         onChange={handleChangePassword}
-        placeholder="Password"
-        autoComplete="on"
       />
 
       {signIn ? (

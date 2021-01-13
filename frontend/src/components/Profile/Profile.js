@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import fakeusers from "../../fakedata/users.json";
 import "./Profile.css";
 
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
+
 // Page Profil
 // import "./profile.css";
 // function App() {
@@ -12,12 +20,11 @@ import "./Profile.css";
 //   );
 // }
 
-const Profile = () => {
+const Profile = ({ userId }) => {
   const [users, setUsers] = useState([]);
 
   const fetchData = async () => {
     setUsers(fakeusers);
-    console.log(fakeusers);
   };
 
   useEffect(() => {

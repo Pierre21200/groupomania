@@ -1,22 +1,25 @@
 import React from "react";
 
-const Input = ({ type, value, name, onChange, placeholder, autoComplete }) => {
+const Input = ({ name, className, id, type, onChange }) => {
   return (
     <div className="input">
       <label htmlFor={name}></label>
       <input
-        className="form-control"
-        id={name}
-        type={type}
-        value={value}
+        className={className}
+        id={id}
         name={name}
+        type={type}
         onChange={onChange}
-        placeholder={placeholder}
-        autoComplete={autoComplete}
+        placeholder={name}
         required
       />
     </div>
   );
+};
+
+Input.defaultProps = {
+  className: "form-control",
+  type: "text"
 };
 
 export default Input;

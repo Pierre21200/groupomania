@@ -16,9 +16,6 @@ router.post("/signup", userCtrl.signup);
 // Get a profil's user
 router.get("/:id", auth, userCtrl.getUserProfile);
 
-//Get all Users
-// router.get("/users/allposts", auth, userCtrl.getAllUsers);
-
 // Update a profil
 router.put("/profil", auth, multer, userCtrl.updateUserProfile);
 router.put("/profil/password", auth, userCtrl.updatePassword);

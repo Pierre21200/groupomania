@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import Input from "../Input/Input.js";
-import Button from "../Button/Button.js";
 import Form from "../Form/Form.js";
-
 import "./LogIn.css";
 
 function LogIn() {
