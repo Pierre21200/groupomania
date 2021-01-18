@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Comments from "../Comments/Comments.js";
 import Users from "../Users/Users.js";
+import "./Posts.css";
 
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 

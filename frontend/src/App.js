@@ -3,8 +3,15 @@ import Home from "./components/Home/Home.js";
 import Profile from "./components/Profile/Profile.js";
 
 import Posts from "./components/Posts/Posts.js";
-
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React from "react";
+import ReactDOM from "react-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  useParams
+} from "react-router-dom";
 
 function App() {
   return (
@@ -25,6 +32,28 @@ function App() {
     </Router>
   );
 }
+
+// function App() {
+//   function BlogPost() {
+//     let { slug } = useParams();
+//     return <div>Now showing post {slug}</div>;
+//   }
+
+//   BlogPost();
+
+//   ReactDOM.render(
+//     <Router>
+//       <Switch>
+//         <Route path="/blog/:slug">
+//           <BlogPost />
+//         </Route>
+//       </Switch>
+//     </Router>,
+//     document.getElementById("root")
+//   );
+// }
+
+document.getElementById("root");
 
 export default App;
 

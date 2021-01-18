@@ -1,45 +1,78 @@
-body {
-  display: flex;
+@font-face {
+  font-family: "Blenda";
+  src: url("../../fonts/Blenda.otf") format("otf");
+}
+
+@font-face {
+  font-family: "Arizonia";
+  src: url("../../fonts/Arizonia-Regular.ttf") format("ttf");
+}
+
+@font-face {
+  font-family: "Cookie";
+  src: url("../../fonts/Cookie-Regular.ttf") format("ttf");
+}
+
+.login-container {
+  height: 100%;
+  width: 100%;
+}
+
+.login-header {
+  height: 20%;
   align-items: center;
 }
 
-#root {
-  height: 100%;
-  width: 100%;
+.login-container-title {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-right: 200px;
 }
 
-.home {
-  height: 100%;
-  width: 100%;
+.login-logo {
+  width: 100px;
 }
 
-header {
-  height: 20%;
-  padding: 60px;
-}
-
-h1 {
+.login-title {
+  margin: 0;
+  margin-left: 20px;
+  margin-top: 10px;
   font-size: 60px;
-  color: rgb(45, 145, 226);
+  color: rgb(34, 112, 229);
+
+  /* color: white; */
+  /* -webkit-text-stroke: 5px rgb(45, 145, 226); */
+  /* -webkit-text-stroke-color: rgb(45, 145, 226); */
+  /* font-family: "Blenda"; */
+  /* font-family: "Arizonia"; */
+  /* font-family: "Cookie"; */
 }
 
-.logo-home {
-  width: 50px;
+.login-subtitle {
+  font-size: 30px;
+  margin-left: 400px;
 }
 
 .form-container {
   display: flex;
   height: 80%;
-  padding: 0px 50px 50px 50px;
+  padding: 0px 80px 50px 80px;
 }
 
 form {
+  /* box-shadow: 10px 5px 20px rgb(71, 157, 228); */
   width: 300px;
   padding: 20px;
   margin: auto;
   margin-top: 150px;
-  border: 2px solid rgb(71, 157, 228);
+  border: 5px solid rgb(34, 112, 229);
   border-radius: 10%;
+}
+
+p {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .btn {

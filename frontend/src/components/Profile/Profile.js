@@ -10,19 +10,8 @@ import {
   useParams
 } from "react-router-dom";
 
-// Page Profil
-// import "./profile.css";
-// function App() {
-//   return (
-//     <div className="home">
-//       <Profile />
-//     </div>
-//   );
-// }
-
 const Profile = ({ userId }) => {
   const [users, setUsers] = useState([]);
-
   const fetchData = async () => {
     setUsers(fakeusers);
   };
@@ -32,7 +21,7 @@ const Profile = ({ userId }) => {
   }, []);
 
   return (
-    <div className="section">
+    <div className="profile-container">
       {users.map(user => (
         <div key={user.id} className="profile-container">
           <div>{user.firstName}</div>
