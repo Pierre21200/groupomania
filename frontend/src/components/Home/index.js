@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Input from "../Input/Input.js";
-import Sidebar from "../Sidebar/Sidebar.js";
+import Input from "../Input/index.js";
+import Sidebar from "../Sidebar/index.js";
 import "./Home.css";
 
 const Home = ({ section }) => {

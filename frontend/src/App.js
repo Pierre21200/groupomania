@@ -1,8 +1,8 @@
-import LogIn from "./components/LogIn/LogIn.js";
-import Home from "./components/Home/Home.js";
-import Profile from "./components/Profile/Profile.js";
+import LogIn from "./components/LogIn/index.js";
+import Home from "./components/Home/index.js";
+import Profile from "./components/Profile/index.js";
 
-import Posts from "./components/Posts/Posts.js";
+import Posts from "./components/Posts/index.js";
 import React from "react";
 import ReactDOM from "react-dom";
 import {
@@ -26,6 +26,9 @@ function App() {
           <Home section={<Posts />} />
         </Route>
         <Route exact path="/Profile">
+          <Home section={<Profile />} />
+        </Route>
+        <Route path="/Profile">
           <Home section={<Profile />} />
         </Route>
       </Switch>

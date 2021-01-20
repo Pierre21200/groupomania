@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Comments from "../Comments/Comments.js";
+import Comments from "../Comments/index.js";
 import Users from "../Users/Users.js";
 import "./Posts.css";
 
@@ -9,22 +9,15 @@ import fakeposts from "../../fakedata/posts.json";
 import fakecomments from "../../fakedata/comments.json";
 import fakeusers from "../../fakedata/users.json";
 
-const Posts = ({ userId, commentId }) => {
+const Posts = () => {
   const [posts, setPosts] = useState([]);
-  let postUser = fakeposts.filter(post => post.userId === userId);
-  let postComment = fakeposts.filter(post => post.id === commentId);
+  const [users, setUsers] = useState([]);
 
   const fetchData = async () => {
     // const result = await axios("http://localhost:4200/posts/allposts");
     // setPosts(result.data.allPosts);
-
-    if (userId) {
-      setPosts(postUser); // afficher le post propre a un user
-    } else if (commentId) {
-      setPosts(postComment); // afficher le post propre a un comm
-    } else {
-      setPosts(fakeposts); // afficher tout les posts
-    }
+    setPosts(fakeposts); // afficher tout les posts
+    setUsers(fakeusers); // afficher tout les posts
   };
 
   useEffect(() => {
@@ -55,7 +48,8 @@ const Posts = ({ userId, commentId }) => {
             <div className="card-body">
               <h5 className="card-title">{post.titlePost}</h5>
               <h6 className="card-subtitle mb-2 text-muted">
-                <Link to="/Profile">
+                {/* <Link to={`/Profile/:${post.userId}`}> */}
+                <Link to={`/Profile/:${post.userId}`}>
                   {/* il faut ajouter après profile {post.userId} */}
                   <Users postId={post.userId} />
                 </Link>

@@ -10,20 +10,23 @@ import {
   useParams
 } from "react-router-dom";
 
-const Profile = ({ userId }) => {
+const Profile = ({}) => {
   const [users, setUsers] = useState([]);
   const fetchData = async () => {
     setUsers(fakeusers);
   };
 
+  let { params } = useParams();
+
   useEffect(() => {
     fetchData();
+    console.log(params);
   }, []);
 
   return (
     <div className="profile-container">
       {users.map(user => (
-        <div key={user.id} className="profile-container">
+        <div key={user.id} className="profiles-container">
           <div>{user.firstName}</div>
           <div>{user.lastName}</div>
           <div>{user.email}</div>

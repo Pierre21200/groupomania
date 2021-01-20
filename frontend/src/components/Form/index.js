@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Input from "../Input/Input.js";
-import Button from "../Button/Button.js";
+import Input from "../Input/index.js";
+import Button from "../Button/index.js";
 
 const Form = ({ signIn }) => {
   const [newFirstname, setNewFirstname] = useState("");
