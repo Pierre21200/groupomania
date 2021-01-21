@@ -12,11 +12,14 @@ import {
 
 const Profile = ({}) => {
   const [users, setUsers] = useState([]);
+  let { params } = useParams();
+
   const fetchData = async () => {
+    if (params) {
+      setUsers();
+    }
     setUsers(fakeusers);
   };
-
-  let { params } = useParams();
 
   useEffect(() => {
     fetchData();
