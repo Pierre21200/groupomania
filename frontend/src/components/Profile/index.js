@@ -12,18 +12,20 @@ import {
 
 const Profile = ({}) => {
   const [users, setUsers] = useState([]);
-  let { params } = useParams();
+
+  // faire un composant de ça, à voir dans home.js
+  const params = useParams();
+  let thisUser = fakeusers.filter(user => user.id == params.userId);
 
   const fetchData = async () => {
-    if (params) {
-      setUsers();
+    if (params.userId) {
+      setUsers(thisUser);
     }
-    setUsers(fakeusers);
+    // setUsers(fakeusers);
   };
 
   useEffect(() => {
     fetchData();
-    console.log(params);
   }, []);
 
   return (

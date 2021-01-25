@@ -3,6 +3,9 @@ import Form from "../Form/index.js";
 import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
 
+// il ne faut pas afficher login dans tout les cas
+// je pense qu'on doit récuper un token s'il existe, vérifier s'il n'est pas expiré, et on peut lancer home
+
 function LogIn() {
   return (
     <div className="login-container">

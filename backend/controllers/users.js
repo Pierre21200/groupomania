@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
     if (!newUser) {
       throw new Error("L'inscription a échoué");
     }
-
+    console.log(newUser.dataValues);
     res.status(201).json("L'utilisateur a bien été créé");
   } catch (error) {
     res.status(401).json({ error: error.message });
@@ -73,7 +73,6 @@ exports.login = async (req, res) => {
       })
     });
   } catch (error) {
-    console.log(error);
     res.status(401).json({ error: error.message });
   }
 };
