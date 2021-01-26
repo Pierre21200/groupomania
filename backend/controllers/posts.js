@@ -15,17 +15,18 @@ const decodeUid = authorization => {
 // POST Create Post
 exports.createPost = async (req, res) => {
   try {
-    const user = await decodeUid(req.headers.authorization);
-    if (!user) {
-      throw new Error("Problème d'autorisation !");
-    }
-    const { title, content } = await req.body;
+    // const user = await decodeUid(req.headers.authorization);
+
+    // if (!user) {
+    //   throw new Error("Problème d'autorisation !");
+    // }
+    const { title, content, utilId } = await req.body;
 
     if (!title || !content) {
       throw new Error("Un paramêtre est manquant !");
     }
     const newPost = await model.Post.create({
-      userId: user.id,
+      userId: utilId, // modification temporaire
       titlePost: title,
       content: content
     });

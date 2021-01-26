@@ -2,20 +2,14 @@ import React, { useState, useEffect } from "react";
 import fakeusers from "../../fakedata/users.json";
 import "./Profile.css";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useParams
-} from "react-router-dom";
+import { BrowserRouter as useParams } from "react-router-dom";
 
-const Profile = ({}) => {
+const Profile = () => {
   const [users, setUsers] = useState([]);
 
   // faire un composant de ça, à voir dans home.js
   const params = useParams();
-  let thisUser = fakeusers.filter(user => user.id == params.userId);
+  let thisUser = fakeusers.filter(user => user.id === params.userId);
 
   const fetchData = async () => {
     if (params.userId) {
@@ -26,7 +20,7 @@ const Profile = ({}) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
   return (
     <div className="profile-container">

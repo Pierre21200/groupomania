@@ -4,7 +4,7 @@ import Button from "../Button/index.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-const Form = ({ signIn }) => {
+const Form = ({ signIn, createPost, logIn }) => {
   const history = useHistory();
 
   const [firstName, setFirstName] = useState("");
@@ -15,6 +15,10 @@ const Form = ({ signIn }) => {
   const [validEmail, setValidEmail] = useState(false);
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(false);
+  const [title, setTitle] = useState("");
+  const [validTitle, setValidTitle] = useState(false);
+  const [content, setContent] = useState("");
+  const [validContent, setValidContent] = useState(false);
 
   function handleChangeFirstname(event) {
     setFirstName(event.target.value);
@@ -33,6 +37,14 @@ const Form = ({ signIn }) => {
     setPassword(event.target.value);
     setValidPassword(event.target.value !== "" ? true : false);
   }
+  function handleChangeTitle(event) {
+    setTitle(event.target.value);
+    setValidTitle(event.target.value !== "" ? true : false);
+  }
+  function handleChangeContent(event) {
+    setContent(event.target.value);
+    setValidContent(event.target.value !== "" ? true : false);
+  }
 
   const login = async () => {
     // ici, le try envoie soit une error 401 via le controller, soit un status 200
@@ -45,9 +57,7 @@ const Form = ({ signIn }) => {
         password
       });
 
-      history.push("/home");
-      // envoyer l'id du user dans l'url, puis le récupérer à l'ouverture de home
-      // history.push("/home"{user.id});
+      history.push(`/home/${result.data.userId}`);
     } catch (error) {
       console.log("error 401");
     }
@@ -63,78 +73,126 @@ const Form = ({ signIn }) => {
         email,
         password
       });
+      console.log(result);
 
-      console.log("Utilisateur a bien été créé");
+      console.log("Utilisateur suivant a bien été créé :");
       // envoyer l'id du user dans l'url, puis le récupérer à l'ouverture de home, en ajoutant un modal (message dans une fenêtre) "Utilisateur suivant bien créé :  {newUser de controller}"
     } catch (error) {
       console.log();
     }
   };
 
+  const creatingPost = async () => {
+    let utilId = 4; // modification temporaire
+    try {
+      let result = await axios.post("http://localhost:4200/posts/create", {
+        title,
+        content,
+        utilId // modification temporaire
+      });
+      console.log(result);
+      console.log("Le Post a bien été créé");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <form className={signIn ? "form-sign" : "form-log"}>
-      {signIn ? (
-        <div>
+    <div>
+      <form className={signIn ? "form-sign" : "form-log"}>
+        {signIn ? (
           <div>
-            <p>
-              Vous n'avez pas encore de compte ?<br />
-              Inscrivez-vous !
-            </p>
+            <div>
+              <p>
+                Vous n'avez pas encore de compte ?<br />
+                Inscrivez-vous !
+              </p>
+            </div>
+            <Input
+              value={firstName}
+              name="Firstname"
+              onChange={handleChangeFirstname}
+            />
+
+            <Input
+              value={lastName}
+              name="Lastname"
+              onChange={handleChangeLastname}
+            />
+            <Input
+              type="email"
+              value={email}
+              name="Email"
+              onChange={handleChangeEmail}
+            />
+
+            <Input
+              type="password"
+              value={password}
+              name="Password"
+              onChange={handleChangePassword}
+            />
+
+            <Button
+              onClick={signup}
+              disabled={
+                validPassword &&
+                validEmail &&
+                validFirstName &&
+                validLastName === true
+                  ? ""
+                  : "disabled"
+              }
+            />
           </div>
-          <Input
-            value={firstName}
-            name="Firstname"
-            onChange={handleChangeFirstname}
-          />
+        ) : null}
 
-          <Input
-            value={lastName}
-            name="Lastname"
-            onChange={handleChangeLastname}
-          />
-        </div>
-      ) : (
-        <div>
-          <p>
-            Vous êtes déjà inscrit ?<br />
-            Connectez-vous !
-          </p>
-        </div>
-      )}
+        {logIn ? (
+          <div>
+            <div>
+              <p>
+                Vous êtes déjà inscrit ?<br />
+                Connectez-vous !
+              </p>
+            </div>
+            <Input value={email} name="email" onChange={handleChangeEmail} />
 
-      <Input
-        type="email"
-        value={email}
-        name="Email"
-        onChange={handleChangeEmail}
-      />
+            <Input
+              value={password}
+              name="password"
+              onChange={handleChangePassword}
+            />
+            <Button
+              onClick={login}
+              disabled={validPassword && validEmail === true ? "" : "disabled"}
+            />
+          </div>
+        ) : null}
 
-      <Input
-        type="password"
-        value={password}
-        name="Password"
-        onChange={handleChangePassword}
-      />
+        {createPost ? (
+          <div>
+            <div>
+              <p>
+                Envie de partager quelque-chose ? <br />
+                Ecrivez-le !
+              </p>
+            </div>
+            <Input value={title} name="title" onChange={handleChangeTitle} />
 
-      {signIn ? (
-        <Button
-          onClick={signup}
-          disabled={
-            validPassword &&
-            validEmail &&
-            validFirstName &&
-            validLastName === true
-              ? ""
-              : "disabled"
-          }
-        />
-      ) : (
-        <Button
-          onClick={login}
-          disabled={validPassword && validEmail === true ? "" : "disabled"}
-        />
-      )}
-    </form>
+            <Input
+              value={content}
+              name="content"
+              onChange={handleChangeContent}
+            />
+
+            <Button
+              onClick={creatingPost}
+              disabled={validTitle && validContent === true ? "" : "disabled"}
+            />
+          </div>
+        ) : null}
+      </form>
+    </div>
   );
 };
 

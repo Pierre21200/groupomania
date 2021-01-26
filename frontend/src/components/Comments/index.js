@@ -1,24 +1,20 @@
 import React, { useState, useEffect } from "react";
-import fakecomments from "../../fakedata/comments.json";
+import axios from "axios";
 
-const Comments = ({ postId, userId }) => {
+const Comments = ({ postId }) => {
   const [comments, setComments] = useState([]);
-  let commentsPost = fakecomments.filter(comment => comment.postId === postId);
-  let commentsUser = fakecomments.filter(comment => comment.userId === userId);
 
   const fetchData = async () => {
-    if (postId) {
-      setComments(commentsPost); // afficher les comments propres a un post
-    } else if (userId) {
-      setComments(commentsUser); // afficher les commentaires propres a un utilisateur
-    } else {
-      setComments(fakecomments); // afficher tout les comments
-    }
+    const result = await axios("http://localhost:4200/comments");
+    let postComments = result.data.allUsers.filter(
+      comment => comment.id === postId
+    );
+    setComments(postComments);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  });
 
   return (
     <div>

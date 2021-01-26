@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from "../Form/index.js";
 import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
 
 // il ne faut pas afficher login dans tout les cas
-// je pense qu'on doit récuper un token s'il existe, vérifier s'il n'est pas expiré, et on peut lancer home
+// je pense qu'on doit récuper un token s'il existe, vérifier s'il n'est pas expiré, et alors on peut lancer logIn ou home
 
 function LogIn() {
   return (
@@ -17,7 +17,7 @@ function LogIn() {
         <p className="login-subtitle">Votre nouveau réseau d'entreprise</p>
       </header>
       <div className="form-container">
-        <Form signIn={false} />
+        <Form logIn={true} />
         <Form signIn={true} />
       </div>
     </div>

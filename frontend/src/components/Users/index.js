@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import fakeusers from "../../fakedata/users.json";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, useParams } from "react-router-dom";
 import axios from "axios";
 
 const Users = ({ postId }) => {
@@ -8,19 +8,15 @@ const Users = ({ postId }) => {
 
   const [users, setUsers] = useState([]);
 
-  // soit tu récupères avec composant thisUser
-  // const result = axios("http://localhost:4200/users");
   const fetchData = async () => {
-    if (postId) {
-      let userPosts = fakeusers.filter(user => user.id === postId);
-      setUsers(userPosts);
-    }
-    console.log("coucou");
+    const result = await axios("http://localhost:4200/users");
+    let userPosts = result.data.allUsers.filter(user => user.id === postId);
+    setUsers(userPosts);
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [users]);
 
   return (
     <div>

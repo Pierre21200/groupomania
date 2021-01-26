@@ -15,23 +15,25 @@ const decodeUid = authorization => {
 // POST Create comment
 exports.createComment = async (req, res) => {
   try {
-    const user = await decodeUid(req.headers.authorization);
-    if (!user) {
-      throw new Error("Problème d'autorisation !");
-    }
+    // const user = await decodeUid(req.headers.authorization);
+    // if (!user) {
+    //   throw new Error("Problème d'autorisation !");
+    // }
     const { id } = await req.params;
+
+    // ou récupérer id du post
     if (!id) {
       throw new Error("Problème id params !");
     }
 
-    const { comm } = await req.body;
+    const { comm, postId } = await req.body;
     if (!comm) {
       throw new Error("Contenu du commentaire inexistant !");
     }
 
     const newComm = await model.Comment.create({
-      postId: id,
-      userId: user.id,
+      postId: postId,
+      userId: id,
       comm: comm
     });
 
