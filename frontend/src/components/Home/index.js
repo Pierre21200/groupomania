@@ -9,14 +9,15 @@ const Home = ({ section }) => {
   const [user, setUser] = useState([]);
   let params = useParams();
 
-  const fetchData = async () => {
-    const result = await axios(`http://localhost:4200/users/${params.userId}`);
-    setUser(result.data.userFound);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios(
+        `http://localhost:4200/users/${params.userId}`
+      );
+      setUser(result.data.userFound);
+    };
     fetchData();
-  });
+  }, []);
 
   return (
     <div className="home-container">

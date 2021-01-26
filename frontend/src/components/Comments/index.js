@@ -14,7 +14,7 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   return (
     <div>

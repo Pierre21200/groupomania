@@ -3,7 +3,6 @@ import Comments from "../Comments/index.js";
 import Users from "../Users/index.js";
 import Input from "../Input/index";
 import Button from "../Button/index";
-
 import "./Posts.css";
 import axios from "axios";
 
@@ -19,14 +18,15 @@ const Posts = () => {
     setValidComment(event.target.value !== "" ? true : false);
   }
 
-  const fetchData = async () => {
-    const result = await axios("http://localhost:4200/posts/allposts");
-    setPosts(result.data.allPosts);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios("http://localhost:4200/posts/allposts");
+      setPosts(result.data.allPosts);
+    };
     fetchData();
-  });
+  }, []);
+
+  console.log(posts);
 
   // const creatingComment = async ({ postId }) => {
   //   try {
@@ -49,12 +49,11 @@ const Posts = () => {
       {posts.map(post => (
         <div key={post.id} className="card">
           <div className="card-body">
-            <h5 className="card-title">{post.titlePost}oui</h5>
+            <h5 className="card-title">{post.titlePost}</h5>
             <h6 className="card-subtitle mb-2 text-muted">
-              {/* <Link to="/Profile/:userId"> */}
-              <Link to={`/profile/${post.userId}`}>
+              <a href={`/profile/${post.userId}`}>
                 <Users postId={post.userId} />
-              </Link>
+              </a>
             </h6>
             <p className="card-text">{post.content}</p>
             <div>{/* <Comments /> */}</div>
