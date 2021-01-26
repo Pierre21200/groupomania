@@ -7,6 +7,9 @@ const Users = ({ postId }) => {
   useEffect(() => {
     const fetchData = async () => {
       const result = await axios("http://localhost:4200/users");
+      // const result = await axios(
+      //   `http://localhost:4200/users/${params.userId}`
+      // );
       let userPosts = result.data.allUsers.filter(user => user.id === postId);
       setUsers(userPosts);
     };

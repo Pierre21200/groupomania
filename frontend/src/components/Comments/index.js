@@ -5,11 +5,8 @@ const Comments = ({ postId }) => {
   const [comments, setComments] = useState([]);
 
   const fetchData = async () => {
-    const result = await axios("http://localhost:4200/comments");
-    let postComments = result.data.allUsers.filter(
-      comment => comment.id === postId
-    );
-    setComments(postComments);
+    const result = await axios(`http://localhost:4200/comments/post/${postId}`);
+    setComments(result.data.postComments);
   };
 
   useEffect(() => {

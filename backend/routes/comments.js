@@ -7,10 +7,10 @@ const auth = require("../middleware/auth");
 const commentCtrl = require("../controllers/comments");
 
 // Post comment
-router.post("/create/:id", auth, commentCtrl.createComment);
+router.post("/create/:id", commentCtrl.createComment);
 
 // Get all comments from a post
-router.get("/post/:id", auth, commentCtrl.getPostComments);
+router.get("/post/:id", commentCtrl.getPostComments);
 
 // Execution
 module.exports = router;
