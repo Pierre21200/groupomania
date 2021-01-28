@@ -5,9 +5,11 @@ import Input from "../Input/index";
 import Button from "../Button/index";
 import "./Posts.css";
 import axios from "axios";
-import { BrowserRouter as useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Posts = () => {
+  let params = useParams();
+
   const [posts, setPosts] = useState([]);
   const [comm, setComm] = useState("");
   const [validComm, setValidComm] = useState(false);
@@ -19,43 +21,36 @@ const Posts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // ${process.env.REACT_APP_API_URL}
+
       const result = await axios("http://localhost:4200/posts/allposts");
+      // const result = await axios(
+      //   `${process.env.REACT_APP_API_URL}/posts/allposts`
+      // );
+
       setPosts(result.data.allPosts);
     };
     fetchData();
   }, []);
 
-  // const CreatingComment = async () => {
-  //   try {
-  //     let postId = 3;
-  //     let params = useParams();
-  //     let result = await axios.post(
-  //       `http://localhost:4200/comments/create/${params.userId}`,
-  //       {
-  //         postId,
-  //         comm
-  //       }
-  //     );
-  //     console.log("Le commentaire a bien été créé");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const creatingComment = async postId => {
+    try {
+      let id = params.userId;
+      let result = await axios.post(`http://localhost:4200/comments/create`, {
+        id,
+        postId,
+        comm
+      });
+      console.log(result.data.newComm);
+      console.log("Le commentaire a bien été créé");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  // const creatingComment = async postId => {
-  //   try {
-  //     let result = await axios.post(
-  //       `http://localhost:4200/comments/create/${params.userId}`,
-  //       {
-  //         postId,
-  //         comm
-  //       }
-  //     );
-  //     console.log("Le commentaire a bien été créé");
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  if (!posts) {
+    return <div>Chargement</div>;
+  }
 
   return (
     <div>
@@ -75,7 +70,7 @@ const Posts = () => {
           </div>
           <Button
             // onClick={<CreatingComment postId={post.id}/>}
-            // onClick={creatingComment}
+            onClick={() => creatingComment(post.id)}
             disabled={validComm ? "" : "disabled"}
           />
         </div>

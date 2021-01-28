@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Input from "../Input/index.js";
 import Button from "../Button/index.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import UserContext from "../UserContext/index.js";
 
 const Form = ({ signIn, createPost, logIn }) => {
   const history = useHistory();
-
   const [firstName, setFirstName] = useState("");
   const [validFirstName, setValidFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
@@ -46,6 +46,8 @@ const Form = ({ signIn, createPost, logIn }) => {
     setValidContent(event.target.value !== "" ? true : false);
   }
 
+  const auth = useContext(UserContext);
+
   const login = async () => {
     // ici, le try envoie soit une error 401 via le controller, soit un status 200
     // lorsque j'essaie de provoquer une erreur envoyer depuis le controller, je reçois une erreur 401, mais pas le message
@@ -56,10 +58,12 @@ const Form = ({ signIn, createPost, logIn }) => {
         email,
         password
       });
-
-      history.push(`/home/${result.data.userId}`);
+      if (result) {
+        auth.setThisUser(result.data); // on envoie ce result dans UserContext setUser
+        history.push(`/home/${result.data.userId}`);
+      }
     } catch (error) {
-      console.log("error 401");
+      console.log(error);
     }
   };
 
@@ -73,7 +77,6 @@ const Form = ({ signIn, createPost, logIn }) => {
         email,
         password
       });
-      console.log(result);
 
       console.log("Utilisateur suivant a bien été créé :");
       // envoyer l'id du user dans l'url, puis le récupérer à l'ouverture de home, en ajoutant un modal (message dans une fenêtre) "Utilisateur suivant bien créé :  {newUser de controller}"
@@ -90,8 +93,6 @@ const Form = ({ signIn, createPost, logIn }) => {
         content,
         utilId // modification temporaire
       });
-      console.log(result);
-      console.log("Le Post a bien été créé");
     } catch (error) {
       console.log(error);
     }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Comments = ({ postId }) => {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState(null);
 
   const fetchData = async () => {
     const result = await axios(`http://localhost:4200/comments/post/${postId}`);
@@ -13,6 +13,9 @@ const Comments = ({ postId }) => {
     fetchData();
   }, []);
 
+  if (!comments) {
+    return <div>Chargement</div>;
+  }
   return (
     <div>
       {comments.map(comment => (

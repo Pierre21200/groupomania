@@ -66,6 +66,7 @@ exports.login = async (req, res) => {
     if (!compare) {
       throw new Error("Mot de passe incorrect !");
     }
+    // retourner aussi s'il est modo ou non
     res.status(200).json({
       userId: userFound.id,
       token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
@@ -77,7 +78,7 @@ exports.login = async (req, res) => {
   }
 };
 
-// GET User Profile
+// GET User Profile : réservé aux modérateurs
 exports.getUserProfile = async (req, res) => {
   try {
     const { id } = await req.params;
@@ -98,7 +99,7 @@ exports.getUserProfile = async (req, res) => {
   }
 };
 
-// // GET All Users
+// // GET All Users : à ne pas utiliser en fait, potentiellement modos
 exports.getAllUsers = async (req, res) => {
   try {
     const allUsers = await model.User.findAll({

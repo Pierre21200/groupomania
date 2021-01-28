@@ -19,21 +19,24 @@ exports.createComment = async (req, res) => {
     // if (!user) {
     //   throw new Error("Problème d'autorisation !");
     // }
-    const { id } = await req.params;
+    // const { id } = await req.params;
 
     // ou récupérer id du post
+
+    const { comm, postId, id } = await req.body;
     if (!id) {
       throw new Error("Problème id params !");
     }
-
-    const { comm, postId } = await req.body;
+    if (!postId) {
+      throw new Error("Un problème avec l'id du post est survenu !");
+    }
     if (!comm) {
       throw new Error("Contenu du commentaire inexistant !");
     }
 
     const newComm = await model.Comment.create({
-      postId: postId,
       userId: id,
+      postId: postId,
       comm: comm
     });
 

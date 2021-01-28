@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import Input from "../Input/index.js";
 import Sidebar from "../Sidebar/index.js";
 import Posts from "..//Posts/index.js";
@@ -10,13 +10,17 @@ import "./Home.css";
 import { useParams } from "react-router-dom";
 
 const Home = ({ section }) => {
+  let params = useParams();
+
   const [posts, setPosts] = useState(true);
   const [createPost, setCreatePost] = useState(false);
+  const [user, setUser] = useState(null);
 
-  const [user, setUser] = useState();
-  let params = useParams();
   const fetchData = async () => {
+    // ${process.env.REACT_APP_API_URL}
+    // const result = await axios(`http://localhost:4200/users/${params.userId}`);
     const result = await axios(`http://localhost:4200/users/${params.userId}`);
+
     setUser(result.data.userFound);
   };
   useEffect(() => {
@@ -28,6 +32,9 @@ const Home = ({ section }) => {
     setPosts(false);
   };
 
+  if (!user) {
+    return <div>chargement</div>;
+  }
   return (
     <div className="home-container">
       {posts ? (
@@ -46,7 +53,7 @@ const Home = ({ section }) => {
         </div>
         <div className="container col-10">
           <header className="home-header">
-            {/* <p>{user.firstName}</p> */}
+            <p>{user.firstName}</p>
             <Input name="Rechercher dans les posts" />
             <button onClick={seeCreatingPost}>Créer un nouveau post</button>
           </header>

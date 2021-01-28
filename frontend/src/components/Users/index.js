@@ -16,6 +16,10 @@ const Users = ({ postId }) => {
     fetchData();
   }, []);
 
+  if (!users) {
+    return <div>Chargement</div>;
+  }
+
   return (
     <div>
       {users.map(user => (

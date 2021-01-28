@@ -11,7 +11,7 @@ const postCtrl = require("../controllers/posts");
 router.post("/create", multer, postCtrl.createPost); // a modifier en enlevant create
 
 // Get all the posts
-router.get("/allposts", postCtrl.getAllPosts); // a modifier en enlevant allposts
+router.get("/allposts", auth, postCtrl.getAllPosts); // a modifier en enlevant allposts
 
 // Get one post
 router.get("/:id", postCtrl.getOnePost);
