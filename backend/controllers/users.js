@@ -66,6 +66,7 @@ exports.login = async (req, res) => {
     if (!compare) {
       throw new Error("Mot de passe incorrect !");
     }
+
     // retourner aussi s'il est modo ou non
     res.status(200).json({
       userId: userFound.id,

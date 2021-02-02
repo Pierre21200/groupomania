@@ -54,10 +54,14 @@ const Form = ({ signIn, createPost, logIn }) => {
     // comment récupérer le message error du controller
 
     try {
-      let result = await axios.post("http://localhost:4200/users/login", {
-        email,
-        password
-      });
+      let result = await axios.post(
+        "http://localhost:4200/users/login",
+        {
+          email,
+          password
+        }
+        // , {headers: {authorization: }}
+      );
       if (result) {
         auth.setThisUser(result.data); // on envoie ce result dans UserContext setUser
         history.push(`/home/${result.data.userId}`);

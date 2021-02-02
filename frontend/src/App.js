@@ -52,7 +52,7 @@ export default App;
 // contextProvider qui wrapp app avec une props value={setUser, user}
 // on continue comme ça : dans login, on stocke nos infos dans user avec setUser, et on essaie de récupérer tout ça plus tard
 // on a bien stocké les infos dans le UserContext, on peut le récupérer plus tard, mais combien de temps les informations restent à l'intérieur
-//c'est pour ça qu'il faut stocker token dans local storage
+// c'est pour ça qu'il faut stocker token dans local storage ?
 
 // stocker token dans localstorage
 
@@ -75,4 +75,3 @@ export default App;
 
 // bien faire la différence autre auth backend et auth frontend
 // dans le backend, on doit envoyer le token dans req.header.authorization
-// comment le middleware auth récupère
