@@ -4,6 +4,7 @@ import Button from "../Button/index.js";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import UserContext from "../UserContext/index.js";
+// import UserContext from "../../App.js";
 
 const Form = ({ signIn, createPost, logIn }) => {
   const history = useHistory();
@@ -49,27 +50,20 @@ const Form = ({ signIn, createPost, logIn }) => {
   const auth = useContext(UserContext);
 
   const login = async () => {
-    // ici, le try envoie soit une error 401 via le controller, soit un status 200
-    // lorsque j'essaie de provoquer une erreur envoyer depuis le controller, je reçois une erreur 401, mais pas le message
-    // comment récupérer le message error du controller
-
+    console.log(auth);
     try {
-      let result = await axios.post(
-        "http://localhost:4200/users/login",
-        {
-          email,
-          password
-        }
-        // { headers: { Authorization: `Bearer ${token}` } }  oui mais pas ici
-        // attention backtick. Créer une fonction pour récupérer mon token
-      );
+      let result = await axios.post("http://localhost:4200/users/login", {
+        email,
+        password
+      });
       if (result) {
-        auth.setThisUser(result.data); // on stocke le userId dans notre contexte
+        auth.setUser(result.data.user);
       }
-      if (auth.thisUser) {
-        console.log(auth.thisUser.user);
-        history.push(`/home/${auth.thisUser.user.id}`); // on redirige vers home avec l'id qu'on récupère dans le contexte
+      if (auth.user) {
+        localStorage.setItem("token", result.data.token);
+        history.push(`/home/${auth.user.id}`);
       }
+      <div>Chargement</div>;
     } catch (error) {
       console.log(error);
     }

@@ -69,7 +69,6 @@ const Posts = () => {
             <Input value={comm} name="comment" onChange={handleChangeComm} />
           </div>
           <Button
-            // onClick={<CreatingComment postId={post.id}/>}
             onClick={() => creatingComment(post.id)}
             disabled={validComm ? "" : "disabled"}
           />

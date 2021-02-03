@@ -1,25 +1,25 @@
 import LogIn from "./components/LogIn/index.js";
 import Home from "./components/Home/index.js";
 import Form from "./components/Form/index";
-
+import UserContext from "./components/UserContext/index.js";
 import Posts from "./components/Posts/index.js";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import UserContext from "./components/UserContext/index.js";
-
-// créer le usercontext ici direct
 
 // éviter this
 
+//si je déclare UserContext, impossible de le récupérer correctement ailleurs
+// export const UserContext = React.createContext();
+
 function App() {
-  const [thisUser, setThisUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     // vérifier si user n'est pas null
     // sinon, récupérer token, le décodé et mettre a jour mon thisUser
   }, []);
   return (
-    <UserContext.Provider value={{ thisUser, setThisUser }}>
+    <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <Switch>
           <Route exact path="/">
@@ -50,3 +50,6 @@ export default App;
 // stocker token dans localstorage
 
 // package decodeUid frontend
+
+// question pour Ludo :
+// pourquoi ne pas tout stocker au même endroit , cad dans le context ?
