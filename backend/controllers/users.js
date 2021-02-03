@@ -67,9 +67,8 @@ exports.login = async (req, res) => {
       throw new Error("Mot de passe incorrect !");
     }
 
-    // retourner aussi s'il est modo ou non
     res.status(200).json({
-      userId: userFound.id,
+      user: userFound,
       token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
         expiresIn: "24h"
       })

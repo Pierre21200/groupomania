@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 
 const Posts = () => {
   let params = useParams();
+  const token = localStorage.getItem("token");
 
   const [posts, setPosts] = useState([]);
   const [comm, setComm] = useState("");
@@ -21,9 +22,9 @@ const Posts = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // ${process.env.REACT_APP_API_URL}
-
-      const result = await axios("http://localhost:4200/posts/allposts");
+      const result = await axios("http://localhost:4200/posts/allposts", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       // const result = await axios(
       //   `${process.env.REACT_APP_API_URL}/posts/allposts`
       // );
@@ -41,7 +42,6 @@ const Posts = () => {
         postId,
         comm
       });
-      console.log(result.data.newComm);
       console.log("Le commentaire a bien été créé");
     } catch (error) {
       console.log(error);
@@ -80,8 +80,3 @@ const Posts = () => {
 };
 
 export default Posts;
-
-// problème
-// je veux appeler la fonction creatingComment sur le onClick en lui passant un argument post.id
-// si j'appelle la fonction, je ne peux pas utiliser useParams à l'intérieur, et à l'extérieur ça ne fonctionne pas non plus
-//si j'appelle un composant react CreatingComment : "Expected `onClick` listener to be a function"

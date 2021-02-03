@@ -60,11 +60,15 @@ const Form = ({ signIn, createPost, logIn }) => {
           email,
           password
         }
-        // , {headers: {authorization: }}
+        // { headers: { Authorization: `Bearer ${token}` } }  oui mais pas ici
+        // attention backtick. Créer une fonction pour récupérer mon token
       );
       if (result) {
-        auth.setThisUser(result.data); // on envoie ce result dans UserContext setUser
-        history.push(`/home/${result.data.userId}`);
+        auth.setThisUser(result.data); // on stocke le userId dans notre contexte
+      }
+      if (auth.thisUser) {
+        console.log(auth.thisUser.user);
+        history.push(`/home/${auth.thisUser.user.id}`); // on redirige vers home avec l'id qu'on récupère dans le contexte
       }
     } catch (error) {
       console.log(error);
