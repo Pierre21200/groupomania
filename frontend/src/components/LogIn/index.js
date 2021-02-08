@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Form from "../Form/index.js";
 import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
-
-// il ne faut pas afficher login dans tout les cas
-// je pense qu'on doit récuper un token s'il existe, vérifier s'il n'est pas expiré, et alors on peut lancer logIn ou home
+import UserContext from "../UserContext/index.js";
 
 function LogIn() {
+  const history = useHistory();
+  const auth = useContext(UserContext);
+
+  if (auth.user) {
+    history.push(`/home/${auth.user.id}`);
+  }
+
   return (
     <div className="login-container">
       <header className="login-header">

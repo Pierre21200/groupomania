@@ -50,7 +50,6 @@ const Form = ({ signIn, createPost, logIn }) => {
   const auth = useContext(UserContext);
 
   const login = async () => {
-    console.log(auth);
     try {
       let result = await axios.post("http://localhost:4200/users/login", {
         email,
@@ -58,11 +57,14 @@ const Form = ({ signIn, createPost, logIn }) => {
       });
       if (result) {
         auth.setUser(result.data.user);
-      }
-      if (auth.user) {
         localStorage.setItem("token", result.data.token);
-        history.push(`/home/${auth.user.id}`);
       }
+
+      // if (auth.user) {
+      //   history.push(`/home/${auth.user.id}`);
+      // }
+      history.push(`/home/${result.data.user.id}`); // plus rapide
+
       <div>Chargement</div>;
     } catch (error) {
       console.log(error);
