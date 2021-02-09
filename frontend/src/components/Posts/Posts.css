@@ -1,11 +1,45 @@
 .card {
-  margin: auto;
-
-  margin-bottom: 50px;
+  margin: 100px;
+  margin-top: 0px;
   box-shadow: 0px 0px 5px rgb(39, 111, 228);
   color: white;
   border-radius: 30px;
-  height: 300px;
+  height: auto;
   width: 800px;
   color: rgb(39, 111, 228);
+}
+
+.bouton {
+  margin: 30px;
+}
+.card-title,
+.card-date {
+  text-align: left;
+}
+
+.card-subtitle {
+  font-weight: bold;
+}
+
+.line {
+  border-bottom: blue 1px solid;
+}
+
+.like {
+  margin-top: 20px;
+}
+
+.commenter {
+  display: flex;
+  flex-direction: inline;
+  margin: 30px;
+}
+
+.input-comm {
+  margin-right: 50px;
+  width: 500px;
+  height: 100%;
+}
+
+#createPostForm {
 }

@@ -40,7 +40,6 @@ exports.signup = async (req, res) => {
     if (!newUser) {
       throw new Error("L'inscription a échoué");
     }
-    console.log(newUser.dataValues);
     res.status(201).json("L'utilisateur a bien été créé");
   } catch (error) {
     res.status(401).json({ error: error.message });
@@ -163,7 +162,6 @@ exports.updateUserProfile = async (req, res) => {
 exports.updatePassword = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
-    console.log(user.id);
     if (!user) {
       throw new Error("Problème d'autorisation !");
     }

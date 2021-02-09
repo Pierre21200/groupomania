@@ -15,18 +15,18 @@ const decodeUid = authorization => {
 // POST Create Post
 exports.createPost = async (req, res) => {
   try {
-    // const user = await decodeUid(req.headers.authorization);
+    const user = await decodeUid(req.headers.authorization);
 
-    // if (!user) {
-    //   throw new Error("Problème d'autorisation !");
-    // }
-    const { title, content, utilId } = await req.body;
+    if (!user) {
+      throw new Error("Problème d'autorisation !");
+    }
+    const { title, content } = await req.body;
 
     if (!title || !content) {
       throw new Error("Un paramêtre est manquant !");
     }
     const newPost = await model.Post.create({
-      userId: utilId, // modification temporaire
+      userId: user.id,
       titlePost: title,
       content: content
     });
@@ -55,25 +55,25 @@ exports.getAllPosts = async (req, res) => {
 };
 
 // GET one post
-exports.getOnePost = async (req, res) => {
-  try {
-    const { id } = await req.params;
-    if (!id) {
-      throw new Error("Ce post n'existe plus ou est illisible !");
-    }
-    const onePost = await model.Post.findOne({
-      where: { id: id }
-    });
-    if (!onePost) {
-      throw new Error("Problème");
-    }
-    res.status(200).json({ onePost });
-  } catch (error) {
-    res.status(401).json({ error: error.message });
-  }
-};
+// exports.getOnePost = async (req, res) => {
+//   try {
+//     const { id } = await req.params;
+//     if (!id) {
+//       throw new Error("Ce post n'existe plus ou est illisible !");
+//     }
+//     const onePost = await model.Post.findOne({
+//       where: { id: id }
+//     });
+//     if (!onePost) {
+//       throw new Error("Problème");
+//     }
+//     res.status(200).json({ onePost });
+//   } catch (error) {
+//     res.status(401).json({ error: error.message });
+//   }
+// };
 
-// GET all user's posts
+// GET all user's posts : réservé au modérateur
 exports.getAllUsersPosts = async (req, res) => {
   try {
     const { id } = await req.params;

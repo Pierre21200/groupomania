@@ -6,8 +6,10 @@ import { useHistory } from "react-router-dom";
 import UserContext from "../UserContext/index.js";
 // import UserContext from "../../App.js";
 
-const Form = ({ signIn, createPost, logIn }) => {
+const Form = ({ signIn, logIn }) => {
+  const auth = useContext(UserContext);
   const history = useHistory();
+
   const [firstName, setFirstName] = useState("");
   const [validFirstName, setValidFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
@@ -16,10 +18,6 @@ const Form = ({ signIn, createPost, logIn }) => {
   const [validEmail, setValidEmail] = useState(false);
   const [password, setPassword] = useState("");
   const [validPassword, setValidPassword] = useState(false);
-  const [title, setTitle] = useState("");
-  const [validTitle, setValidTitle] = useState(false);
-  const [content, setContent] = useState("");
-  const [validContent, setValidContent] = useState(false);
 
   function handleChangeFirstname(event) {
     setFirstName(event.target.value);
@@ -38,16 +36,6 @@ const Form = ({ signIn, createPost, logIn }) => {
     setPassword(event.target.value);
     setValidPassword(event.target.value !== "" ? true : false);
   }
-  function handleChangeTitle(event) {
-    setTitle(event.target.value);
-    setValidTitle(event.target.value !== "" ? true : false);
-  }
-  function handleChangeContent(event) {
-    setContent(event.target.value);
-    setValidContent(event.target.value !== "" ? true : false);
-  }
-
-  const auth = useContext(UserContext);
 
   const login = async () => {
     try {
@@ -59,20 +47,14 @@ const Form = ({ signIn, createPost, logIn }) => {
         auth.setUser(result.data.user);
         localStorage.setItem("token", result.data.token);
       }
-
-      // if (auth.user) {
-      //   history.push(`/home/${auth.user.id}`);
-      // }
-      history.push(`/home/${result.data.user.id}`); // plus rapide
-
       <div>Chargement</div>;
+
+      history.push(`/`);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // même logique que login, mais importance des regex car seul vérification
-  //comment récuper le newUser, et le message.error
   const signup = async () => {
     try {
       let result = await axios.post("http://localhost:4200/users/signup", {
@@ -83,121 +65,82 @@ const Form = ({ signIn, createPost, logIn }) => {
       });
 
       console.log("Utilisateur suivant a bien été créé :");
-      // envoyer l'id du user dans l'url, puis le récupérer à l'ouverture de home, en ajoutant un modal (message dans une fenêtre) "Utilisateur suivant bien créé :  {newUser de controller}"
     } catch (error) {
       console.log();
     }
   };
 
-  const creatingPost = async () => {
-    let utilId = 4; // modification temporaire
-    try {
-      let result = await axios.post("http://localhost:4200/posts/create", {
-        title,
-        content,
-        utilId // modification temporaire
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div>
-      <form className={signIn ? "form-sign" : "form-log"}>
-        {signIn ? (
+    <form>
+      {signIn ? (
+        <div>
           <div>
-            <div>
-              <p>
-                Vous n'avez pas encore de compte ?<br />
-                Inscrivez-vous !
-              </p>
-            </div>
-            <Input
-              value={firstName}
-              name="Firstname"
-              onChange={handleChangeFirstname}
-            />
-
-            <Input
-              value={lastName}
-              name="Lastname"
-              onChange={handleChangeLastname}
-            />
-            <Input
-              type="email"
-              value={email}
-              name="Email"
-              onChange={handleChangeEmail}
-            />
-
-            <Input
-              type="password"
-              value={password}
-              name="Password"
-              onChange={handleChangePassword}
-            />
-
-            <Button
-              onClick={signup}
-              disabled={
-                validPassword &&
-                validEmail &&
-                validFirstName &&
-                validLastName === true
-                  ? ""
-                  : "disabled"
-              }
-            />
+            <p>
+              Vous n'avez pas encore de compte ?<br />
+              Inscrivez-vous !
+            </p>
           </div>
-        ) : null}
+          <Input
+            value={firstName}
+            name="Firstname"
+            onChange={handleChangeFirstname}
+          />
 
-        {logIn ? (
+          <Input
+            value={lastName}
+            name="Lastname"
+            onChange={handleChangeLastname}
+          />
+          <Input
+            type="email"
+            value={email}
+            name="Email"
+            onChange={handleChangeEmail}
+          />
+
+          <Input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={handleChangePassword}
+          />
+
+          <Button
+            onClick={signup}
+            disabled={
+              validPassword &&
+              validEmail &&
+              validFirstName &&
+              validLastName === true
+                ? ""
+                : "disabled"
+            }
+          />
+        </div>
+      ) : null}
+
+      {logIn ? (
+        <div>
           <div>
-            <div>
-              <p>
-                Vous êtes déjà inscrit ?<br />
-                Connectez-vous !
-              </p>
-            </div>
-            <Input value={email} name="email" onChange={handleChangeEmail} />
-
-            <Input
-              value={password}
-              name="password"
-              onChange={handleChangePassword}
-            />
-            <Button
-              onClick={login}
-              disabled={validPassword && validEmail === true ? "" : "disabled"}
-            />
+            <p>
+              Vous êtes déjà inscrit ?<br />
+              Connectez-vous !
+            </p>
           </div>
-        ) : null}
+          <Input value={email} name="email" onChange={handleChangeEmail} />
 
-        {createPost ? (
-          <div>
-            <div>
-              <p>
-                Envie de partager quelque-chose ? <br />
-                Ecrivez-le !
-              </p>
-            </div>
-            <Input value={title} name="title" onChange={handleChangeTitle} />
-
-            <Input
-              value={content}
-              name="content"
-              onChange={handleChangeContent}
-            />
-
-            <Button
-              onClick={creatingPost}
-              disabled={validTitle && validContent === true ? "" : "disabled"}
-            />
-          </div>
-        ) : null}
-      </form>
-    </div>
+          <Input
+            value={password}
+            name="password"
+            onChange={handleChangePassword}
+          />
+          <Button
+            onClick={login}
+            disabled={validPassword && validEmail === true ? "" : "disabled"}
+          />
+        </div>
+      ) : null}
+    </form>
   );
 };
 

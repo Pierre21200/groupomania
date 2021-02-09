@@ -3,7 +3,6 @@ import "./Sidebar.css";
 import logo from "../../icons/icon-c.png";
 
 const Sidebar = () => {
-  // récupérer l'id avec useParams, ou avec un composant
   return (
     <div className="sidebar">
       <div className="logo-home">

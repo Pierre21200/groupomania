@@ -23,8 +23,8 @@ exports.createComment = async (req, res) => {
 
     // ou récupérer id du post
 
-    const { comm, postId, id } = await req.body;
-    if (!id) {
+    const { comm, postId, userId } = await req.body;
+    if (!userId) {
       throw new Error("Problème id params !");
     }
     if (!postId) {
@@ -35,7 +35,7 @@ exports.createComment = async (req, res) => {
     }
 
     const newComm = await model.Comment.create({
-      userId: id,
+      userId: userId,
       postId: postId,
       comm: comm
     });

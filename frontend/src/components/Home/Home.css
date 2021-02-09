@@ -7,9 +7,6 @@
   --bs-gutter-x: 0;
 }
 
-.container {
-}
-
 .home-header {
   height: 10%; /* Full-height: remove this if you want "auto" height */
   width: 80%;
@@ -29,12 +26,27 @@
 }
 
 .section-container {
-  padding: 0px 50px 0px 50px;
-  margin-top: 10%;
+  height: 90%;
+  width: 80%;
+  position: fixed;
+  z-index: 1;
+  top: 10%;
+  left: 20%;
+  overflow-x: hidden;
+  box-shadow: 0px 0px 5px rgb(39, 111, 228);
+  display: flex;
+  justify-content: center;
 }
 
-/* .sidebar-container {
-  border-right: 2px solid rgb(45, 145, 226);
-  background-color: rgb(34, 112, 229);
-  font-weight: bold;
-} */
+.sidebar {
+  height: 100%; /* Full-height: remove this if you want "auto" height */
+  width: 20%;
+  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  color: rgb(39, 111, 228);
+  background-color: rgb(39, 111, 228);
+  box-shadow: 0px 0px 5px rgb(39, 111, 228);
+}

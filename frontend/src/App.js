@@ -1,3 +1,5 @@
+// #
+
 import LogIn from "./components/LogIn/index.js";
 import Home from "./components/Home/index.js";
 import Form from "./components/Form/index";
@@ -14,11 +16,11 @@ const jwt = require("jsonwebtoken");
 function App() {
   const [user, setUser] = useState(null);
 
-  // ici, on verifie l'existence d'un token et de son expiration, et on met à jour notre contexte en fonction
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
+        // const decodedToken = jwt.verify(token, {env.JWT_SECRET});
         const decodedToken = jwt.verify(token, "t2uxm0dsvf1");
 
         if (!decodedToken.userId) {
@@ -27,10 +29,13 @@ function App() {
 
         const fetchData = async () => {
           let result = await axios(
-            `http://localhost:4200/users/${decodedToken.userId}`
+            `http://localhost:4200/users/${decodedToken.userId}`,
+            {
+              headers: { Authorization: `Bearer ${token}` }
+            }
           );
           if (!result) {
-            throw new Error("Problème avec requête");
+            throw new Error("Il y a eu un problème avec la requête");
           }
           setUser(result.data.userFound);
         };
@@ -42,35 +47,30 @@ function App() {
     }
   }, []);
 
-  // Puis on protège nos routes avec PrivateRoute
   return (
     <UserContext.Provider value={{ user, setUser }}>
       <Router>
         <Switch>
-          <Route exact path="/">
+          <PrivateRoute exact path="/" component={Home} />
+          <Route exact path="/login">
             <LogIn />
           </Route>
-          <PrivateRoute exact path="/home/:userId" component={Home} />
         </Switch>
       </Router>
     </UserContext.Provider>
   );
 }
 
-document.getElementById("root");
-
 export default App;
 
-// revoir error, error.message, error.error lol : problème non réglé
+// revoir error, error.message, error.error : problème non réglé
 
 // variable d'environnement localhost4200  : problème non réglé
 
-// controllers : ne pas récupérer les id dans params mais dans le body : problème non réglé
-
 // question pour Ludo :
 // probleme pour import userContext si je le déclare ici dans app.js
-// le token dans localstorage durée illimité, quand est ce que je dois l'effacer a part au logout ?
-// pourquoi ne pas tout stocker au même endroit , cad dans le context ?
-// dans form login, history push plus rapide avec result.data
+// problème variables d'environnements, et de message error
+// pourquoi ne pas tout stocker (user + token) au même endroit , cad dans le context ?
+// lorsque j'envoie un userId lors d'une requete, il vaut mieux le récupérer depuis le frontend dans le context, ou depuis le backend avec decodeUid de mon headers authorization
 
 // peut on améliorer la logique de private route, et la redirection vers home pour la page login (car warning) ?
