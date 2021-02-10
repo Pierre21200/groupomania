@@ -3,8 +3,8 @@ import Comments from "../Comments/index.js";
 import Users from "../Users/index.js";
 import Input from "../Input/index";
 import Form from "../Form/index";
-import UserContext from "../UserContext/index.js";
-
+import { UserContext } from "../../App.js";
+import DecodedToken from "../DecodeToken/index";
 import Button from "../Button/index";
 import "./Posts.css";
 import axios from "axios";
@@ -52,6 +52,7 @@ const Posts = () => {
 
   const creatingComment = async postId => {
     try {
+      <DecodedToken />;
       let userId = auth.user.id;
       let result = await axios.post(
         `http://localhost:4200/comments/create`,

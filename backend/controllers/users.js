@@ -69,11 +69,11 @@ exports.login = async (req, res) => {
     res.status(200).json({
       user: userFound,
       token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
-        expiresIn: "24h"
+        expiresIn: "10s"
       })
     });
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(401).json({ message: error.message });
   }
 };
 

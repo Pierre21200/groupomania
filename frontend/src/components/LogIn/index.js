@@ -1,34 +1,40 @@
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory, Redirect } from "react-router-dom";
 import Form from "../Form/index.js";
 import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
-import UserContext from "../UserContext/index.js";
+import { UserContext } from "../../App.js";
 
 function LogIn() {
   const history = useHistory();
   const auth = useContext(UserContext);
+  const [redirect, setRedirect] = useState(false);
 
-  if (auth.user) {
-    history.push(`/`);
-    return null;
-  } else {
-    return (
-      <div className="login-container">
-        <header className="login-header">
-          <div className="login-container-title">
-            <img className="login-logo" src={logo} alt="groupomania-logo" />
-            <h1 className="login-title">Groupomania</h1>
-          </div>
-          <p className="login-subtitle">Votre nouveau réseau d'entreprise</p>
-        </header>
-        <div className="form-container">
-          <Form logIn={true} />
-          <Form signIn={true} />
+  useEffect(() => {
+    if (auth?.user) {
+      setRedirect(true);
+    }
+    if (redirect) {
+      history.push("/");
+      // <Redirect to={{ pathname: "/" }} />; // Non fonctionnel
+    }
+  }, [auth, redirect]);
+
+  return (
+    <div className="login-container">
+      <header className="login-header">
+        <div className="login-container-title">
+          <img className="login-logo" src={logo} alt="groupomania-logo" />
+          <h1 className="login-title">Groupomania</h1>
         </div>
+        <p className="login-subtitle">Votre nouveau réseau d'entreprise</p>
+      </header>
+      <div className="form-container">
+        <Form logIn={true} />
+        <Form signIn={true} />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default LogIn;

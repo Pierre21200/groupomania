@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Input from "../Input/index.js";
 import Button from "../Button/index.js";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
-import UserContext from "../UserContext/index.js";
-// import UserContext from "../../App.js";
+import { Redirect, useHistory } from "react-router-dom";
+import { UserContext } from "../../App.js";
 
 const Form = ({ signIn, logIn }) => {
   const auth = useContext(UserContext);
@@ -49,7 +48,7 @@ const Form = ({ signIn, logIn }) => {
       }
       <div>Chargement</div>;
 
-      history.push(`/`);
+      history.push(`/`); // Redirect
     } catch (error) {
       console.log(error);
     }

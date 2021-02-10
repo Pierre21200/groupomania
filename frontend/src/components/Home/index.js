@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import Input from "../Input/index.js";
 import Sidebar from "../Sidebar/index.js";
 import Posts from "..//Posts/index.js";
-import UserContext from "../UserContext/index.js";
+import { UserContext } from "../../App.js";
+
 import "./Home.css";
 
 const Home = () => {
@@ -21,7 +22,7 @@ const Home = () => {
 
         <div className="container col-10">
           <header className="home-header">
-            <p>{auth.user.firstName}</p>
+            {/* <p>{auth.user.firstName}</p> */}
             <Input name="Rechercher dans les posts" />
           </header>
         </div>
