@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { getComments, postComments } from "../FetchData/Comments/index";
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, newComment }) => {
   const token = localStorage.getItem("token");
-
   const [comments, setComments] = useState(null);
-
-  const fetchData = async () => {
-    const result = await axios(
-      `http://localhost:4200/comments/post/${postId}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+  useEffect(async () => {
+    const result = await getComments(token, postId);
     setComments(result.data.postComments);
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
 
   if (!comments) {

@@ -4,10 +4,12 @@ import Button from "../Button/index.js";
 import axios from "axios";
 import { Redirect, useHistory } from "react-router-dom";
 import { UserContext } from "../../App.js";
+import { signUser, logUser, updateUser } from "../FetchData/Users/index";
 
-const Form = ({ signIn, logIn }) => {
+const Form = ({ signIn, logIn, updateProfile, style }) => {
   const auth = useContext(UserContext);
   const history = useHistory();
+  const token = localStorage.getItem("token");
 
   const [firstName, setFirstName] = useState("");
   const [validFirstName, setValidFirstName] = useState(false);
@@ -38,15 +40,11 @@ const Form = ({ signIn, logIn }) => {
 
   const login = async () => {
     try {
-      let result = await axios.post("http://localhost:4200/users/login", {
-        email,
-        password
-      });
+      const result = await logUser(email, password);
       if (result) {
         auth.setUser(result.data.user);
         localStorage.setItem("token", result.data.token);
       }
-      <div>Chargement</div>;
 
       history.push(`/`); // Redirect
     } catch (error) {
@@ -56,28 +54,37 @@ const Form = ({ signIn, logIn }) => {
 
   const signup = async () => {
     try {
-      let result = await axios.post("http://localhost:4200/users/signup", {
-        firstName,
-        lastName,
-        email,
-        password
-      });
-
+      signUser(firstName, lastName, email, password);
       console.log("Utilisateur suivant a bien été créé :");
     } catch (error) {
       console.log();
     }
   };
 
+  const update = async () => {
+    try {
+      const result = await updateUser(firstName, lastName, email, token);
+      if (result) {
+        console.log("L'utilisateur a bien été modifié");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <form>
+    <form style={style} className={updateProfile ? "update-form" : "null"}>
       {signIn ? (
         <div>
           <div>
-            <p>
-              Vous n'avez pas encore de compte ?<br />
-              Inscrivez-vous !
-            </p>
+            {updateProfile ? (
+              <p>Modifiez votre profile ! </p>
+            ) : (
+              <p>
+                Vous n'avez pas encore de compte ?<br />
+                Inscrivez-vous !
+              </p>
+            )}
           </div>
           <Input
             value={firstName}
@@ -105,7 +112,8 @@ const Form = ({ signIn, logIn }) => {
           />
 
           <Button
-            onClick={signup}
+            className={updateProfile ? "btn btn-outline-light" : null}
+            onClick={updateProfile ? update : signup}
             disabled={
               validPassword &&
               validEmail &&

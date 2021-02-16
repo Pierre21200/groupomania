@@ -35,11 +35,8 @@
   margin: 30px;
 }
 
-.input-comm {
+.input-newComment {
   margin-right: 50px;
   width: 500px;
   height: 100%;
-}
-
-#createPostForm {
 }

@@ -36,3 +36,7 @@ h2 {
   font-weight: bold;
   border-radius: 30px;
 }
+
+.update-form {
+  margin: auto;
+}

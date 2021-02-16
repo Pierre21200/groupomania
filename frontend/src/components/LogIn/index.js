@@ -11,13 +11,17 @@ function LogIn() {
   const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
+    console.log(auth);
     if (auth?.user) {
       setRedirect(true);
     }
     if (redirect) {
       history.push("/");
-      // <Redirect to={{ pathname: "/" }} />; // Non fonctionnel
+      // <Redirect to="/" />;
+      // <Redirect to={{ pathname: "/" }} />;
     }
+
+    // redirect ? <Redirect to="/" /> : null;
   }, [auth, redirect]);
 
   return (

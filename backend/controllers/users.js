@@ -10,7 +10,7 @@ const model = require("../models/users");
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = await req.body;
-
+    const modo = true;
     if (!firstName || !lastName || !email || !password) {
       throw new Error("Un paramêtre est manquant !");
     }
@@ -69,7 +69,7 @@ exports.login = async (req, res) => {
     res.status(200).json({
       user: userFound,
       token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
-        expiresIn: "10s"
+        expiresIn: "24h"
       })
     });
   } catch (error) {
@@ -154,7 +154,7 @@ exports.updateUserProfile = async (req, res) => {
 
     res.status(200).json({ updateProfile });
   } catch (error) {
-    res.status(401).json({ error: error.message });
+    res.status(401).json({ error });
   }
 };
 
@@ -205,5 +205,21 @@ exports.updatePassword = async (req, res) => {
     res.status(200).json({ newMe });
   } catch (error) {
     res.status(401).json({ error: error.message });
+  }
+};
+
+exports.deleteProfile = async (req, res) => {
+  try {
+    const user = await decodeUid(req.headers.authorization);
+    if (!user) {
+      throw new Error("Problème d'autorisation !");
+    }
+    await model.User.destroy({
+      where: {
+        id: user.id
+      }
+    });
+  } catch (error) {
+    res.status(401).json({ error });
   }
 };

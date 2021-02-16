@@ -23,21 +23,21 @@ exports.createComment = async (req, res) => {
 
     // ou récupérer id du post
 
-    const { comm, postId, userId } = await req.body;
+    const { commentContent, postId, userId } = await req.body;
     if (!userId) {
       throw new Error("Problème id params !");
     }
     if (!postId) {
       throw new Error("Un problème avec l'id du post est survenu !");
     }
-    if (!comm) {
+    if (!commentContent) {
       throw new Error("Contenu du commentaire inexistant !");
     }
 
     const newComm = await model.Comment.create({
       userId: userId,
       postId: postId,
-      comm: comm
+      comm: commentContent
     });
 
     if (!newComm) {

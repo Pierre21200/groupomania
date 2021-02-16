@@ -3,15 +3,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useHistory
+  useHistory,
+  Redirect
 } from "react-router-dom";
 
 const jwt = require("jsonwebtoken");
 
-// la fonction DecodeToken te permet de vérifier token et son expiration, et redirige vers login si error
-// elle sert donc a protéger tes routes en frontend en plus de PrivateRoute sur home (posts etc)
-const DecodeToken = () => {
-  const history = useHistory();
+const decodeToken = () => {
   try {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -24,8 +22,8 @@ const DecodeToken = () => {
     console.log("La session reste ouverte !");
   } catch (e) {
     console.log(e);
-    history.push("/login");
+    return <Redirect to={{ pathname: "/" }} />; // la redirectection ne se fait pas
   }
 };
 
-export default DecodeToken;
+export default decodeToken;

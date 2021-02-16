@@ -9,6 +9,10 @@ import "./Home.css";
 const Home = () => {
   const auth = useContext(UserContext);
 
+  // if (auth.user.moderator) {
+  //   console.log("modo");
+  // }
+
   return (
     <div className="home-container">
       <div className="section-container">
@@ -22,7 +26,7 @@ const Home = () => {
 
         <div className="container col-10">
           <header className="home-header">
-            {/* <p>{auth.user.firstName}</p> */}
+            <p>{auth.user.firstName}</p>
             <Input name="Rechercher dans les posts" />
           </header>
         </div>

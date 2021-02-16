@@ -6,6 +6,11 @@ const User = sequelize.define(
   "user",
   {
     id: { type: Sequelize.INTEGER, autoIncrement: true, primaryKey: true },
+    moderator: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
+    }, // nouveau
     firstName: {
       type: Sequelize.STRING(255),
       allowNull: false,
@@ -15,7 +20,7 @@ const User = sequelize.define(
     email: { type: Sequelize.STRING(255), allowNull: false },
     password: { type: Sequelize.STRING(255), allowNull: false }
   },
-  { tableName: "user", timestamps: false, underscored: true } //par default "tableName" serait "roles" (au pluriel), "timestamps" crée 2 champs automatique pour les dates de création et de modification (très pratique si nécessaire) et "underscored" permet de créer automatiquement des champs de "relation" entre les tables de type "role_id" plutôt que "UserId".
+  { tableName: "user", timestamps: false, underscored: true }
 );
 
 User.associate = models => {
