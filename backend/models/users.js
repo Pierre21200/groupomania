@@ -10,7 +10,12 @@ const User = sequelize.define(
       type: Sequelize.BOOLEAN,
       allowNull: true,
       defaultValue: false
-    }, // nouveau
+    },
+    active: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: true
+    },
     firstName: {
       type: Sequelize.STRING(255),
       allowNull: false,

@@ -66,6 +66,10 @@ exports.login = async (req, res) => {
       throw new Error("Mot de passe incorrect !");
     }
 
+    if (!userFound.active) {
+      throw new Error("Utilisateur inactif !");
+    }
+
     res.status(200).json({
       user: userFound,
       token: jwt.sign({ userId: userFound.id }, process.env.JWT_SECRET, {
@@ -208,17 +212,43 @@ exports.updatePassword = async (req, res) => {
   }
 };
 
-exports.deleteProfile = async (req, res) => {
+// exports.inactiveProfile = async (req, res) => {
+//   try {
+//     const user = await decodeUid(req.headers.authorization);
+//     if (!user) {
+//       throw new Error("Problème d'autorisation !");
+//     }
+//     await model.User.destroy({
+//       where: {
+//         id: user.id
+//       }
+//     });
+//   } catch (error) {
+//     res.status(401).json({ error });
+//   }
+// };
+
+exports.inactiveProfile = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
     if (!user) {
       throw new Error("Problème d'autorisation !");
     }
-    await model.User.destroy({
-      where: {
-        id: user.id
+
+    const updateProfile = await model.User.update(
+      { active: false },
+      {
+        where: {
+          id: user.id
+        }
       }
-    });
+    );
+
+    if (!updateProfile) {
+      throw new Error("Le profil n'a pas été inactivé");
+    }
+
+    res.status(200).json({ updateProfile });
   } catch (error) {
     res.status(401).json({ error });
   }

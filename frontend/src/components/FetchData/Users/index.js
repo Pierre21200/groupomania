@@ -35,8 +35,12 @@ export const updateUser = (firstName, lastName, email, token) => {
 };
 
 export const deleteUser = token => {
-  const result = axios.delete(`${URL}/profile/delete`, {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+  const result = axios.put(
+    `${URL}/profile/inactive`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
   return result;
 };

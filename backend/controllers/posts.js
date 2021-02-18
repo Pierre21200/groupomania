@@ -43,6 +43,7 @@ exports.createPost = async (req, res) => {
 exports.getAllPosts = async (req, res) => {
   try {
     const allPosts = await model.Post.findAll({
+      where: { active: true },
       order: [["id", "DESC"]]
     });
     if (!allPosts) {
@@ -100,3 +101,20 @@ exports.getAllUsersPosts = async (req, res) => {
 
 // PATCH Moderate Post
 // Qu'est ce qu'il peut faire en tant que modérateur ? Supprimer, modifier ?
+exports.updatePost = async (req, res) => {
+  try {
+    const { postId } = req.body;
+    const onePost = await model.Post.update(
+      { active: false },
+      {
+        where: { id: postId }
+      }
+    );
+    if (!onePost) {
+      throw new Error("Problème");
+    }
+    res.status(200).json({ onePost });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};

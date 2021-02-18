@@ -9,10 +9,6 @@ import "./Home.css";
 const Home = () => {
   const auth = useContext(UserContext);
 
-  // if (auth.user.moderator) {
-  //   console.log("modo");
-  // }
-
   return (
     <div className="home-container">
       <div className="section-container">

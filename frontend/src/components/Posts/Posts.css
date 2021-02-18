@@ -40,3 +40,8 @@
   width: 500px;
   height: 100%;
 }
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+}

@@ -21,7 +21,20 @@ export const postPost = (postTitle, postContent, token) => {
   return result;
 };
 
-// pas lié pour le moment car modo
+// réservé modo
+export const updatePost = (token, postId) => {
+  console.log(postId);
+  const result = axios.put(
+    `${URL}update`,
+    { postId: postId },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+  return result;
+};
+
+// pas lié pour le moment car modo, mais c'est pas ici !
 export const getProfile = token => {
   const result = axios.post(`${URL}:id`, {
     headers: { Authorization: `Bearer ${token}` }
