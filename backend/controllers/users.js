@@ -40,7 +40,12 @@ exports.signup = async (req, res) => {
     if (!newUser) {
       throw new Error("L'inscription a échoué");
     }
-    res.status(201).json("L'utilisateur a bien été créé");
+    res.status(201).json({
+      user: newUser,
+      token: jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
+        expiresIn: "24h"
+      })
+    });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }
@@ -81,10 +86,11 @@ exports.login = async (req, res) => {
   }
 };
 
-// GET User Profile : réservé aux modérateurs
+// GET User Profile
 exports.getUserProfile = async (req, res) => {
   try {
     const { id } = await req.params;
+
     if (!id) {
       throw new Error("Un problème est survenu avec l'id de ce profil");
     }

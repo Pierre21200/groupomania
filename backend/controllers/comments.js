@@ -15,14 +15,6 @@ const decodeUid = authorization => {
 // POST Create comment
 exports.createComment = async (req, res) => {
   try {
-    // const user = await decodeUid(req.headers.authorization);
-    // if (!user) {
-    //   throw new Error("Problème d'autorisation !");
-    // }
-    // const { id } = await req.params;
-
-    // ou récupérer id du post
-
     const { commentContent, postId, userId } = await req.body;
     if (!userId) {
       throw new Error("Problème id params !");
@@ -57,13 +49,31 @@ exports.getPostComments = async (req, res) => {
       throw new Error("Problème id params");
     }
     const postComments = await model.Comment.findAll({
-      where: { postId: id },
+      where: { postId: id, active: true },
       order: [["id", "DESC"]]
     });
     if (!postComments) {
       throw new Error("Pas de commentaires pour ce post");
     }
     res.status(200).json({ postComments });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
+exports.updateComment = async (req, res) => {
+  try {
+    const { commentId } = req.body;
+    const oneComment = await model.Comment.update(
+      { active: false },
+      {
+        where: { id: commentId }
+      }
+    );
+    if (!oneComment) {
+      throw new Error("Problème");
+    }
+    res.status(200).json({ oneComment });
   } catch (error) {
     res.status(401).json({ error: error.message });
   }

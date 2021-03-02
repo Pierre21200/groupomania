@@ -1,18 +1,3 @@
-@font-face {
-  font-family: "Blenda";
-  src: url("../../fonts/Blenda.otf") format("otf");
-}
-
-@font-face {
-  font-family: "Arizonia";
-  src: url("../../fonts/Arizonia-Regular.ttf") format("ttf");
-}
-
-@font-face {
-  font-family: "Cookie";
-  src: url("../../fonts/Cookie-Regular.ttf") format("ttf");
-}
-
 .login-container {
   height: 100%;
   width: 100%;
@@ -40,13 +25,6 @@
   margin-top: 10px;
   font-size: 60px;
   color: rgb(34, 112, 229);
-
-  /* color: white; */
-  /* -webkit-text-stroke: 5px rgb(45, 145, 226); */
-  /* -webkit-text-stroke-color: rgb(45, 145, 226); */
-  /* font-family: "Blenda"; */
-  /* font-family: "Arizonia"; */
-  /* font-family: "Cookie"; */
 }
 
 .login-subtitle {
@@ -61,7 +39,6 @@
 }
 
 form {
-  /* box-shadow: 10px 5px 20px rgb(71, 157, 228); */
   width: 300px;
   padding: 20px;
   margin: auto;
@@ -70,7 +47,27 @@ form {
   border-radius: 10%;
 }
 
-/* p {
-  font-size: 20px;
+.msgInvalid {
+  color: red;
+  margin: 10px 0px 0px 0px;
   font-weight: bold;
-} */
+  font-style: italic;
+}
+
+.msgValid {
+  color: green;
+  margin: 10px 0px 0px 0px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.msgValidSidebar {
+  color: rgb(255, 255, 255);
+  margin: 10px 0px 0px 0px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.btn {
+  margin-top: 20px;
+}

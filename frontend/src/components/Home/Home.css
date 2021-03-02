@@ -50,3 +50,8 @@
   background-color: rgb(39, 111, 228);
   box-shadow: 0px 0px 5px rgb(39, 111, 228);
 }
+
+.homeTitle {
+  margin: auto;
+  font-style: italic;
+}

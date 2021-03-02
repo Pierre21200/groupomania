@@ -19,3 +19,14 @@ export const postComments = (token, userId, postId, commentContent) => {
   );
   return result;
 };
+
+export const updateComment = (token, commentId) => {
+  const result = axios.put(
+    `${URL}/update`,
+    { commentId: commentId },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+  return result;
+};

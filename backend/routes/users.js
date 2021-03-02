@@ -21,7 +21,7 @@ router.get("/", auth, userCtrl.getAllUsers);
 
 // Update a profil
 router.put("/profile", auth, multer, userCtrl.updateUserProfile);
-router.put("/profil/password", auth, userCtrl.updatePassword);
+router.put("/profile/password", auth, userCtrl.updatePassword);
 
 // Delete a profil
 router.put("/profile/inactive", userCtrl.inactiveProfile);

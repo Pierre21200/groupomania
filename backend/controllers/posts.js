@@ -77,14 +77,15 @@ exports.getAllPosts = async (req, res) => {
 // GET all user's posts : réservé au modérateur
 exports.getAllUsersPosts = async (req, res) => {
   try {
-    const { id } = await req.params;
-    if (!id) {
+    const userId = req.params;
+    if (!userId) {
       throw new Error("Cet utilisateur n'existe plus ou est illisible");
     }
 
     const allPosts = await model.Post.findAll({
       where: {
-        user_id: id
+        userId: userId.id,
+        active: true
       }
     });
 

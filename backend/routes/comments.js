@@ -12,5 +12,7 @@ router.post("/create", auth, commentCtrl.createComment);
 // Get all comments from a post
 router.get("/post/:id", auth, commentCtrl.getPostComments);
 
+// Moderate a comment
+router.put("/update", commentCtrl.updateComment);
 // Execution
 module.exports = router;

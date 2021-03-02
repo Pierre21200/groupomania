@@ -1,43 +1,66 @@
 import React, { useState, useEffect, useContext } from "react";
 import Comments from "../Comments/index.js";
 import Input from "../Input/index";
-import { UserContext } from "../../App.js";
+import User from "../User/index";
 import decodedToken from "../DecodeToken/index";
 import Button from "../Button/index";
-import "./Posts.css";
-import { getPosts, postPost, updatePost } from "../FetchData/Posts/index";
+import { UserContext } from "../../App.js";
+import {
+  getPosts,
+  postPost,
+  updatePost,
+  getUserPosts
+} from "../FetchData/Posts/index";
 import { postComments } from "../FetchData/Comments/index.js";
 import { Redirect } from "react-router-dom";
+import "./Posts.css";
 
-const Posts = () => {
-  const auth = useContext(UserContext);
-  const token = localStorage.getItem("token");
+const Posts = ({ userPosts }) => {
+  const auth = useContext(UserContext); // auth Context
+  const token = localStorage.getItem("token"); // token localStorage
+
+  // Concernant redirection vers login
+  const [redirect, setRedirect] = useState(false); // redirection si pas de token
+
+  // Les posts qui apparaissent (deux possibiltié : tout les posts, ou les posts d'un seul utilisateur)
   const [posts, setPosts] = useState([]);
-  const [showCreatingPost, setShowCreatingPost] = useState(false);
-  const [newPost, setNewPost] = useState(null);
-  const [postTitle, setPostTitle] = useState("");
-  const [postContent, setPostContent] = useState("");
-  const [newComment, setNewComment] = useState("");
-  const [commentContent, setCommentContent] = useState("");
-  const [validComm, setValidComm] = useState(false);
-  const [redirect, setRedirect] = useState(false);
 
+  // Concernant toutes les logiques pour déployer des fenêtres
+  const [showCreatingPost, setShowCreatingPost] = useState(false); // faire apparaitre création de poste
+  const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
+  const [showModeratePost, setShowModeratePost] = useState(false); // faire apparaitre bouton de modération
+
+  // Concernant posts
+  const [newPost, setNewPost] = useState(null); // un nouveau post est créé
+  const [postTitle, setPostTitle] = useState(""); // titre du post
+  const [postContent, setPostContent] = useState(""); // contenu du post
+  const [validPostTitle, setValidPostTitle] = useState(false); // regex titre du post
+  const [validPostContent, setValidPostContent] = useState(false); // regex contenu du post
+  const [majPost, setMajPost] = useState(false); // modération d'un post
+
+  // Concernant comments
+  const [newComment, setNewComment] = useState(""); // un nouveau commentaire est créé
+  const [commentContent, setCommentContent] = useState(""); // contenu du commentaire
+  const [validCommentContent, setValidCommentContent] = useState(false); // regex contenu du commentaire
+
+  // Pour le modérateur, stock l'id de l'utilisateur que l'on veut visionner, puis passe cette valeur dans la props de posts
+  const [profile, setProfile] = useState(false); //
+
+  // gestion d'événements des inputs
   const handleChangeCommentContent = event => {
     setCommentContent(event.target.value);
-    setValidComm(event.target.value !== "" ? true : false);
+    setValidCommentContent(event.target.value !== "" ? true : false);
   };
   const handleChangePostTitle = event => {
     setPostTitle(event.target.value);
+    setValidPostTitle(event.target.value !== "" ? true : false);
   };
   const handleChangePostContent = event => {
     setPostContent(event.target.value);
+    setValidPostContent(event.target.value !== "" ? true : false);
   };
 
-  const getSetPosts = async () => {
-    const result = await getPosts(token);
-    setPosts(result.data.allPosts);
-  };
-
+  // On utilise cette fonction avant chaque reqûete vers le backend afin d'éviter une erreur serveur si token est expiré
   const getRedirect = () => {
     const decode = decodedToken();
     if (!decode) {
@@ -46,14 +69,28 @@ const Posts = () => {
     }
   };
 
-  useEffect(() => {
-    getRedirect();
-    const decode = decodedToken();
-    if (decode) {
-      getSetPosts();
+  // get & set posts
+  const getSetPosts = async () => {
+    if (userPosts) {
+      const result = await getUserPosts(token, userPosts);
+      setPosts(result.data.allPosts);
+    } else {
+      const result = await getPosts(token);
+      setPosts(result.data.allPosts);
     }
-  }, [token, newPost, newComment]);
+  };
 
+  // Fait apparaître création de post
+  const seeCreatingPost = () => {
+    setShowCreatingPost(!showCreatingPost);
+  };
+
+  // Fait apparaitre commentaires et création de commentaires
+  const seeComments = () => {
+    setShowComments(!showComments);
+  };
+
+  // Création d'un commentaire
   const creatingComment = async postId => {
     getRedirect();
     const decode = decodedToken();
@@ -76,6 +113,7 @@ const Posts = () => {
     }
   };
 
+  // Création d'un post
   const creatingPost = async () => {
     getRedirect();
     const decode = decodedToken();
@@ -91,46 +129,63 @@ const Posts = () => {
     }
   };
 
-  const seeCreatingPost = () => {
-    setShowCreatingPost(!showCreatingPost);
+  // Fait apparaitre demande de confirmation de modération d'un post
+  const modalModeratePost = () => {
+    setShowModeratePost(!showModeratePost);
   };
 
-  const moderate = postId => {
-    updatePost(token, postId);
+  // Modération d'un post
+  const moderatePost = async postId => {
+    const result = await updatePost(token, postId);
+    setMajPost(!majPost);
+    setShowModeratePost(!showModeratePost);
+    console.log(result);
   };
+
+  // Fonction useEffect
+  useEffect(() => {
+    getRedirect();
+    const decode = decodedToken();
+    if (decode) {
+      getSetPosts();
+    }
+  }, [token, newPost, newComment, majPost]);
 
   return redirect ? (
     <Redirect to={{ pathname: "/login" }} />
+  ) : profile ? (
+    // <Redirect to={{ pathname: `/profile/${profile}` }} />
+    <Posts userPosts={profile} />
   ) : (
     <div>
-      <Button
-        onClick={seeCreatingPost}
-        disabled=""
-        className="btn btn-outline-primary bouton"
-        value="Créer un nouveau post"
-      />
+      {!userPosts ? (
+        <Button
+          onClick={seeCreatingPost}
+          disabled=""
+          className="btn btn-outline-primary bouton"
+          value="Créer un nouveau post"
+        />
+      ) : null}
+
       {showCreatingPost ? (
         <div id="createPostForm">
           <div className="card">
             <div className="card-body">
               <Input
-                className="post-title"
-                type="text"
+                className="new-post-title form-control"
                 value={postTitle}
-                name="post-title"
+                name="Titre du post"
                 onChange={handleChangePostTitle}
               />
               <Input
-                className="post-content"
-                type="text"
+                className="new-post-content form-control"
                 value={postContent}
-                name="post-content"
+                name="Contenu du post"
                 onChange={handleChangePostContent}
               />
               <Button
                 onClick={creatingPost}
-                disabled=""
-                className="btn btn-outline-primary bouton"
+                disabled={validPostTitle && validPostContent ? "" : "disabled"}
                 value="Envoyer"
               />
             </div>
@@ -141,48 +196,85 @@ const Posts = () => {
       {posts.map(post => (
         <div key={post.id} id={post.id} className="card">
           <div className="card-body">
-            <div className="card-header">
-              <h6 className="card-title mb-2 text-muted">
-                Utilisateur : {auth.user.firstName}
-                <br />
-                20/06/2021
+            <div className="card-header row">
+              <h6 className="post-user col-4">
+                {auth?.user.moderator ? (
+                  <Button
+                    className="btn btn-outline-primary btn-post"
+                    disabled=""
+                    onClick={() => setProfile(post.userId)}
+                    value={<User id={post.userId} />}
+                  />
+                ) : (
+                  <User id={post.userId} />
+                )}
               </h6>
-              {/* <h6 className="card-date">20/06/2021</h6> */}
+
+              <h6 className="post-title col-4">{post.titlePost}</h6>
+
               {auth?.user.moderator ? (
-                <Button
-                  disabled=""
-                  value="Modérer"
-                  onClick={() => moderate(post.id)}
-                />
+                <div className="col-4 post-moderate">
+                  <Button
+                    className="btn btn-outline-primary btn-post"
+                    disabled=""
+                    value="Modérer"
+                    onClick={modalModeratePost}
+                  />
+                </div>
+              ) : null}
+
+              {showModeratePost ? (
+                <div className="confirm-moderate-post">
+                  <p>
+                    Vous êtes sur le point de supprimer ce post, êtes vous sur ?
+                  </p>
+                  <Button
+                    disabled=""
+                    value="Confirmer"
+                    onClick={() => moderatePost(post.id)}
+                  />
+                </div>
               ) : null}
             </div>
 
-            <h6 className="card-subtitle"> Titre du post : {post.titlePost}</h6>
-            <p className="card-text">Contenu du post : {post.content}</p>
+            <div className="line"></div>
+
+            <p className="post-content">Contenue du post : {post.content}</p>
 
             <div className="line"></div>
-            <div className="like">
-              <Button disabled="" value="J'aime"></Button>
-            </div>
-            <div className="commenter">
-              <Input
-                className="input-newComment"
-                type="text"
-                value={commentContent}
-                name="commenter"
-                onChange={handleChangeCommentContent}
-              ></Input>
-              <Button
-                className="btn btn-outline-primary btn-newComment"
-                onClick={() => creatingComment(post.id)}
-                disabled={validComm ? "" : "disabled"}
-              />
-            </div>
 
-            <div>
-              Commentaires du post :{" "}
-              <Comments postId={post.id} newComment={newComment} />
-            </div>
+            <Button
+              className="btn btn-outline-primary btn-see-comments"
+              disabled=""
+              value="Commentaires"
+              onClick={seeComments}
+            />
+
+            {showComments ? (
+              <div>
+                <div>
+                  <Comments postId={post.id} newComment={newComment} />
+                </div>
+                <div className="comments row">
+                  <div className="col-9">
+                    <Input
+                      className="input-newComment form-control"
+                      value={commentContent}
+                      name="Commenter ce post"
+                      onChange={handleChangeCommentContent}
+                    />
+                  </div>
+
+                  <div className="col-3">
+                    <Button
+                      className="btn btn-outline-primary btn-new-comment"
+                      onClick={() => creatingComment(post.id)}
+                      disabled={validCommentContent ? "" : "disabled"}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       ))}

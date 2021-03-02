@@ -23,7 +23,6 @@ export const postPost = (postTitle, postContent, token) => {
 
 // réservé modo
 export const updatePost = (token, postId) => {
-  console.log(postId);
   const result = axios.put(
     `${URL}update`,
     { postId: postId },
@@ -34,9 +33,9 @@ export const updatePost = (token, postId) => {
   return result;
 };
 
-// pas lié pour le moment car modo, mais c'est pas ici !
-export const getProfile = token => {
-  const result = axios.post(`${URL}:id`, {
+// réservé modo
+export const getUserPosts = (token, userId) => {
+  const result = axios.get(`${URL}user/${userId}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
   return result;

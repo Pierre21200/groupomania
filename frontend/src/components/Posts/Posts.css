@@ -12,14 +12,6 @@
 .bouton {
   margin: 30px;
 }
-.card-title,
-.card-date {
-  text-align: left;
-}
-
-.card-subtitle {
-  font-weight: bold;
-}
 
 .line {
   border-bottom: blue 1px solid;
@@ -31,17 +23,82 @@
 
 .commenter {
   display: flex;
-  flex-direction: inline;
-  margin: 30px;
 }
 
 .input-newComment {
-  margin-right: 50px;
-  width: 500px;
-  height: 100%;
+  margin: auto;
 }
 
 .card-header {
   display: flex;
-  justify-content: space-between;
+  text-align: center;
+  justify-content: center;
+}
+
+.btn-post {
+  margin: 0;
+}
+
+.post-user {
+  text-align: left;
+  margin: 0px;
+}
+
+.post-moderate {
+  text-align: right;
+}
+
+.post-title {
+  margin: auto;
+}
+
+.post-content {
+  margin: auto;
+  padding: 50px;
+}
+
+.comments {
+  padding: 30px;
+}
+
+.input-newComment {
+  display: inline;
+}
+
+.btn-new-comment {
+  margin: 0;
+}
+
+.btn-moderate-comment {
+  margin: 0;
+  margin-left: 200px;
+}
+
+.msg-no-comment {
+  font-style: italic;
+}
+
+.comment {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+.user {
+  font-weight: bold;
+  padding-right: 10px;
+}
+
+.btn-see-comments {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.confirm-moderate-post {
+  background: white;
+  border-radius: 30px;
+  border: blue 1px solid;
+  padding: 10px;
+  position: absolute;
+  right: 10px;
+  top: 100px;
+  width: 200px;
 }

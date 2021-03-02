@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const URL = `${process.env.REACT_APP_API_URL}/users`;
+
 export const signUser = (firstName, lastName, email, password) => {
   const result = axios.post(`${URL}/signup`, {
     firstName,
@@ -19,13 +20,27 @@ export const logUser = (email, password) => {
   return result;
 };
 
-export const updateUser = (firstName, lastName, email, token) => {
+export const updateUserData = (firstName, lastName, email, token) => {
   const result = axios.put(
     `${URL}/profile`,
     {
       firstName,
       lastName,
       email
+    },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+  return result;
+};
+
+export const updatePassword = (password, newPassword, token) => {
+  const result = axios.put(
+    `${URL}/profile/password`,
+    {
+      password,
+      newPassword
     },
     {
       headers: { Authorization: `Bearer ${token}` }
@@ -42,5 +57,12 @@ export const deleteUser = token => {
       headers: { Authorization: `Bearer ${token}` }
     }
   );
+  return result;
+};
+
+export const getUser = (token, id) => {
+  const result = axios.get(`${URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
   return result;
 };

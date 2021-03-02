@@ -3,7 +3,7 @@
   height: 10%;
   display: flex;
   align-items: center;
-  margin-bottom: 100px;
+  margin-bottom: 10px;
   color: rgb(39, 111, 228);
   background-color: white;
   box-shadow: inset 0px 0px 5px rgb(39, 111, 228);
@@ -38,5 +38,14 @@ h2 {
 }
 
 .update-form {
+  margin: auto;
+}
+
+.confirm-delete {
+  border-radius: 30px;
+  padding: 10px;
+  width: 80%;
+  background-color: white;
+  color: black;
   margin: auto;
 }

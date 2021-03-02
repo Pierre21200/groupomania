@@ -3,16 +3,14 @@ import Input from "../Input/index.js";
 import Sidebar from "../Sidebar/index.js";
 import Posts from "..//Posts/index.js";
 import { UserContext } from "../../App.js";
-
 import "./Home.css";
 
-const Home = () => {
+const Home = ({ profile }) => {
   const auth = useContext(UserContext);
-
   return (
     <div className="home-container">
       <div className="section-container">
-        <Posts />
+        {profile ? <Posts userPosts={true} /> : <Posts />}
       </div>
 
       <div className="row">
@@ -22,8 +20,9 @@ const Home = () => {
 
         <div className="container col-10">
           <header className="home-header">
-            <p>{auth.user.firstName}</p>
-            <Input name="Rechercher dans les posts" />
+            <h2 className="homeTitle">
+              Bonjour {auth.user.firstName}, bienvenue sur Groupomania !{" "}
+            </h2>
           </header>
         </div>
       </div>
