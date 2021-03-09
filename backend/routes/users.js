@@ -25,5 +25,9 @@ router.put("/profile/password", auth, userCtrl.updatePassword);
 
 // Delete a profil
 router.put("/profile/inactive", userCtrl.inactiveProfile);
+
+//delete a profil pour modo
+router.put("/update", userCtrl.inactiveUser);
+
 // Execution
 module.exports = router;

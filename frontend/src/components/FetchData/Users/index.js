@@ -13,11 +13,10 @@ export const signUser = (firstName, lastName, email, password) => {
 };
 
 export const logUser = (email, password) => {
-  const result = axios.post(`${URL}/login`, {
+  return axios.post(`${URL}/login`, {
     email,
     password
   });
-  return result;
 };
 
 export const updateUserData = (firstName, lastName, email, token) => {
@@ -64,5 +63,17 @@ export const getUser = (token, id) => {
   const result = axios.get(`${URL}/${id}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
+  return result;
+};
+
+// réservé modo
+export const updateProfile = (token, id) => {
+  const result = axios.put(
+    `${URL}/update`,
+    { id: id },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
   return result;
 };

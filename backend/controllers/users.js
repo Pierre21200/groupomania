@@ -3,6 +3,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const model = require("../models/users");
+const modelC = require("../models/comments");
+const modelP = require("../models/posts");
 
 // Database Route
 
@@ -10,7 +12,6 @@ const model = require("../models/users");
 exports.signup = async (req, res) => {
   try {
     const { firstName, lastName, email, password } = await req.body;
-    const modo = true;
     if (!firstName || !lastName || !email || !password) {
       throw new Error("Un paramêtre est manquant !");
     }
@@ -82,7 +83,7 @@ exports.login = async (req, res) => {
       })
     });
   } catch (error) {
-    res.status(401).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -218,22 +219,6 @@ exports.updatePassword = async (req, res) => {
   }
 };
 
-// exports.inactiveProfile = async (req, res) => {
-//   try {
-//     const user = await decodeUid(req.headers.authorization);
-//     if (!user) {
-//       throw new Error("Problème d'autorisation !");
-//     }
-//     await model.User.destroy({
-//       where: {
-//         id: user.id
-//       }
-//     });
-//   } catch (error) {
-//     res.status(401).json({ error });
-//   }
-// };
-
 exports.inactiveProfile = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
@@ -250,8 +235,75 @@ exports.inactiveProfile = async (req, res) => {
       }
     );
 
+    const updateComments = await modelC.Comment.update(
+      { active: false },
+      {
+        where: {
+          userId: id
+        }
+      }
+    );
+
+    const updatePosts = await modelP.Post.update(
+      { active: false },
+      {
+        where: {
+          userId: id
+        }
+      }
+    );
+
     if (!updateProfile) {
       throw new Error("Le profil n'a pas été inactivé");
+    }
+
+    res.status(200).json({ updateProfile });
+  } catch (error) {
+    res.status(401).json({ error });
+  }
+};
+
+// pour modo
+exports.inactiveUser = async (req, res) => {
+  try {
+    const { id } = await req.body;
+    if (!id) {
+      throw new Error("Il manque l'identifiant dans la requête");
+    }
+
+    const updateProfile = await model.User.update(
+      { active: false },
+      {
+        where: {
+          id: id
+        }
+      }
+    );
+
+    const updateComments = await modelC.Comment.update(
+      { active: false },
+      {
+        where: {
+          userId: id
+        }
+      }
+    );
+
+    const updatePosts = await modelP.Post.update(
+      { active: false },
+      {
+        where: {
+          userId: id
+        }
+      }
+    );
+
+    if (!updateComments) {
+      throw new Error("Les commentaires n'ont pas été désactivé");
+    }
+
+    if (!updateProfile) {
+      throw new Error("Le profil n'a pas été désactivé");
     }
 
     res.status(200).json({ updateProfile });

@@ -20,8 +20,9 @@ USE `groupomania` ;
 -- -----------------------------------------------------
 -- Table `groupomania`.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `groupomania`.`users` (
+CREATE TABLE IF NOT EXISTS `groupomania`.`user` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+`active` INT UNSIGNED NOT NULL,
   `firstName` VARCHAR(45) NOT NULL,
   `lastName` VARCHAR(45) NOT NULL,
   `email` VARCHAR(255) NOT NULL,
@@ -33,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `groupomania`.`users` (
 -- -----------------------------------------------------
 -- Table `groupomania`.`posts`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `groupomania`.`posts` (
+CREATE TABLE IF NOT EXISTS `groupomania`.`post` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `userId` INT UNSIGNED NOT NULL,
   `titlePost` VARCHAR(45) NOT NULL,
@@ -50,9 +51,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `groupomania`.`comments`
+-- Table `groupomania`.`comment`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `groupomania`.`comments` (
+CREATE TABLE IF NOT EXISTS `groupomania`.`comment` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `postId` INT UNSIGNED NOT NULL,
   `userId` INT UNSIGNED NOT NULL,

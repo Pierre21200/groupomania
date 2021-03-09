@@ -11,7 +11,7 @@ import {
   updatePassword
 } from "../FetchData/Users/index";
 
-const Form = ({ signIn, logIn, updateUser, style }) => {
+const Form = ({ signIn, logIn, updateUser }) => {
   const auth = useContext(UserContext);
   const token = localStorage.getItem("token");
 
@@ -44,6 +44,10 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
     // setValidEmail(emailReg.test(event.target.value) ? true : false);
     setValidEmail(true);
   }
+  function handleChangeEmailLog(event) {
+    setEmail(event.target.value);
+    setValidEmail(event.target.value !== "" ? true : false);
+  }
   function handleChangePassword(event) {
     setPassword(event.target.value);
     setValidPassword(event.target.value !== "" ? true : false);
@@ -57,13 +61,14 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
   const login = async () => {
     try {
       const result = await logUser(email, password);
+
       if (result) {
         auth.setUser(result.data.user);
         localStorage.setItem("token", result.data.token);
+        console.log(result);
       }
     } catch (error) {
       console.log(error);
-      setErrorPassword(true);
     }
   };
 
@@ -112,19 +117,10 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
               Inscrivez-vous !
             </p>
           </div>
-          <Input
-            value={firstName}
-            name="Prénom"
-            onChange={handleChangeFirstname}
-          />
+          <Input name="Prénom" onChange={handleChangeFirstname} />
 
-          <Input value={lastName} name="Nom" onChange={handleChangeLastname} />
-          <Input
-            type="email"
-            value={email}
-            name="Email"
-            onChange={handleChangeEmail}
-          />
+          <Input name="Nom" onChange={handleChangeLastname} />
+          <Input type="email" name="Email" onChange={handleChangeEmail} />
 
           {email && !validEmail ? (
             <p className="msgInvalid">Cet email n'est pas valide</p>
@@ -133,7 +129,6 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
 
           <Input
             type="password"
-            value={password}
             name="Mot de passe"
             onChange={handleChangePassword}
           />
@@ -160,17 +155,14 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
               Connectez-vous !
             </p>
           </div>
-          <Input value={email} name="Email" onChange={handleChangeEmail} />
+          <Input name="Email" onChange={handleChangeEmailLog} value={email} />
 
           <Input
             name="Mot de passe"
             type="password"
-            value={password}
             onChange={handleChangePassword}
+            value={password}
           />
-          {errorPassword ? (
-            <p className="msgInvalid">Le mot de passe n'est pas correct !</p>
-          ) : null}
 
           <Button
             onClick={login}
@@ -186,20 +178,11 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
               Modifiez vos informations générales !
             </p>
           </div>
-          <Input
-            value={firstName}
-            name={auth.user.firstName}
-            onChange={handleChangeFirstname}
-          />
+          <Input name={auth.user.firstName} onChange={handleChangeFirstname} />
 
-          <Input
-            value={lastName}
-            name={auth.user.lastName}
-            onChange={handleChangeLastname}
-          />
+          <Input name={auth.user.lastName} onChange={handleChangeLastname} />
           <Input
             type="email"
-            value={email}
             name={auth.user.email}
             onChange={handleChangeEmail}
           />
@@ -225,7 +208,6 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
 
           <Input
             type="password"
-            value={password}
             name="Mot de passe actuel"
             onChange={handleChangePassword}
           />
@@ -236,7 +218,6 @@ const Form = ({ signIn, logIn, updateUser, style }) => {
 
           <Input
             type="password"
-            value={newPassword}
             name="Nouveau mot de passe"
             onChange={handleChangeNewPassword}
           />

@@ -1,6 +1,7 @@
 "use strict";
 let Sequelize = require("sequelize");
 let sequelize = require("./index.js");
+const bcrypt = require("bcrypt");
 
 const User = sequelize.define(
   "user",
@@ -33,4 +34,54 @@ User.associate = models => {
 };
 
 sequelize.sync({});
+
+const createUsers = async () => {
+  const email = "pierrepotin21@gmail.com";
+  const userFound = await User.findOne({
+    where: { email: email }
+  });
+  if (!userFound) {
+    await User.create({
+      firstName: "Pierre",
+      lastName: "Potin",
+      email: "pierrepotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10),
+      moderator: true
+    });
+    await User.create({
+      firstName: "Tibo",
+      lastName: "Potin",
+      email: "tibopotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10)
+    });
+    await User.create({
+      firstName: "Gilles",
+      lastName: "Potin",
+      email: "gillespotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10)
+    });
+    await User.create({
+      firstName: "Jules",
+      lastName: "Potin",
+      email: "julespotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10)
+    });
+    await User.create({
+      firstName: "Jocelyne",
+      lastName: "Potin",
+      email: "Jocelynepotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10)
+    });
+    await User.create({
+      firstName: "Matt",
+      lastName: "Potin",
+      email: "mattpotin21@gmail.com",
+      password: await bcrypt.hash("piopio", 10)
+    });
+  } else {
+    console.log("db already fill");
+  }
+};
+
+createUsers();
 exports.User = User;

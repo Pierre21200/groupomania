@@ -11,24 +11,30 @@ import {
   updatePost,
   getUserPosts
 } from "../FetchData/Posts/index";
-import { postComments } from "../FetchData/Comments/index.js";
-import { Redirect } from "react-router-dom";
+import { getUser, updateProfile } from "../FetchData/Users/index";
+import { Redirect, useParams } from "react-router-dom";
 import "./Posts.css";
 
 const Posts = ({ userPosts }) => {
+  const userId = useParams();
   const auth = useContext(UserContext); // auth Context
   const token = localStorage.getItem("token"); // token localStorage
 
+  const [user, setUser] = useState("");
+
+  const [redirectToHome, setRedirectToHome] = useState(false);
+
   // Concernant redirection vers login
-  const [redirect, setRedirect] = useState(false); // redirection si pas de token
+  const [redirectToLogin, setRedirectToLogin] = useState(false); // redirection si pas de token
 
   // Les posts qui apparaissent (deux possibiltié : tout les posts, ou les posts d'un seul utilisateur)
   const [posts, setPosts] = useState([]);
 
   // Concernant toutes les logiques pour déployer des fenêtres
   const [showCreatingPost, setShowCreatingPost] = useState(false); // faire apparaitre création de poste
-  const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
+  // const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
   const [showModeratePost, setShowModeratePost] = useState(false); // faire apparaitre bouton de modération
+  const [showModerateProfile, setShowModerateProfile] = useState(false); // faire apparaitre bouton de modération
 
   // Concernant posts
   const [newPost, setNewPost] = useState(null); // un nouveau post est créé
@@ -38,19 +44,10 @@ const Posts = ({ userPosts }) => {
   const [validPostContent, setValidPostContent] = useState(false); // regex contenu du post
   const [majPost, setMajPost] = useState(false); // modération d'un post
 
-  // Concernant comments
-  const [newComment, setNewComment] = useState(""); // un nouveau commentaire est créé
-  const [commentContent, setCommentContent] = useState(""); // contenu du commentaire
-  const [validCommentContent, setValidCommentContent] = useState(false); // regex contenu du commentaire
-
   // Pour le modérateur, stock l'id de l'utilisateur que l'on veut visionner, puis passe cette valeur dans la props de posts
   const [profile, setProfile] = useState(false); //
 
   // gestion d'événements des inputs
-  const handleChangeCommentContent = event => {
-    setCommentContent(event.target.value);
-    setValidCommentContent(event.target.value !== "" ? true : false);
-  };
   const handleChangePostTitle = event => {
     setPostTitle(event.target.value);
     setValidPostTitle(event.target.value !== "" ? true : false);
@@ -64,7 +61,7 @@ const Posts = ({ userPosts }) => {
   const getRedirect = () => {
     const decode = decodedToken();
     if (!decode) {
-      setRedirect(true);
+      setRedirectToLogin(true);
       auth.setUser(null);
     }
   };
@@ -72,8 +69,10 @@ const Posts = ({ userPosts }) => {
   // get & set posts
   const getSetPosts = async () => {
     if (userPosts) {
-      const result = await getUserPosts(token, userPosts);
-      setPosts(result.data.allPosts);
+      const resultPosts = await getUserPosts(token, userId.id);
+      const resultUser = await getUser(token, userId.id);
+      setUser(resultUser.data.userFound);
+      setPosts(resultPosts.data.allPosts);
     } else {
       const result = await getPosts(token);
       setPosts(result.data.allPosts);
@@ -85,35 +84,6 @@ const Posts = ({ userPosts }) => {
     setShowCreatingPost(!showCreatingPost);
   };
 
-  // Fait apparaitre commentaires et création de commentaires
-  const seeComments = () => {
-    setShowComments(!showComments);
-  };
-
-  // Création d'un commentaire
-  const creatingComment = async postId => {
-    getRedirect();
-    const decode = decodedToken();
-    if (decode) {
-      try {
-        let userId = auth.user.id;
-        const result = await postComments(
-          token,
-          userId,
-          postId,
-          commentContent
-        );
-        setNewComment(result.data.newComment);
-        console.log("Le commentaire a bien été créé");
-      } catch (error) {
-        console.log(error);
-      }
-    } else {
-      console.log("Votre session a expiré");
-    }
-  };
-
-  // Création d'un post
   const creatingPost = async () => {
     getRedirect();
     const decode = decodedToken();
@@ -139,7 +109,17 @@ const Posts = ({ userPosts }) => {
     const result = await updatePost(token, postId);
     setMajPost(!majPost);
     setShowModeratePost(!showModeratePost);
+  };
+
+  const modalModerateProfile = () => {
+    setShowModerateProfile(!showModerateProfile);
+  };
+
+  // Modération d'un post
+  const moderateProfile = async userId => {
+    const result = await updateProfile(token, userId);
     console.log(result);
+    console.log("done");
   };
 
   // Fonction useEffect
@@ -149,22 +129,72 @@ const Posts = ({ userPosts }) => {
     if (decode) {
       getSetPosts();
     }
-  }, [token, newPost, newComment, majPost]);
+  }, [token, newPost, majPost]);
 
-  return redirect ? (
+  return redirectToLogin ? (
     <Redirect to={{ pathname: "/login" }} />
   ) : profile ? (
-    // <Redirect to={{ pathname: `/profile/${profile}` }} />
-    <Posts userPosts={profile} />
+    <Redirect to={{ pathname: `/profile/${profile}` }} />
+  ) : redirectToHome ? (
+    <Redirect to={{ pathname: "/" }} />
   ) : (
     <div>
       {!userPosts ? (
         <Button
           onClick={seeCreatingPost}
           disabled=""
-          className="btn btn-outline-primary bouton"
+          className="btn btn-outline-primary bouton btn-seecreatingpost"
           value="Créer un nouveau post"
         />
+      ) : (
+        <div>
+          <div>
+            <Button
+              onClick={() => setRedirectToHome(true)}
+              disabled=""
+              className="btn btn-outline-primary bouton btn-seecreatingpost"
+              value="Retour à tous les posts"
+            />
+          </div>
+          <div className="profile">
+            <div className="profile-infos">
+              <p className="infos-title">Identifiant</p>
+              <p> {user.id}</p>
+            </div>
+            <div className="profile-infos">
+              <p className="infos-title">Prénom</p>
+              <p> {user.firstName}</p>
+            </div>
+            <div className="profile-infos">
+              <p className="infos-title">Nom</p>
+              <p> {user.lastName}</p>
+            </div>
+            <div className="profile-infos">
+              <p className="infos-title">Email</p>
+              <p> {user.email}</p>
+            </div>
+            <div>
+              <Button
+                onClick={modalModerateProfile}
+                disabled=""
+                className="btn btn-outline-primary bouton btn-moderate-profile"
+                value="Modérer"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showModerateProfile ? (
+        <div>
+          Vous êtes sur le point de supprimer ce profil, êtes vous sur ?
+          <Button
+            onClick={() => moderateProfile(userId.id)}
+            disabled=""
+            className="btn btn-outline-primary bouton btn-seecreatingpost"
+            value="Confirmer"
+          />
+        </div>
       ) : null}
 
       {showCreatingPost ? (
@@ -173,13 +203,11 @@ const Posts = ({ userPosts }) => {
             <div className="card-body">
               <Input
                 className="new-post-title form-control"
-                value={postTitle}
                 name="Titre du post"
                 onChange={handleChangePostTitle}
               />
               <Input
                 className="new-post-content form-control"
-                value={postContent}
                 name="Contenu du post"
                 onChange={handleChangePostContent}
               />
@@ -243,38 +271,9 @@ const Posts = ({ userPosts }) => {
 
             <div className="line"></div>
 
-            <Button
-              className="btn btn-outline-primary btn-see-comments"
-              disabled=""
-              value="Commentaires"
-              onClick={seeComments}
-            />
-
-            {showComments ? (
-              <div>
-                <div>
-                  <Comments postId={post.id} newComment={newComment} />
-                </div>
-                <div className="comments row">
-                  <div className="col-9">
-                    <Input
-                      className="input-newComment form-control"
-                      value={commentContent}
-                      name="Commenter ce post"
-                      onChange={handleChangeCommentContent}
-                    />
-                  </div>
-
-                  <div className="col-3">
-                    <Button
-                      className="btn btn-outline-primary btn-new-comment"
-                      onClick={() => creatingComment(post.id)}
-                      disabled={validCommentContent ? "" : "disabled"}
-                    />
-                  </div>
-                </div>
-              </div>
-            ) : null}
+            <div>
+              <Comments postId={post.id} />
+            </div>
           </div>
         </div>
       ))}
