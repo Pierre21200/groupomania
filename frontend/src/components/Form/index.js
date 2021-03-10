@@ -75,6 +75,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
   const signup = async () => {
     try {
       const result = await signUser(firstName, lastName, email, password);
+
       if (result) {
         auth.setUser(result.data.user);
         localStorage.setItem("token", result.data.token);
@@ -117,10 +118,19 @@ const Form = ({ signIn, logIn, updateUser }) => {
               Inscrivez-vous !
             </p>
           </div>
-          <Input name="Prénom" onChange={handleChangeFirstname} />
+          <Input
+            name="Prénom"
+            onChange={handleChangeFirstname}
+            value={firstName}
+          />
 
-          <Input name="Nom" onChange={handleChangeLastname} />
-          <Input type="email" name="Email" onChange={handleChangeEmail} />
+          <Input name="Nom" onChange={handleChangeLastname} value={lastName} />
+          <Input
+            type="email"
+            name="Email"
+            onChange={handleChangeEmail}
+            value={email}
+          />
 
           {email && !validEmail ? (
             <p className="msgInvalid">Cet email n'est pas valide</p>
@@ -131,6 +141,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
             type="password"
             name="Mot de passe"
             onChange={handleChangePassword}
+            value={password}
           />
 
           <Button
@@ -178,13 +189,22 @@ const Form = ({ signIn, logIn, updateUser }) => {
               Modifiez vos informations générales !
             </p>
           </div>
-          <Input name={auth.user.firstName} onChange={handleChangeFirstname} />
+          <Input
+            name={auth.user.firstName}
+            onChange={handleChangeFirstname}
+            value={firstName}
+          />
 
-          <Input name={auth.user.lastName} onChange={handleChangeLastname} />
+          <Input
+            name={auth.user.lastName}
+            onChange={handleChangeLastname}
+            value={lastName}
+          />
           <Input
             type="email"
             name={auth.user.email}
             onChange={handleChangeEmail}
+            value={email}
           />
 
           {email && !validEmail ? (
@@ -210,6 +230,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
             type="password"
             name="Mot de passe actuel"
             onChange={handleChangePassword}
+            value={password}
           />
 
           {errorPassword ? (
@@ -220,6 +241,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
             type="password"
             name="Nouveau mot de passe"
             onChange={handleChangeNewPassword}
+            value={password}
           />
 
           <Button

@@ -1,38 +1,37 @@
-"use strict";
-let Sequelize = require("sequelize");
+'use strict';
 
-// On se connecte à notre base de données
-let sequelize = new Sequelize(
-  process.env.SQL_DB,
-  process.env.SQL_USER,
-  process.env.SQL_PASSWD,
-  {
-    host: process.env.SQL_HOST,
-    dialect: "mysql",
-    logging: false
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.json')[env];
+const db = {};
+
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+fs
+  .readdirSync(__dirname)
+  .filter(file => {
+    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+  })
+  .forEach(file => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
   }
-);
+});
 
-// console.log(
-//   "Connexion à la base de donnée " + process.env.SQL_DB + " effectuée"
-// );
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-// INSERT INTO nom_table (colonne1, colonne4, colonne2)
-// VALUES ('data_colonne1', 'data_colonne4', 'data_colonne2');
-
-// try {
-//   sequelize.authenticate();
-//   console.log("Connecté à la base de données MySQL!");
-//   sequelize
-//     .query(
-//       "INSERT INTO user (first_name, last_name, email, password) VALUES ('Pierre', 'Potin', 'pierrepotin21@gmail.com', 'piopio')"
-//     )
-//     .then(([results, metadata]) => {
-//       console.log("Base de données créée !");
-//     });
-// } catch (error) {
-//   console.error("Impossible de se connecter, erreur suivante :", error);
-// }
-
-//on exporte pour utiliser notre connexion depuis les autre fichiers.
-module.exports = sequelize;
+module.exports = db;

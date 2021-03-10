@@ -1,6 +1,6 @@
 // Middleware Imports
 const jwt = require("jsonwebtoken");
-const model = require("../models/comments");
+const model = require("../models/comment");
 
 // UserID decoder
 const decodeUid = authorization => {

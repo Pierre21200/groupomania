@@ -18,7 +18,7 @@ const Comments = ({ postId }) => {
 
   // Concernant comments
   const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
-  const [newComment, setNewComment] = useState(""); // un nouveau commentaire est créé
+  const [newComment, setNewComment] = useState(false); // un nouveau commentaire est créé
   const [commentContent, setCommentContent] = useState(""); // contenu du commentaire
   const [validCommentContent, setValidCommentContent] = useState(false); // regex contenu du commentaire
 
@@ -46,7 +46,7 @@ const Comments = ({ postId }) => {
           postId,
           commentContent
         );
-        setNewComment(result.data.newComment);
+        setNewComment(true);
         console.log("Le commentaire a bien été créé");
       } catch (error) {
         console.log(error);
@@ -64,7 +64,6 @@ const Comments = ({ postId }) => {
     const result = await updateComment(token, commentId);
     setMajComment(!majComment);
     setShowModerateComment(!showModerateComment);
-    console.log(result);
   };
 
   const getRedirect = () => {
@@ -85,7 +84,7 @@ const Comments = ({ postId }) => {
 
   useEffect(() => {
     getSetComments();
-  }, [comments, newComment, majComment]);
+  }, [newComment]);
 
   return (
     <div>

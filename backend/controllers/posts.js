@@ -1,6 +1,6 @@
 // Middleware Imports
 const jwt = require("jsonwebtoken");
-const model = require("../models/posts");
+const model = require("../models");
 
 // UserID decoder
 const decodeUid = authorization => {

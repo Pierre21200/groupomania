@@ -44,7 +44,8 @@ function App() {
           {/* <PrivateRoute
             exact
             path="/profile/:id"
-            component={<Home profile={true} />}
+            component={Home}
+            profile={true}
           /> */}
 
           <Route exact path="/profile/:id">
@@ -58,17 +59,21 @@ function App() {
 
 export default App;
 
-// quand je modifie mon profil, faire un nouveau rendu de home
-
-// Private Route juste au dessus
-
-// error, error.message, error.error
-// revoir message tout les messages d'erreur
+// Private Route juste au dessus : toujours le même problème
+// Impossible de récupérer error.message de mon backend
 
 // vider mes inputs
-// pas réussi
+// solution dans creatingPost, pas mieux à faire ? sinon, appliquer cette logique à tout mes inputs
 
-// problème sur profile/:id au niveau de auth quand je raffraichi
+// problème profil/id, warning memory leak et impossible de rafraichir
 
 // penser a faire une page 404
 // faire un fichier de descriptif de lancement pour mon app
+
+// faire du tri dans mes dossiers
+// mettre private route ailleurs
+
+// la on s'attaque à la création de base en soit et au remplissage
+
+// npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string;
+// npm sequelize-cli init

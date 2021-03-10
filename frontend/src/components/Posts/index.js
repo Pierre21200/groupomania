@@ -91,6 +91,9 @@ const Posts = ({ userPosts }) => {
       try {
         const result = await postPost(postTitle, postContent, token);
         setNewPost(result.data.newPost);
+        // il y a surement mieux à faire
+        setPostTitle("");
+        setPostContent("");
       } catch (error) {
         console.log(error);
       }
@@ -107,7 +110,7 @@ const Posts = ({ userPosts }) => {
   // Modération d'un post
   const moderatePost = async postId => {
     const result = await updatePost(token, postId);
-    setMajPost(!majPost);
+    setNewPost(true);
     setShowModeratePost(!showModeratePost);
   };
 
@@ -118,8 +121,6 @@ const Posts = ({ userPosts }) => {
   // Modération d'un post
   const moderateProfile = async userId => {
     const result = await updateProfile(token, userId);
-    console.log(result);
-    console.log("done");
   };
 
   // Fonction useEffect
@@ -129,7 +130,7 @@ const Posts = ({ userPosts }) => {
     if (decode) {
       getSetPosts();
     }
-  }, [token, newPost, majPost]);
+  }, [newPost]);
 
   return redirectToLogin ? (
     <Redirect to={{ pathname: "/login" }} />
@@ -205,11 +206,13 @@ const Posts = ({ userPosts }) => {
                 className="new-post-title form-control"
                 name="Titre du post"
                 onChange={handleChangePostTitle}
+                value={postTitle}
               />
               <Input
                 className="new-post-content form-control"
                 name="Contenu du post"
                 onChange={handleChangePostContent}
+                value={postContent}
               />
               <Button
                 onClick={creatingPost}

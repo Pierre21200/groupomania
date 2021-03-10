@@ -49,15 +49,3 @@ const runInstall = () => {
 };
 
 runInstall();
-
-let sequelize = new Sequelize(
-  process.env.SQL_DB,
-  process.env.SQL_USER,
-  process.env.SQL_PASSWD,
-  {
-    host: process.env.SQL_HOST,
-    dialect: "mysql",
-    logging: false
-  }
-);
-module.exports = sequelize;

@@ -17,7 +17,7 @@ const sequelize = require("./models/index");
 const app = express();
 
 // Sequelize
-app.use(Sequelize);
+// app.use(Sequelize);
 
 // Helmet Middleware
 app.use(helmet());

@@ -10,9 +10,10 @@ const User = ({ id }) => {
     setPostsUser(result.data.userFound);
   };
 
-  useEffect(() => {
-    getSetUser();
-  });
+  // useEffect(() => {
+  //   getSetUser();
+  // });
+  getSetUser();
 
   return postsUser ? (
     <div className="user">

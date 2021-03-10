@@ -2,9 +2,9 @@
 // Middleware Imports
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const model = require("../models/users");
-const modelC = require("../models/comments");
-const modelP = require("../models/posts");
+const model = require("../models");
+const modelC = require("../models/comment");
+const modelP = require("../models/post");
 
 // Database Route
 
