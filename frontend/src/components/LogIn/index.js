@@ -1,25 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
-import Form from "../Form/index.js";
+import Form from "../SubComponents/Form/index.js";
 import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
 import { UserContext } from "../../App.js";
 
 function LogIn() {
   const auth = useContext(UserContext);
-  const [redirect, setRedirect] = useState(false);
+  const [redirectToHome, setRedirectToHome] = useState(false);
 
-  const getRedirect = () => {
+  const getRedirectToHome = () => {
     if (auth?.user) {
-      setRedirect(true);
+      setRedirectToHome(true);
     }
   };
 
   useEffect(() => {
-    getRedirect();
-  }, [auth, redirect]);
+    getRedirectToHome();
+  }, [auth, redirectToHome]);
 
-  return redirect ? (
+  return redirectToHome ? (
     <Redirect to={{ pathname: "/" }} />
   ) : (
     <div className="login-container">

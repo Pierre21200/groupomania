@@ -14,12 +14,20 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER
       },
-      comm: {
+      content: {
         type: Sequelize.STRING
       },
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     });
   },

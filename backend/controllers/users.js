@@ -3,8 +3,8 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const model = require("../models");
-const modelC = require("../models/comment");
-const modelP = require("../models/post");
+// const modelC = require("../models/comment");
+// const modelP = require("../models/post");
 
 // Database Route
 
@@ -235,23 +235,23 @@ exports.inactiveProfile = async (req, res) => {
       }
     );
 
-    const updateComments = await modelC.Comment.update(
-      { active: false },
-      {
-        where: {
-          userId: id
-        }
-      }
-    );
+    // const updateComments = await modelC.Comment.update(
+    //   { active: false },
+    //   {
+    //     where: {
+    //       userId: id
+    //     }
+    //   }
+    // );
 
-    const updatePosts = await modelP.Post.update(
-      { active: false },
-      {
-        where: {
-          userId: id
-        }
-      }
-    );
+    // const updatePosts = await modelP.Post.update(
+    //   { active: false },
+    //   {
+    //     where: {
+    //       userId: id
+    //     }
+    //   }
+    // );
 
     if (!updateProfile) {
       throw new Error("Le profil n'a pas été inactivé");
@@ -266,7 +266,10 @@ exports.inactiveProfile = async (req, res) => {
 // pour modo
 exports.inactiveUser = async (req, res) => {
   try {
+    console.log(req.body);
     const { id } = await req.body;
+    console.log(id);
+
     if (!id) {
       throw new Error("Il manque l'identifiant dans la requête");
     }
@@ -280,7 +283,7 @@ exports.inactiveUser = async (req, res) => {
       }
     );
 
-    const updateComments = await modelC.Comment.update(
+    const updateComments = await model.Comment.update(
       { active: false },
       {
         where: {
@@ -289,7 +292,7 @@ exports.inactiveUser = async (req, res) => {
       }
     );
 
-    const updatePosts = await modelP.Post.update(
+    const updatePosts = await model.Post.update(
       { active: false },
       {
         where: {
@@ -297,14 +300,6 @@ exports.inactiveUser = async (req, res) => {
         }
       }
     );
-
-    if (!updateComments) {
-      throw new Error("Les commentaires n'ont pas été désactivé");
-    }
-
-    if (!updateProfile) {
-      throw new Error("Le profil n'a pas été désactivé");
-    }
 
     res.status(200).json({ updateProfile });
   } catch (error) {

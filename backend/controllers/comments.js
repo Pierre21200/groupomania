@@ -1,6 +1,6 @@
 // Middleware Imports
 const jwt = require("jsonwebtoken");
-const model = require("../models/comment");
+const model = require("../models");
 
 // UserID decoder
 const decodeUid = authorization => {
@@ -29,7 +29,7 @@ exports.createComment = async (req, res) => {
     const newComm = await model.Comment.create({
       userId: userId,
       postId: postId,
-      comm: commentContent
+      content: commentContent
     });
 
     if (!newComm) {

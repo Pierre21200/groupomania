@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUser } from "../FetchData/Users";
+import { getUser } from "../../Utils/FetchData/Users";
 
 const User = ({ id }) => {
   const token = localStorage.getItem("token");
@@ -10,10 +10,10 @@ const User = ({ id }) => {
     setPostsUser(result.data.userFound);
   };
 
-  // useEffect(() => {
-  //   getSetUser();
-  // });
-  getSetUser();
+  useEffect(() => {
+    getSetUser();
+    id = null;
+  });
 
   return postsUser ? (
     <div className="user">

@@ -24,6 +24,3 @@ Input.defaultProps = {
 };
 
 export default Input;
-
-// problème de couleur dans mon code
-// faire des faux data au format json, copier la réponse de postman

@@ -13,7 +13,6 @@ module.exports = (req, res, next) => {
       next();
     }
   } catch (e) {
-    console.log(e);
     throw new Error("Non identifié");
   }
 };

@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useContext } from "react";
-import Comments from "../Comments/index.js";
-import Input from "../Input/index";
-import User from "../User/index";
-import decodedToken from "../DecodeToken/index";
-import Button from "../Button/index";
-import { UserContext } from "../../App.js";
+import Comments from "./Comments/index.js";
+import Input from "../../SubComponents/Input/index";
+import Textarea from "../../SubComponents/Textarea/index";
+import User from "../../SubComponents/User/index";
+import decodedToken from "../../Utils/DecodeToken/index";
+import Button from "../../SubComponents/Button/index";
+import { UserContext } from "../../../App.js";
 import {
   getPosts,
   postPost,
   updatePost,
   getUserPosts
-} from "../FetchData/Posts/index";
-import { getUser, updateProfile } from "../FetchData/Users/index";
+} from "../../Utils/FetchData/Posts/index";
+import { getUser, updateProfile } from "../../Utils/FetchData/Users/index";
 import { Redirect, useParams } from "react-router-dom";
-import "./Posts.css";
 
 const Posts = ({ userPosts }) => {
   const userId = useParams();
   const auth = useContext(UserContext); // auth Context
   const token = localStorage.getItem("token"); // token localStorage
 
-  const [user, setUser] = useState("");
-
-  const [redirectToHome, setRedirectToHome] = useState(false);
+  // if userPosts is true
+  const [user, setUser] = useState(""); // Stock les valeurs du user selectionné par le modérateur
+  const [redirectToHome, setRedirectToHome] = useState(false); // if userPosts est true
 
   // Concernant redirection vers login
   const [redirectToLogin, setRedirectToLogin] = useState(false); // redirection si pas de token
@@ -31,18 +31,14 @@ const Posts = ({ userPosts }) => {
   const [posts, setPosts] = useState([]);
 
   // Concernant toutes les logiques pour déployer des fenêtres
-  const [showCreatingPost, setShowCreatingPost] = useState(false); // faire apparaitre création de poste
-  // const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
-  const [showModeratePost, setShowModeratePost] = useState(false); // faire apparaitre bouton de modération
-  const [showModerateProfile, setShowModerateProfile] = useState(false); // faire apparaitre bouton de modération
+  const [dropdownCreatePost, setDropdownCreatePost] = useState(false); // faire apparaitre création de poste
 
   // Concernant posts
-  const [newPost, setNewPost] = useState(null); // un nouveau post est créé
   const [postTitle, setPostTitle] = useState(""); // titre du post
   const [postContent, setPostContent] = useState(""); // contenu du post
   const [validPostTitle, setValidPostTitle] = useState(false); // regex titre du post
   const [validPostContent, setValidPostContent] = useState(false); // regex contenu du post
-  const [majPost, setMajPost] = useState(false); // modération d'un post
+  const [majPost, setMajPost] = useState(false); // ajout ou modération d'un post
 
   // Pour le modérateur, stock l'id de l'utilisateur que l'on veut visionner, puis passe cette valeur dans la props de posts
   const [profile, setProfile] = useState(false); //
@@ -58,7 +54,7 @@ const Posts = ({ userPosts }) => {
   };
 
   // On utilise cette fonction avant chaque reqûete vers le backend afin d'éviter une erreur serveur si token est expiré
-  const getRedirect = () => {
+  const getRedirectToLogin = () => {
     const decode = decodedToken();
     if (!decode) {
       setRedirectToLogin(true);
@@ -66,32 +62,29 @@ const Posts = ({ userPosts }) => {
     }
   };
 
-  // get & set posts
-  const getSetPosts = async () => {
+  // get + set posts : deux options, userPosts est true or not
+  const fetchPosts = async () => {
     if (userPosts) {
       const resultPosts = await getUserPosts(token, userId.id);
       const resultUser = await getUser(token, userId.id);
       setUser(resultUser.data.userFound);
       setPosts(resultPosts.data.allPosts);
+      setProfile(false);
     } else {
       const result = await getPosts(token);
       setPosts(result.data.allPosts);
+      setRedirectToHome(false);
     }
   };
 
-  // Fait apparaître création de post
-  const seeCreatingPost = () => {
-    setShowCreatingPost(!showCreatingPost);
-  };
-
+  // Création d'un post
   const creatingPost = async () => {
-    getRedirect();
+    getRedirectToLogin();
     const decode = decodedToken();
     if (decode) {
       try {
-        const result = await postPost(postTitle, postContent, token);
-        setNewPost(result.data.newPost);
-        // il y a surement mieux à faire
+        await postPost(postTitle, postContent, token);
+        setMajPost(!majPost);
         setPostTitle("");
         setPostContent("");
       } catch (error) {
@@ -102,35 +95,26 @@ const Posts = ({ userPosts }) => {
     }
   };
 
-  // Fait apparaitre demande de confirmation de modération d'un post
-  const modalModeratePost = () => {
-    setShowModeratePost(!showModeratePost);
-  };
-
   // Modération d'un post
   const moderatePost = async postId => {
-    const result = await updatePost(token, postId);
-    setNewPost(true);
-    setShowModeratePost(!showModeratePost);
+    await updatePost(token, postId);
+    setMajPost(true);
   };
 
-  const modalModerateProfile = () => {
-    setShowModerateProfile(!showModerateProfile);
-  };
-
-  // Modération d'un post
+  // Modération d'un profil en tant que modérator
   const moderateProfile = async userId => {
-    const result = await updateProfile(token, userId);
+    await updateProfile(token, userId);
+    setRedirectToHome(true);
   };
 
   // Fonction useEffect
   useEffect(() => {
-    getRedirect();
+    getRedirectToLogin();
     const decode = decodedToken();
     if (decode) {
-      getSetPosts();
+      fetchPosts();
     }
-  }, [newPost]);
+  }, [majPost, userPosts]);
 
   return redirectToLogin ? (
     <Redirect to={{ pathname: "/login" }} />
@@ -142,7 +126,7 @@ const Posts = ({ userPosts }) => {
     <div>
       {!userPosts ? (
         <Button
-          onClick={seeCreatingPost}
+          onClick={() => setDropdownCreatePost(!dropdownCreatePost)}
           disabled=""
           className="btn btn-outline-primary bouton btn-seecreatingpost"
           value="Créer un nouveau post"
@@ -158,6 +142,12 @@ const Posts = ({ userPosts }) => {
             />
           </div>
           <div className="profile">
+            <div className="container-moderate">
+              <i
+                onClick={() => moderateProfile(userId.id)}
+                className="btn-moderate far fa-times-circle fa-2x"
+              ></i>
+            </div>
             <div className="profile-infos">
               <p className="infos-title">Identifiant</p>
               <p> {user.id}</p>
@@ -173,32 +163,13 @@ const Posts = ({ userPosts }) => {
             <div className="profile-infos">
               <p className="infos-title">Email</p>
               <p> {user.email}</p>
-            </div>
-            <div>
-              <Button
-                onClick={modalModerateProfile}
-                disabled=""
-                className="btn btn-outline-primary bouton btn-moderate-profile"
-                value="Modérer"
-              />
+              <p> {user.active}</p>
             </div>
           </div>
         </div>
       )}
 
-      {showModerateProfile ? (
-        <div>
-          Vous êtes sur le point de supprimer ce profil, êtes vous sur ?
-          <Button
-            onClick={() => moderateProfile(userId.id)}
-            disabled=""
-            className="btn btn-outline-primary bouton btn-seecreatingpost"
-            value="Confirmer"
-          />
-        </div>
-      ) : null}
-
-      {showCreatingPost ? (
+      {dropdownCreatePost ? (
         <div id="createPostForm">
           <div className="card">
             <div className="card-body">
@@ -208,7 +179,7 @@ const Posts = ({ userPosts }) => {
                 onChange={handleChangePostTitle}
                 value={postTitle}
               />
-              <Input
+              <Textarea
                 className="new-post-content form-control"
                 name="Contenu du post"
                 onChange={handleChangePostContent}
@@ -229,7 +200,7 @@ const Posts = ({ userPosts }) => {
           <div className="card-body">
             <div className="card-header row">
               <h6 className="post-user col-4">
-                {auth?.user.moderator ? (
+                {auth?.user.moderator && !userPosts ? (
                   <Button
                     className="btn btn-outline-primary btn-post"
                     disabled=""
@@ -237,40 +208,27 @@ const Posts = ({ userPosts }) => {
                     value={<User id={post.userId} />}
                   />
                 ) : (
-                  <User id={post.userId} />
+                  <div>
+                    <User id={post.userId} />
+                  </div>
                 )}
               </h6>
-
               <h6 className="post-title col-4">{post.titlePost}</h6>
-
               {auth?.user.moderator ? (
-                <div className="col-4 post-moderate">
-                  <Button
-                    className="btn btn-outline-primary btn-post"
-                    disabled=""
-                    value="Modérer"
-                    onClick={modalModeratePost}
-                  />
-                </div>
-              ) : null}
-
-              {showModeratePost ? (
-                <div className="confirm-moderate-post">
-                  <p>
-                    Vous êtes sur le point de supprimer ce post, êtes vous sur ?
-                  </p>
-                  <Button
-                    disabled=""
-                    value="Confirmer"
+                <div className="col-4 container-moderate">
+                  <i
                     onClick={() => moderatePost(post.id)}
-                  />
+                    className="btn-moderate far fa-times-circle fa-2x"
+                  ></i>
                 </div>
-              ) : null}
+              ) : (
+                <div className="col-4"></div>
+              )}
             </div>
 
             <div className="line"></div>
 
-            <p className="post-content">Contenue du post : {post.content}</p>
+            <p className="post-content">{post.content}</p>
 
             <div className="line"></div>
 

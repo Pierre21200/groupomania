@@ -1,52 +1,57 @@
 import React, { useState, useEffect, useContext } from "react";
-import { getComments, updateComment } from "../FetchData/Comments/index";
-import User from "../User/index";
-import Button from "../Button/index";
-import { UserContext } from "../../App.js";
-import decodedToken from "../DecodeToken/index";
-import { postComments } from "../FetchData/Comments/index.js";
-import Input from "../Input/index";
+import {
+  getComments,
+  updateComment
+} from "../../../Utils/FetchData/Comments/index";
+import { Redirect } from "react-router-dom";
+
+import User from "../../../SubComponents/User/index";
+import Button from "../../../SubComponents/Button/index";
+import { UserContext } from "../../../../App.js";
+import decodedToken from "../../../Utils/DecodeToken/index";
+import { postComments } from "../../../Utils/FetchData/Comments/index.js";
+import Textarea from "../../../SubComponents/Textarea/index";
+import Modal from "../../../SubComponents/Modal/index";
 
 const Comments = ({ postId }) => {
   const token = localStorage.getItem("token");
   const auth = useContext(UserContext); // auth Context
-  const [comments, setComments] = useState(null);
-  const [majComment, setMajComment] = useState(false); // modération d'un post
-  const [showModerateComment, setShowModerateComment] = useState(false); // faire apparaitre création de poste
 
-  const [redirect, setRedirect] = useState(false); // redirection si pas de token
+  const [comments, setComments] = useState([]); // stock les commentaires
+  const [majComment, setMajComment] = useState(false); // modération d'un post
+
+  const [modalModerateComment, setModalModerateComment] = useState(false); // faire apparaitre création de poste
+
+  const [redirectToLogin, setRedirectToLogin] = useState(false); // redirection si pas de token
 
   // Concernant comments
-  const [showComments, setShowComments] = useState(false); // faire apparaitre création de commentaire et commentaires
-  const [newComment, setNewComment] = useState(false); // un nouveau commentaire est créé
+  const [dropdownComments, setDropdownComments] = useState(false); // faire apparaitre création de commentaire et commentaires
   const [commentContent, setCommentContent] = useState(""); // contenu du commentaire
   const [validCommentContent, setValidCommentContent] = useState(false); // regex contenu du commentaire
 
-  const getSetComments = async () => {
+  const fetchComments = async () => {
     const result = await getComments(token, postId);
     if (result) {
       setComments(result.data.postComments);
     }
   };
 
+  // gestion d'evenement de l'input
   const handleChangeCommentContent = event => {
     setCommentContent(event.target.value);
     setValidCommentContent(event.target.value !== "" ? true : false);
   };
 
+  // Création d'un commentaire
   const creatingComment = async postId => {
-    getRedirect();
+    getRedirectToLogin();
     const decode = decodedToken();
     if (decode) {
       try {
         let userId = auth.user.id;
-        const result = await postComments(
-          token,
-          userId,
-          postId,
-          commentContent
-        );
-        setNewComment(true);
+        await postComments(token, userId, postId, commentContent);
+        setMajComment(!majComment);
+        setCommentContent("");
         console.log("Le commentaire a bien été créé");
       } catch (error) {
         console.log(error);
@@ -56,45 +61,53 @@ const Comments = ({ postId }) => {
     }
   };
 
-  const modalModerateComment = () => {
-    setShowModerateComment(!showModerateComment);
-  };
-
+  // Modération d'un commentaire
   const moderateComment = async commentId => {
-    const result = await updateComment(token, commentId);
+    await updateComment(token, commentId);
     setMajComment(!majComment);
-    setShowModerateComment(!showModerateComment);
+    setModalModerateComment(false);
   };
 
-  const getRedirect = () => {
+  // redirection à la page de connexion si token inexistant ou expiré
+  const getRedirectToLogin = () => {
     const decode = decodedToken();
     if (!decode) {
-      setRedirect(true);
+      setRedirectToLogin(true);
       auth.setUser(null);
     }
   };
 
+  // gestion de dropdownComments
   const seeComments = postId => {
-    if (showComments === postId) {
-      setShowComments(false);
+    if (dropdownComments === postId) {
+      setDropdownComments(false);
     } else {
-      setShowComments(postId);
+      setDropdownComments(postId);
     }
   };
 
   useEffect(() => {
-    getSetComments();
-  }, [newComment]);
+    fetchComments();
+  }, [majComment]);
 
-  return (
+  return redirectToLogin ? (
+    <Redirect to={{ pathname: "/login" }} />
+  ) : (
     <div>
+      {modalModerateComment ? (
+        <Modal
+          sidebar={true}
+          title="Suppression d'un commentaire"
+          content="Vous êtes sur le point de supprimer un commentaire, êtes vous sur ?"
+        />
+      ) : null}
       <Button
         className="btn btn-outline-primary btn-see-comments"
         disabled=""
         value="Commentaires"
         onClick={() => seeComments(postId)}
       />
-      {showComments && showComments === postId ? (
+      {dropdownComments && dropdownComments === postId ? (
         <div>
           <div>
             <div>
@@ -103,29 +116,13 @@ const Comments = ({ postId }) => {
                   <div className="comment-user">
                     <User id={comment.userId} />
                   </div>
-                  <div>{comment.comm}</div>
+                  <div className="comment-content">{comment.content}</div>
                   {auth?.user.moderator ? (
-                    <div>
-                      <Button
-                        className="btn btn-outline-primary btn-moderate-comment"
-                        disabled=""
-                        value="Modérer"
-                        onClick={modalModerateComment}
-                      />
-                    </div>
-                  ) : null}
-
-                  {showModerateComment ? (
-                    <div>
-                      <p>
-                        Vous êtes sur le point de supprimer ce commentaire, êtes
-                        vous sur ?
-                      </p>
-                      <Button
-                        disabled=""
-                        value="Confirmer"
+                    <div className="container-moderate">
+                      <i
                         onClick={() => moderateComment(comment.id)}
-                      />
+                        className="btn-moderate far fa-times-circle fa-2x"
+                      ></i>
                     </div>
                   ) : null}
                 </div>
@@ -133,10 +130,11 @@ const Comments = ({ postId }) => {
             </div>
             <div className="comments row">
               <div className="col-9">
-                <Input
+                <Textarea
                   className="input-newComment form-control"
                   name="Commenter ce post"
                   onChange={handleChangeCommentContent}
+                  value={commentContent}
                 />
               </div>
 

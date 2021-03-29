@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       postId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
-      comm: DataTypes.STRING,
+      content: DataTypes.STRING,
       active: DataTypes.BOOLEAN
     },
     {

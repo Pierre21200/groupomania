@@ -70,7 +70,9 @@ export const getUser = (token, id) => {
 export const updateProfile = (token, id) => {
   const result = axios.put(
     `${URL}/update`,
-    { id: id },
+    {
+      id
+    },
     {
       headers: { Authorization: `Bearer ${token}` }
     }
