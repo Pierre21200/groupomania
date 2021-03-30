@@ -7,12 +7,14 @@ const User = ({ id }) => {
 
   const getSetUser = async () => {
     const result = await getUser(token, id);
-    setPostsUser(result.data.userFound);
+    if (result) {
+      setPostsUser(result.data.userFound);
+    }
+    console.log("non");
   };
 
   useEffect(() => {
     getSetUser();
-    id = null;
   });
 
   return postsUser ? (

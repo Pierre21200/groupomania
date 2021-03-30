@@ -125,12 +125,15 @@ const Posts = ({ userPosts }) => {
   ) : (
     <div>
       {!userPosts ? (
-        <Button
-          onClick={() => setDropdownCreatePost(!dropdownCreatePost)}
-          disabled=""
-          className="btn btn-outline-primary bouton btn-seecreatingpost"
-          value="Créer un nouveau post"
-        />
+        <div>
+          {" "}
+          <Button
+            onClick={() => setDropdownCreatePost(!dropdownCreatePost)}
+            disabled=""
+            className="btn btn-outline-primary bouton btn-seecreatingpost"
+            value="Créer un nouveau post"
+          />
+        </div>
       ) : (
         <div>
           <div>
@@ -208,9 +211,7 @@ const Posts = ({ userPosts }) => {
                     value={<User id={post.userId} />}
                   />
                 ) : (
-                  <div>
-                    <User id={post.userId} />
-                  </div>
+                  <div>{<User id={post.userId} />}</div>
                 )}
               </h6>
               <h6 className="post-title col-4">{post.titlePost}</h6>

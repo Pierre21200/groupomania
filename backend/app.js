@@ -1,5 +1,5 @@
 // Middleware Imports
-let Sequelize = require("sequelize");
+// let Sequelize = require("sequelize");
 
 const express = require("express");
 const path = require("path");
@@ -12,12 +12,8 @@ const helmet = require("helmet");
 const userRoutes = require("./routes/users");
 const postRoutes = require("./routes/posts");
 const commentRoutes = require("./routes/comments");
-const sequelize = require("./models/index");
 
 const app = express();
-
-// Sequelize
-// app.use(Sequelize);
 
 // Helmet Middleware
 app.use(helmet());
@@ -52,6 +48,7 @@ app.use("/posts", postRoutes);
 app.use("/comments", commentRoutes);
 
 // Error Handling 404
+
 // app.use((req, res, next) => {
 //   throw new error("Route non trouvée", 404);
 // });
