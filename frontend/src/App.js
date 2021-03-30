@@ -48,7 +48,7 @@ function App() {
             component={Home}
             profile={true}
           />
-          {/* <Route path="/" component={Page404} /> */}
+          <Route path="/" component={Page404} />
         </Switch>
       </Router>
     </UserContext.Provider>
@@ -56,5 +56,3 @@ function App() {
 }
 
 export default App;
-
-// N’oublie pas de gérer les routes inconnues 404 front et back.
