@@ -23,6 +23,6 @@ Concernant le frontend, déplacez vous dans le dossier frontend à l’aide de l
 Vous pouvez maintenant vous connecter avec le compte modérateur suivant :
 
 Email : administrateur: admin@gmail.com
-Mot de passe: admin123
+Mot de passe: administrateur123
 
 Ou créer un compte normal.

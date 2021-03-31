@@ -1,12 +1,12 @@
 import axios from "axios";
 
 const URL = `${process.env.REACT_APP_API_URL}/posts/`;
-// const token = localStorage.getItem("token");
 
 export const getPosts = token => {
   const result = axios.get(`${URL}`, {
     headers: { Authorization: `Bearer ${token}` }
   });
+
   return result;
 };
 

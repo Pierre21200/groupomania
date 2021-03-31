@@ -171,7 +171,6 @@ const Posts = ({ userPosts }) => {
           </div>
         </div>
       )}
-
       {dropdownCreatePost ? (
         <div id="createPostForm">
           <div className="card">
@@ -197,7 +196,7 @@ const Posts = ({ userPosts }) => {
           </div>
         </div>
       ) : null}
-
+      {console.log(posts)}
       {posts.map(post => (
         <div key={post.id} id={post.id} className="card">
           <div className="card-body">
@@ -209,9 +208,12 @@ const Posts = ({ userPosts }) => {
                     disabled=""
                     onClick={() => setProfile(post.userId)}
                     value={<User id={post.userId} />}
+                    // value={<User id={1} />}
                   />
                 ) : (
+                  // <div>{<User id={2} />}</div>
                   <div>{<User id={post.userId} />}</div>
+                  // <div>User</div>
                 )}
               </h6>
               <h6 className="post-title col-4">{post.titlePost}</h6>

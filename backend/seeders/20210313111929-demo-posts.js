@@ -24,15 +24,14 @@ module.exports = {
         {
           userId: "2",
           titlePost: "Regardez cette blague !",
-          content: "C'est l'histoire de ........",
+          content: "Comment appelle-t-on un rat sans queue ? Un raccourci !",
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           userId: "3",
           titlePost: "Débattez avec moi !",
-          content:
-            "La politique actuelle et la gestion de la pandémie blablbalbalbla",
+          content: "La gestion de la pandémie est pas un peu catastrophique ? ",
           createdAt: new Date(),
           updatedAt: new Date()
         },

@@ -50,7 +50,7 @@ exports.getPostComments = async (req, res) => {
     }
     const postComments = await model.Comment.findAll({
       where: { postId: id, active: true },
-      order: [["id", "DESC"]]
+      order: [["id"]]
     });
     if (!postComments) {
       throw new Error("Pas de commentaires pour ce post");

@@ -18,43 +18,43 @@ module.exports = {
       "users",
       [
         {
-          firstName: "Pierre",
-          lastName: "Potin",
-          email: "pierrepotin21@gmail.com",
-          password: await bcrypt.hash("pierre", 10),
+          firstName: "Admi",
+          lastName: "Nistrateur",
+          email: "admin@gmail.com",
+          password: await bcrypt.hash("administrateur123", 10),
           moderator: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          firstName: "Tibo",
-          lastName: "Potin",
-          email: "tibopotin21@gmail.com",
-          password: await bcrypt.hash("tibo", 10),
+          firstName: "Pierre",
+          lastName: "Alain",
+          email: "pierrealain@gmail.com",
+          password: await bcrypt.hash("pierrealain123", 10),
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
           firstName: "Jules",
-          lastName: "Potin",
-          email: "julespotin21@gmail.com",
-          password: await bcrypt.hash("jules", 10),
+          lastName: "Boivier",
+          email: "julesboivier@gmail.com",
+          password: await bcrypt.hash("julesboivier123", 10),
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          firstName: "Gilles",
-          lastName: "Potin",
-          email: "gillespotin21@gmail.com",
-          password: await bcrypt.hash("gilles", 10),
+          firstName: "Solene",
+          lastName: "Dallo",
+          email: "solenedallo@gmail.com",
+          password: await bcrypt.hash("solenedallo123", 10),
           createdAt: new Date(),
           updatedAt: new Date()
         },
         {
-          firstName: "Jocelyne",
-          lastName: "Potin",
-          email: "jocelynepotin21@gmail.com",
-          password: await bcrypt.hash("jocelyne", 10),
+          firstName: "Mireille",
+          lastName: "Carbier",
+          email: "mireillecarbier@gmail.com",
+          password: await bcrypt.hash("mireillecarbier123", 10),
           createdAt: new Date(),
           updatedAt: new Date()
         }

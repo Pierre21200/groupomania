@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { getUser } from "../../Utils/FetchData/Users";
 
 const User = ({ id }) => {
   const token = localStorage.getItem("token");
   const [postsUser, setPostsUser] = useState(null);
 
-  const getSetUser = async () => {
+  const getSetUser = useCallback(async () => {
     const result = await getUser(token, id);
     if (result) {
       setPostsUser(result.data.userFound);
     }
     console.log("non");
-  };
+  }, [token, id]);
 
   useEffect(() => {
-    getSetUser();
-  });
+    if (!postsUser) {
+      getSetUser();
+    }
+  }, [postsUser, getSetUser]);
 
   return postsUser ? (
     <div className="user">
