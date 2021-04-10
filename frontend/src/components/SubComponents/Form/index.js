@@ -10,7 +10,7 @@ import {
   updatePassword
 } from "../../Utils/FetchData/Users/index";
 
-const Form = ({ signIn, logIn, updateUser }) => {
+const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
   const auth = useContext(UserContext);
   const token = localStorage.getItem("token");
 
@@ -31,6 +31,8 @@ const Form = ({ signIn, logIn, updateUser }) => {
 
   const [update, setUpdate] = useState(false);
   const [confirmUpdatePassword, setConfirmUpdatePassword] = useState(false);
+
+  const [msgError, setMsgError] = useState(null);
 
   const emailReg = new RegExp(/^([\w-\.]+)@((?:[\w]+\.)+)([a-zA-Z]{2,4})/);
   const passwordReg = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/);
@@ -59,7 +61,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
 
   function handleChangeNewPassword(event) {
     setNewPassword(event.target.value);
-    setValidNewPassword(event.target.value !== "" ? true : false);
+    setValidNewPassword(passwordReg.test(event.target.value) ? true : false);
   }
 
   const login = async () => {
@@ -82,7 +84,6 @@ const Form = ({ signIn, logIn, updateUser }) => {
       if (result) {
         auth.setUser(result.data.user);
         localStorage.setItem("token", result.data.token);
-        console.log("Utilisateur suivant a bien été créé :");
       }
     } catch (error) {
       console.log(error);
@@ -100,7 +101,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
         window.location.reload();
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.userFound);
     }
   };
 
@@ -112,12 +113,15 @@ const Form = ({ signIn, logIn, updateUser }) => {
         console.log("Le mot de passe a bien été modifié");
       }
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.error);
+      setMsgError(error.response.data.error);
     }
   };
 
   return (
-    <form className={updateUser ? "update-form" : null}>
+    <form
+      className={updateUserInfos || updateUserPassword ? "update-form" : null}
+    >
       {update ? (
         <Modal
           fisrtNameBefore={auth.user.firstName}
@@ -218,14 +222,9 @@ const Form = ({ signIn, logIn, updateUser }) => {
         </div>
       ) : null}
 
-      {updateUser ? (
+      {updateUserInfos ? (
         <div>
-          <div className="form-update-profile">
-            <div>
-              <p className="msgValidSidebar">
-                Modifiez vos informations générales !
-              </p>
-            </div>
+          <div className="form-update">
             <Input
               name={auth.user.firstName}
               onChange={handleChangeFirstname}
@@ -249,7 +248,7 @@ const Form = ({ signIn, logIn, updateUser }) => {
               <p className="msgValidSidebar">Cet email est valide</p>
             ) : null}
             <Button
-              className="btn btn-outline-light"
+              className="btn btn-outline-primary"
               onClick={confirmUpdateProfile}
               disabled={
                 validEmail && validFirstName && validLastName === true
@@ -258,35 +257,40 @@ const Form = ({ signIn, logIn, updateUser }) => {
               }
             />
           </div>
-          <div className="form-update-password">
-            <p className="msgValidSidebar">Modifiez votre mot de passe !</p>
-            <Input
-              type="password"
-              name="Mot de passe actuel"
-              onChange={handleChangePassword}
-              value={password}
+        </div>
+      ) : null}
+
+      {updateUserPassword ? (
+        <div className="form-update">
+          <Input
+            type="password"
+            name="Mot de passe actuel"
+            onChange={handleChangePassword}
+            value={password}
+          />
+          <Input
+            type="password"
+            name="Nouveau mot de passe"
+            onChange={handleChangeNewPassword}
+            value={newPassword}
+          />
+
+          {confirmUpdatePassword ? (
+            <Button
+              className="btn btn-outline-danger btn-confirm"
+              onClick={updateNewPassword}
+              disabled={validPassword && validNewPassword ? "" : "disabled"}
+              value="Confirmer la modification du mot de passe"
             />
-            <Input
-              type="password"
-              name="Nouveau mot de passe"
-              onChange={handleChangeNewPassword}
-              value={newPassword}
+          ) : (
+            <Button
+              className="btn btn-outline-primary"
+              onClick={() => setConfirmUpdatePassword(true)}
+              disabled={validPassword && validNewPassword ? "" : "disabled"}
             />
-            {confirmUpdatePassword ? (
-              <Button
-                className="btn btn-outline-danger btn-confirm"
-                onClick={updateNewPassword}
-                disabled={validPassword && validNewPassword ? "" : "disabled"}
-                value="Confirmer la modification du mot de passe"
-              />
-            ) : (
-              <Button
-                className="btn btn-outline-light"
-                onClick={() => setConfirmUpdatePassword(true)}
-                disabled={validPassword && validNewPassword ? "" : "disabled"}
-              />
-            )}
-          </div>
+          )}
+
+          {msgError ? <p>{msgError}</p> : null}
         </div>
       ) : null}
     </form>

@@ -5,7 +5,6 @@ body,
   width: 100%;
 }
 
-/* home */
 .home-container {
   width: 100%;
   height: 100%;
@@ -14,63 +13,25 @@ body,
 .row {
   --bs-gutter-x: 0;
 }
-/* .container {
-  height: 50%;
-  border: 10px brown solid;
-} */
+
+/* Header Home */
 .home-header {
-  height: 80px;
-  width: 80%;
+  position: fixed;
+  min-height: 80px;
+  height: 10%;
+  width: 100%;
   margin: 0;
   padding: 0;
   top: 0;
-  left: 20%;
-  position: fixed;
-  color: white;
-  background-color: white;
-  box-shadow: 0px 0px 5px rgb(39, 111, 228);
-  background-color: rgb(39, 111, 228);
-  display: flex;
-  flex-direction: inline;
-}
-
-.section-container {
-  height: 90%;
-  width: 80%;
-  position: fixed;
-  z-index: 1;
-  top: 10%;
-  left: 20%;
-  overflow-x: hidden;
-  box-shadow: 0px 0px 5px rgb(39, 111, 228);
-  display: flex;
-  justify-content: center;
-}
-
-.sidebar {
-  height: 100%; /* Full-height: remove this if you want "auto" height */
-  width: 20%;
-  position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-  z-index: 1; /* Stay on top */
-  top: 0; /* Stay at the top */
   left: 0;
-  overflow-x: hidden; /* Disable horizontal scroll */
-  color: rgb(39, 111, 228);
-  background-color: rgb(39, 111, 228);
-  box-shadow: 0px 0px 5px rgb(39, 111, 228);
+  display: flex;
 }
 
-.homeTitle {
-  margin: auto;
-  font-style: italic;
-}
-
-/* sidebar */
 .logo-home {
-  width: 100%;
+  margin-bottom: 0;
+  width: 20%;
   min-height: 80px;
   height: 10%;
-  display: flex;
   align-items: center;
   margin-bottom: 10px;
   color: rgb(39, 111, 228);
@@ -82,15 +43,89 @@ body,
   margin: auto;
 }
 
+.welcome-home {
+  height: 100%;
+  width: 80%;
+  background-color: rgb(39, 111, 228);
+  display: flex;
+}
+
+.welcome-title {
+  color: white;
+  margin: auto;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+/* Sidebar + section */
+
+/* Sidebar */
+.sidebar {
+  height: 90%;
+  width: 20%;
+  position: fixed;
+  z-index: 1000;
+  top: 10%;
+  left: 0;
+  overflow-x: hidden;
+  color: rgb(39, 111, 228);
+  background-color: rgb(39, 111, 228);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 5%;
+  padding-bottom: 20%;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+.sidebar-btn {
+  font-size: 20px;
+}
+
+.sub-sidebar-btn {
+  font-size: 15px;
+}
+
+.update-form {
+  margin: 0;
+  width: auto;
+  border: none;
+}
+
+@media screen and (max-width: 1024px) {
+  .sidebar-btn {
+    font-size: 18px;
+  }
+
+  .sub-sidebar-btn {
+    font-size: 11px;
+  }
+}
+
+/* Section  */
+.section-container {
+  height: 90%;
+  width: 80%;
+  position: fixed;
+  z-index: 0;
+  top: 10%;
+  left: 20%;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+.posts-container {
+  width: 100%;
+}
+
 h1 {
   font-size: 25px;
   font-weight: bold;
   margin-left: 10px;
   border-radius: 30px;
-}
-
-.menu {
-  color: white;
 }
 
 h2 {
@@ -105,20 +140,6 @@ h2 {
   border-radius: 30px;
 }
 
-.update-form {
-  margin: 0;
-  width: auto;
-}
-
-.confirm-delete {
-  border-radius: 30px;
-  padding: 10px;
-  width: 80%;
-  background-color: white;
-  color: black;
-  margin: auto;
-}
-
 .modif-profile {
   background-color: red;
   position: fixed;
@@ -126,31 +147,16 @@ h2 {
   left: 40%;
 }
 
-.btn-confirm {
-  color: white;
-}
-.form-update-profile {
-  margin-bottom: 50px;
-}
-
-/* @media screen and (max-width: 1023px) {
-  .sidebar-container {
-    display: none;
-  }
-  .section-container {
-    width: 100%;
-  }
-} */
-
 /* posts */
 .card {
-  margin: 100px;
+  margin: auto;
+  margin-top: 50px;
   box-shadow: 0px 0px 5px rgb(39, 111, 228);
-  color: white;
   border-radius: 30px;
   height: auto;
-  width: 800px;
+  width: 95%;
   color: rgb(39, 111, 228);
+  background-color: white;
 }
 
 .bouton {
@@ -253,19 +259,44 @@ h2 {
 }
 
 .profile {
-  padding: 20px;
-  margin: auto;
-  margin-top: 50px;
-  box-shadow: 0px 0px 5px rgb(39, 111, 228);
+  display: flex;
   color: white;
+  justify-content: space-between;
+}
+
+.form-profile {
+  padding: 20px;
+  width: 40%;
   border-radius: 30px;
-  height: auto;
-  width: 30%;
-  color: rgb(39, 111, 228);
+  border: blue 1px solid;
+  color: blue;
+  margin-left: 5%;
+  margin-top: 10%;
+}
+
+.buttons-profile {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 40%;
+  margin-right: 5%;
+  margin-top: 10%;
+}
+
+.msg-no-post {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  font-style: italic;
+  color: blue;
+}
+.container-profile-infos {
+  padding: 15%;
 }
 
 .profile-infos {
   display: flex;
+  margin: auto;
 }
 
 .infos-title {
@@ -297,14 +328,88 @@ h2 {
   padding-left: 20px;
 }
 
+/* Login */
+.login-container {
+  height: 100%;
+  width: 100%;
+}
+
+.login-header {
+  height: 20%;
+  align-items: center;
+}
+
+.login-container-title {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-right: 200px;
+}
+
+.login-logo {
+  width: 100px;
+}
+
+.login-title {
+  margin: 0;
+  margin-left: 20px;
+  margin-top: 10px;
+  font-size: 60px;
+  color: rgb(34, 112, 229);
+}
+
+.login-subtitle {
+  font-size: 30px;
+  margin-left: 400px;
+}
+
+.form-container {
+  display: flex;
+  height: 80%;
+  padding: 0px 80px 50px 80px;
+}
+
+form {
+  width: 300px;
+  padding: 20px;
+  margin: auto;
+  border: 5px solid rgb(34, 112, 229);
+  border-radius: 10%;
+}
+
+.msgInvalid {
+  color: red;
+  margin: 10px 0px 0px 0px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.msgValid {
+  color: green;
+  margin: 10px 0px 0px 0px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.msgValidSidebar {
+  color: rgb(255, 255, 255);
+  margin: 10px 0px 0px 0px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.btn {
+  margin-top: 20px;
+}
+
 /* Modal */
 .modal-confirm {
   background-color: rgb(39, 111, 228);
   position: fixed;
-  width: 500px;
+  width: 50%;
   margin: auto;
-  left: 40%;
-  z-index: 1;
+  left: 30%;
+  z-index: 10;
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0px 0px 0px 10px white;
@@ -318,7 +423,7 @@ h2 {
   margin: auto;
   top: 200px;
   left: 30%;
-  z-index: 2;
+  z-index: 10;
   padding: 20px;
   border-radius: 30px;
   box-shadow: 0px 0px 0px 10px white;
@@ -366,7 +471,7 @@ h2 {
   display: none;
 }
 
-@media screen and (max-width: 1024px) {
+/* @media screen and (max-width: 1024px) {
   .btn {
     margin: 5px;
   }
@@ -385,5 +490,33 @@ h2 {
   .section-container {
     left: 0;
     width: 100%;
+  }
+} */
+
+@media screen and (min-width: 1025px) {
+  .mobile {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .laptop {
+    display: none;
+  }
+
+  .welcome-home {
+    width: 100%;
+  }
+  .welcome-title {
+    font-size: 22px;
+  }
+  .section-container {
+    width: 100%;
+    left: 0;
+  }
+
+  .container-btn-profile {
+    display: flex;
+    flex-direction: column;
   }
 }

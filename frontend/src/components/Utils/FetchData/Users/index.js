@@ -50,7 +50,7 @@ export const updatePassword = (password, newPassword, token) => {
 
 export const deleteUser = token => {
   const result = axios.put(
-    `${URL}/profile/inactive`,
+    `${URL}/profile/delete`,
     {},
     {
       headers: { Authorization: `Bearer ${token}` }

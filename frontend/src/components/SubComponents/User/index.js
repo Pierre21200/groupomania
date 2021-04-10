@@ -10,7 +10,6 @@ const User = ({ id }) => {
     if (result) {
       setPostsUser(result.data.userFound);
     }
-    console.log("non");
   }, [token, id]);
 
   useEffect(() => {

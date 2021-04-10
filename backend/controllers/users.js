@@ -22,6 +22,7 @@ exports.signup = async (req, res) => {
     });
 
     if (userFound) {
+      console.log(userFound.dataValues);
       throw new Error("Cet email est déjà utilisé !");
     }
 
@@ -219,42 +220,31 @@ exports.updatePassword = async (req, res) => {
   }
 };
 
-exports.inactiveProfile = async (req, res) => {
+exports.deleteProfile = async (req, res) => {
   try {
     const user = await decodeUid(req.headers.authorization);
     if (!user) {
       throw new Error("Problème d'autorisation !");
     }
 
-    const updateProfile = await model.User.update(
-      { active: false },
-      {
-        where: {
-          id: user.id
-        }
+    const updateProfile = await model.User.destroy({
+      where: { id: user.id }
+    });
+
+    const updateComments = await model.Comment.destroy({
+      where: {
+        userId: user.id
       }
-    );
+    });
 
-    // const updateComments = await modelC.Comment.update(
-    //   { active: false },
-    //   {
-    //     where: {
-    //       userId: id
-    //     }
-    //   }
-    // );
-
-    // const updatePosts = await modelP.Post.update(
-    //   { active: false },
-    //   {
-    //     where: {
-    //       userId: id
-    //     }
-    //   }
-    // );
+    const updatePosts = await model.Post.destroy({
+      where: {
+        userId: user.id
+      }
+    });
 
     if (!updateProfile) {
-      throw new Error("Le profil n'a pas été inactivé");
+      throw new Error("Le profil n'a pas été supprimé");
     }
 
     res.status(200).json({ updateProfile });
@@ -266,9 +256,7 @@ exports.inactiveProfile = async (req, res) => {
 // pour modo
 exports.inactiveUser = async (req, res) => {
   try {
-    console.log(req.body);
     const { id } = await req.body;
-    console.log(id);
 
     if (!id) {
       throw new Error("Il manque l'identifiant dans la requête");

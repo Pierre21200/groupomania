@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import logo from "../../../icons/icon-c.png";
 import Button from "../../SubComponents/Button/index";
 import Form from "../../SubComponents/Form/index";
 import { deleteUser } from "../../Utils/FetchData/Users/index.js";
@@ -8,7 +7,10 @@ import { Redirect } from "react-router-dom";
 const Sidebar = () => {
   const [redirectToLogin, setRedirectToLogin] = useState(false);
   const [dropdownUpdateProfile, setDropdownUpdateProfile] = useState(false);
+  const [dropdownUpdateInfos, setDropdownUpdateInfos] = useState(false);
+  const [dropdownUpdatePassword, setDropdownUpdatePassword] = useState(false);
   const [deleteProfile, setDeleteProfile] = useState(false);
+
   const token = localStorage.getItem("token");
 
   const logout = () => {
@@ -25,39 +27,58 @@ const Sidebar = () => {
     <Redirect to={{ pathname: "/login" }} />
   ) : (
     <div className="sidebar">
-      <div className="logo-home">
-        <img className="home-logo" src={logo} alt="groupomania-logo" />
-      </div>
-      <div className="menu">
+      <div className="container-btn-profile">
         <Button
           onClick={() => setDropdownUpdateProfile(!dropdownUpdateProfile)}
           disabled=""
-          className="btn btn-outline-light bouton"
+          className="btn sidebar-btn btn-outline-light "
           value="Mon Profil"
         />
+        {dropdownUpdateProfile ? (
+          <div>
+            <Button
+              onClick={() => setDropdownUpdateInfos(!dropdownUpdateInfos)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-light "
+              value="Modifier vos informations générales"
+            />
+            {dropdownUpdateInfos ? <Form updateUserInfos={true} /> : null}
 
-        {dropdownUpdateProfile ? <Form updateUser={true} /> : null}
+            <Button
+              onClick={() => setDropdownUpdatePassword(!dropdownUpdatePassword)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-light "
+              value="Modifier votre mot de passe"
+            />
 
-        {deleteProfile ? (
-          <Button
-            onClick={confirmDeleteProfile}
-            disabled=""
-            className="btn btn-outline-danger btn-confirm bouton"
-            value="Confirmer suppression de mon profil"
-          />
-        ) : (
-          <Button
-            onClick={() => setDeleteProfile(true)}
-            disabled=""
-            className="btn btn-outline-light bouton"
-            value="Supprimer mon profil"
-          />
-        )}
+            {dropdownUpdatePassword ? <Form updateUserPassword={true} /> : null}
 
+            <Button
+              onClick={() => setDeleteProfile(!deleteProfile)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-light "
+              value="Supprimer votre profil"
+            />
+
+            {deleteProfile ? (
+              <div>
+                <Button
+                  onClick={() => setDeleteProfile(!deleteProfile)}
+                  disabled=""
+                  className="btn sub-sidebar-btn btn-danger "
+                  value="Confirmer la suppression de votre profil"
+                />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="container-btn-logout">
         <Button
           onClick={logout}
           disabled=""
-          className="btn btn-outline-light bouton"
+          className="btn sidebar-btn btn-outline-light bouton"
           value="Deconnexion"
         />
       </div>

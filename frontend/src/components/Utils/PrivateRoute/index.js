@@ -6,14 +6,14 @@ export const PrivateRoute = ({
   component: Component,
   exact,
   path,
-  profile
+  userProfile
 }) => {
   const auth = useContext(UserContext);
   const location = useLocation();
   return (
     <Route exact={exact} path={path}>
       {auth?.user ? (
-        <Component profile={profile} />
+        <Component userProfile={userProfile} />
       ) : (
         <Redirect
           to={{

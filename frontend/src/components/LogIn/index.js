@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect } from "react-router-dom";
 import Form from "../SubComponents/Form/index.js";
-import "./LogIn.css";
 import logo from "../../icons/icon-c.png";
 import { UserContext } from "../../App.js";
 

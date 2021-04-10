@@ -14,7 +14,6 @@ export const UserContext = React.createContext();
 
 function App() {
   const [user, setUser] = useState(null);
-  console.log(user);
 
   const majAuth = async () => {
     try {
@@ -42,11 +41,12 @@ function App() {
         <Switch>
           <Route exact path="/login" component={LogIn} />
           <PrivateRoute exact path="/" component={Home} />
+
           <PrivateRoute
             exact
             path="/profile/:id"
             component={Home}
-            profile={true}
+            userProfile={true}
           />
           <Route path="/" component={Page404} />
         </Switch>

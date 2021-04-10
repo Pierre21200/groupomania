@@ -5,6 +5,9 @@ import Textarea from "../../SubComponents/Textarea/index";
 import User from "../../SubComponents/User/index";
 import decodedToken from "../../Utils/DecodeToken/index";
 import Button from "../../SubComponents/Button/index";
+import Form from "../../SubComponents/Form/index";
+import { deleteUser } from "../../Utils/FetchData/Users/index.js";
+
 import { UserContext } from "../../../App.js";
 import {
   getPosts,
@@ -15,14 +18,14 @@ import {
 import { getUser, updateProfile } from "../../Utils/FetchData/Users/index";
 import { Redirect, useParams } from "react-router-dom";
 
-const Posts = ({ userPosts }) => {
+const Posts = ({ userProfile, myProfile }) => {
   const userId = useParams();
   const auth = useContext(UserContext); // auth Context
   const token = localStorage.getItem("token"); // token localStorage
 
-  // if userPosts is true
+  // if userProfile/myProfile is true
   const [user, setUser] = useState(""); // Stock les valeurs du user selectionné par le modérateur
-  const [redirectToHome, setRedirectToHome] = useState(false); // if userPosts est true
+  const [redirectToHome, setRedirectToHome] = useState(false);
 
   // Concernant redirection vers login
   const [redirectToLogin, setRedirectToLogin] = useState(false); // redirection si pas de token
@@ -32,6 +35,10 @@ const Posts = ({ userPosts }) => {
 
   // Concernant toutes les logiques pour déployer des fenêtres
   const [dropdownCreatePost, setDropdownCreatePost] = useState(false); // faire apparaitre création de poste
+  const [dropdownUpdateProfile, setDropdownUpdateProfile] = useState(false);
+  const [dropdownUpdateInfos, setDropdownUpdateInfos] = useState(false);
+  const [dropdownUpdatePassword, setDropdownUpdatePassword] = useState(false);
+  const [deleteProfile, setDeleteProfile] = useState(false);
 
   // Concernant posts
   const [postTitle, setPostTitle] = useState(""); // titre du post
@@ -62,14 +69,18 @@ const Posts = ({ userPosts }) => {
     }
   };
 
-  // get + set posts : deux options, userPosts est true or not
+  // get + set posts : deux options, userProfile est true or not
   const fetchPosts = async () => {
-    if (userPosts) {
+    if (userProfile) {
       const resultPosts = await getUserPosts(token, userId.id);
       const resultUser = await getUser(token, userId.id);
       setUser(resultUser.data.userFound);
       setPosts(resultPosts.data.allPosts);
       setProfile(false);
+    } else if (myProfile) {
+      const result = await getUserPosts(token, auth.user.id);
+      setUser(auth.user);
+      setPosts(result.data.allPosts);
     } else {
       const result = await getPosts(token);
       setPosts(result.data.allPosts);
@@ -107,6 +118,16 @@ const Posts = ({ userPosts }) => {
     setRedirectToHome(true);
   };
 
+  const logout = () => {
+    localStorage.removeItem("token");
+    setRedirectToLogin(true);
+  };
+
+  const confirmDeleteProfile = async () => {
+    await deleteUser(token);
+    logout();
+  };
+
   // Fonction useEffect
   useEffect(() => {
     getRedirectToLogin();
@@ -114,7 +135,9 @@ const Posts = ({ userPosts }) => {
     if (decode) {
       fetchPosts();
     }
-  }, [majPost, userPosts]);
+  }, [majPost, userProfile, myProfile]);
+
+  console.log(userProfile, myProfile);
 
   return redirectToLogin ? (
     <Redirect to={{ pathname: "/login" }} />
@@ -123,10 +146,9 @@ const Posts = ({ userPosts }) => {
   ) : redirectToHome ? (
     <Redirect to={{ pathname: "/" }} />
   ) : (
-    <div>
-      {!userPosts ? (
+    <div className="posts-container">
+      {!userProfile && !myProfile ? (
         <div>
-          {" "}
           <Button
             onClick={() => setDropdownCreatePost(!dropdownCreatePost)}
             disabled=""
@@ -135,39 +157,82 @@ const Posts = ({ userPosts }) => {
           />
         </div>
       ) : (
-        <div>
-          <div>
-            <Button
-              onClick={() => setRedirectToHome(true)}
-              disabled=""
-              className="btn btn-outline-primary bouton btn-seecreatingpost"
-              value="Retour à tous les posts"
-            />
-          </div>
-          <div className="profile">
+        <div className="profile">
+          {auth.user.moderator ? (
             <div className="container-moderate">
               <i
                 onClick={() => moderateProfile(userId.id)}
                 className="btn-moderate far fa-times-circle fa-2x"
               ></i>
             </div>
-            <div className="profile-infos">
-              <p className="infos-title">Identifiant</p>
-              <p> {user.id}</p>
-            </div>
-            <div className="profile-infos">
-              <p className="infos-title">Prénom</p>
-              <p> {user.firstName}</p>
-            </div>
-            <div className="profile-infos">
-              <p className="infos-title">Nom</p>
-              <p> {user.lastName}</p>
-            </div>
-            <div className="profile-infos">
-              <p className="infos-title">Email</p>
-              <p> {user.email}</p>
-              <p> {user.active}</p>
-            </div>
+          ) : null}
+
+          <div className="form-profile">
+            {dropdownUpdateInfos ? <Form updateUserInfos={true} /> : null}
+            {dropdownUpdatePassword ? <Form updateUserPassword={true} /> : null}
+            {deleteProfile ? (
+              <Button
+                onClick={confirmDeleteProfile}
+                disabled=""
+                className="btn sidebar-btn btn-outline-danger bouton"
+                value="Confirmer la suppression de votre profil"
+              />
+            ) : null}
+
+            {!dropdownUpdateInfos &&
+            !dropdownUpdatePassword &&
+            !deleteProfile ? (
+              <div className="container-profile-infos">
+                {auth.user.moderator ? (
+                  <div className="profile-infos">
+                    <p className="infos-title">Identifiant</p>
+                    <p> {user.id}</p>
+                  </div>
+                ) : null}
+
+                <div className="profile-infos">
+                  <p className="infos-title">Prénom</p>
+                  <p> {user.firstName}</p>
+                </div>
+                <div className="profile-infos">
+                  <p className="infos-title">Nom</p>
+                  <p> {user.lastName}</p>
+                </div>
+                <div className="profile-infos">
+                  <p className="infos-title">Email</p>
+                  <p> {user.email}</p>
+                  <p> {user.active}</p>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="buttons-profile">
+            <Button
+              onClick={() => setDropdownUpdateInfos(!dropdownUpdateInfos)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-outline-primary "
+              value="Modifier vos informations générales"
+            />
+            <Button
+              onClick={() => setDropdownUpdatePassword(!dropdownUpdatePassword)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-outline-primary "
+              value="Modifier votre mot de passe"
+            />
+            <Button
+              onClick={() => setDeleteProfile(!deleteProfile)}
+              disabled=""
+              className="btn sub-sidebar-btn btn-outline-primary "
+              value="Supprimer votre profil"
+            />
+
+            <Button
+              onClick={logout}
+              disabled=""
+              className="btn sub-sidebar-btn btn-outline-primary "
+              value="Deconnexion"
+            />
           </div>
         </div>
       )}
@@ -196,51 +261,54 @@ const Posts = ({ userPosts }) => {
           </div>
         </div>
       ) : null}
-      {console.log(posts)}
-      {posts.map(post => (
-        <div key={post.id} id={post.id} className="card">
-          <div className="card-body">
-            <div className="card-header row">
-              <h6 className="post-user col-4">
-                {auth?.user.moderator && !userPosts ? (
-                  <Button
-                    className="btn btn-outline-primary btn-post"
-                    disabled=""
-                    onClick={() => setProfile(post.userId)}
-                    value={<User id={post.userId} />}
-                    // value={<User id={1} />}
-                  />
-                ) : (
-                  // <div>{<User id={2} />}</div>
-                  <div>{<User id={post.userId} />}</div>
-                  // <div>User</div>
-                )}
-              </h6>
-              <h6 className="post-title col-4">{post.titlePost}</h6>
-              {auth?.user.moderator ? (
-                <div className="col-4 container-moderate">
-                  <i
-                    onClick={() => moderatePost(post.id)}
-                    className="btn-moderate far fa-times-circle fa-2x"
-                  ></i>
+
+      {posts.length > 0 ? (
+        <div>
+          {posts.map(post => (
+            <div key={post.id} id={post.id} className="card">
+              <div className="card-body">
+                <div className="card-header row">
+                  <h6 className="post-user col-4">
+                    {auth?.user.moderator && !userProfile ? (
+                      <Button
+                        className="btn btn-outline-primary btn-post"
+                        disabled=""
+                        onClick={() => setProfile(post.userId)}
+                        value={<User id={post.userId} />}
+                      />
+                    ) : (
+                      <div>{<User id={post.userId} />}</div>
+                    )}
+                  </h6>
+                  <h6 className="post-title col-4">{post.titlePost}</h6>
+                  {auth?.user.moderator ? (
+                    <div className="col-4 container-moderate">
+                      <i
+                        onClick={() => moderatePost(post.id)}
+                        className="btn-moderate far fa-times-circle fa-2x"
+                      ></i>
+                    </div>
+                  ) : (
+                    <div className="col-4"></div>
+                  )}
                 </div>
-              ) : (
-                <div className="col-4"></div>
-              )}
+
+                <div className="line"></div>
+
+                <p className="post-content">{post.content}</p>
+
+                <div className="line"></div>
+
+                <div>
+                  <Comments postId={post.id} />
+                </div>
+              </div>
             </div>
-
-            <div className="line"></div>
-
-            <p className="post-content">{post.content}</p>
-
-            <div className="line"></div>
-
-            <div>
-              <Comments postId={post.id} />
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
+      ) : (
+        <p className="msg-no-post">Vous n'avez créer aucun post</p>
+      )}
     </div>
   );
 };
