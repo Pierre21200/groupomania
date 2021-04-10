@@ -28,8 +28,33 @@ const Home = ({ userProfile }) => {
 
         <div className="welcome-home mobile">
           <p className="welcome-title">Groupomania</p>
+          {!userProfile && !myProfile ? (
+            <Button
+              onClick={() => setMyProfile(auth.user.id)}
+              disabled=""
+              className="btn navbar-btn btn-outline-light "
+              value="Mon Profil"
+            />
+          ) : null}
+
+          {userProfile ? (
+            <Button
+              onClick={() => setMyProfile(null)}
+              disabled="disabled"
+              className="btn navbar-btn btn-outline-light "
+              value="Retour aux posts"
+            />
+          ) : null}
 
           {myProfile ? (
+            <Button
+              onClick={() => setMyProfile(null)}
+              disabled=""
+              className="btn navbar-btn btn-outline-light "
+              value="Retour aux posts"
+            />
+          ) : null}
+          {/* {myProfile ? (
             <Button
               onClick={() => setMyProfile(null)}
               disabled=""
@@ -43,13 +68,31 @@ const Home = ({ userProfile }) => {
               className="btn sidebar-btn btn-light "
               value="Mon Profil"
             />
-          )}
+          )} */}
         </div>
       </div>
 
       <div className="container">
         <div className="sidebar-container laptop">
           <div className="sidebar">
+            {!userProfile && !myProfile ? (
+              <Button
+                onClick={() => setMyProfile(auth.user.id)}
+                disabled=""
+                className="btn sidebar-btn btn-outline-light "
+                value="Mon Profil"
+              />
+            ) : null}
+
+            {userProfile ? (
+              <Button
+                onClick={() => setMyProfile(null)}
+                disabled="disabled"
+                className="btn sidebar-btn btn-outline-light "
+                value="Retour aux posts"
+              />
+            ) : null}
+
             {myProfile ? (
               <Button
                 onClick={() => setMyProfile(null)}
@@ -57,14 +100,7 @@ const Home = ({ userProfile }) => {
                 className="btn sidebar-btn btn-outline-light "
                 value="Retour aux posts"
               />
-            ) : (
-              <Button
-                onClick={() => setMyProfile(auth.user.id)}
-                disabled=""
-                className="btn sidebar-btn btn-outline-light "
-                value="Mon Profil"
-              />
-            )}
+            ) : null}
           </div>
         </div>
 

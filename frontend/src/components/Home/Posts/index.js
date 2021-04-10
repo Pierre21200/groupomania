@@ -137,8 +137,6 @@ const Posts = ({ userProfile, myProfile }) => {
     }
   }, [majPost, userProfile, myProfile]);
 
-  console.log(userProfile, myProfile);
-
   return redirectToLogin ? (
     <Redirect to={{ pathname: "/login" }} />
   ) : profile ? (
@@ -146,119 +144,99 @@ const Posts = ({ userProfile, myProfile }) => {
   ) : redirectToHome ? (
     <Redirect to={{ pathname: "/" }} />
   ) : (
-    <div className="posts-container">
-      {!userProfile && !myProfile ? (
-        <div>
-          <Button
-            onClick={() => setDropdownCreatePost(!dropdownCreatePost)}
-            disabled=""
-            className="btn btn-outline-primary bouton btn-seecreatingpost"
-            value="Créer un nouveau post"
-          />
-        </div>
-      ) : (
-        <div className="profile">
-          {auth.user.moderator ? (
-            <div className="container-moderate">
-              <i
-                onClick={() => moderateProfile(userId.id)}
-                className="btn-moderate far fa-times-circle fa-2x"
-              ></i>
+    <div className="container">
+      {userProfile ? (
+        <Button
+          onClick={() => setRedirectToHome(true)}
+          disabled=""
+          className="btn btn-outline-primary bouton btn-seecreatingpost"
+          value="Retour à tout les posts"
+        />
+      ) : null}
+
+      {userProfile || myProfile ? (
+        <div className="container-profile-form">
+          {!dropdownUpdateInfos && !dropdownUpdatePassword && !deleteProfile ? (
+            <div className="container-profile-infos">
+              {auth.user.moderator ? (
+                <div className="profile-infos">
+                  <p className="infos-title">Identifiant</p>
+                  <p> {user.id}</p>
+                </div>
+              ) : null}
+
+              <div className="profile-infos">
+                <p className="infos-title">Prénom</p>
+                <p> {user.firstName}</p>
+              </div>
+              <div className="profile-infos">
+                <p className="infos-title">Nom</p>
+                <p> {user.lastName}</p>
+              </div>
+              <div className="profile-infos">
+                <p className="infos-title">Email</p>
+                <p> {user.email}</p>
+                <p> {user.active}</p>
+              </div>
+            </div>
+          ) : (
+            <div>
+              {dropdownUpdateInfos ? <Form updateUserInfos={true} /> : null}
+              {dropdownUpdatePassword ? (
+                <Form updateUserPassword={true} />
+              ) : null}
+              {deleteProfile ? (
+                <Button
+                  onClick={confirmDeleteProfile}
+                  disabled=""
+                  className="btn sidebar-btn btn-outline-danger bouton"
+                  value="Confirmer la suppression de votre profil"
+                />
+              ) : null}
+            </div>
+          )}
+
+          {myProfile ? (
+            <div className="buttons-profile">
+              <Button
+                onClick={() => setDropdownUpdateInfos(!dropdownUpdateInfos)}
+                disabled=""
+                className="btn sub-sidebar-btn btn-outline-primary"
+                value="Modifier vos informations générales"
+              />
+              <Button
+                onClick={() =>
+                  setDropdownUpdatePassword(!dropdownUpdatePassword)
+                }
+                disabled=""
+                className="btn sub-sidebar-btn btn-outline-primary "
+                value="Modifier votre mot de passe"
+              />
+
+              <Button
+                onClick={logout}
+                disabled=""
+                className="btn sub-sidebar-btn btn-outline-primary "
+                value="Deconnexion"
+              />
+
+              {myProfile && auth.user.moderator ? null : (
+                <Button
+                  disabled=""
+                  className="btn sub-sidebar-btn btn-outline-primary "
+                  value="Supprimer le profil"
+                />
+              )}
             </div>
           ) : null}
 
-          <div className="form-profile">
-            {dropdownUpdateInfos ? <Form updateUserInfos={true} /> : null}
-            {dropdownUpdatePassword ? <Form updateUserPassword={true} /> : null}
-            {deleteProfile ? (
-              <Button
-                onClick={confirmDeleteProfile}
-                disabled=""
-                className="btn sidebar-btn btn-outline-danger bouton"
-                value="Confirmer la suppression de votre profil"
-              />
-            ) : null}
-
-            {!dropdownUpdateInfos &&
-            !dropdownUpdatePassword &&
-            !deleteProfile ? (
-              <div className="container-profile-infos">
-                {auth.user.moderator ? (
-                  <div className="profile-infos">
-                    <p className="infos-title">Identifiant</p>
-                    <p> {user.id}</p>
-                  </div>
-                ) : null}
-
-                <div className="profile-infos">
-                  <p className="infos-title">Prénom</p>
-                  <p> {user.firstName}</p>
-                </div>
-                <div className="profile-infos">
-                  <p className="infos-title">Nom</p>
-                  <p> {user.lastName}</p>
-                </div>
-                <div className="profile-infos">
-                  <p className="infos-title">Email</p>
-                  <p> {user.email}</p>
-                  <p> {user.active}</p>
-                </div>
-              </div>
-            ) : null}
-          </div>
-
-          <div className="buttons-profile">
+          {!userProfile ? null : (
             <Button
-              onClick={() => setDropdownUpdateInfos(!dropdownUpdateInfos)}
               disabled=""
-              className="btn sub-sidebar-btn btn-outline-primary "
-              value="Modifier vos informations générales"
+              className="btn sub-sidebar-btn btn-outline-danger "
+              value="Supprimer le profil"
             />
-            <Button
-              onClick={() => setDropdownUpdatePassword(!dropdownUpdatePassword)}
-              disabled=""
-              className="btn sub-sidebar-btn btn-outline-primary "
-              value="Modifier votre mot de passe"
-            />
-            <Button
-              onClick={() => setDeleteProfile(!deleteProfile)}
-              disabled=""
-              className="btn sub-sidebar-btn btn-outline-primary "
-              value="Supprimer votre profil"
-            />
-
-            <Button
-              onClick={logout}
-              disabled=""
-              className="btn sub-sidebar-btn btn-outline-primary "
-              value="Deconnexion"
-            />
-          </div>
-        </div>
-      )}
-      {dropdownCreatePost ? (
-        <div id="createPostForm">
-          <div className="card">
-            <div className="card-body">
-              <Input
-                className="new-post-title form-control"
-                name="Titre du post"
-                onChange={handleChangePostTitle}
-                value={postTitle}
-              />
-              <Textarea
-                className="new-post-content form-control"
-                name="Contenu du post"
-                onChange={handleChangePostContent}
-                value={postContent}
-              />
-              <Button
-                onClick={creatingPost}
-                disabled={validPostTitle && validPostContent ? "" : "disabled"}
-                value="Envoyer"
-              />
-            </div>
-          </div>
+          )}
         </div>
       ) : null}
 
@@ -267,9 +245,9 @@ const Posts = ({ userProfile, myProfile }) => {
           {posts.map(post => (
             <div key={post.id} id={post.id} className="card">
               <div className="card-body">
-                <div className="card-header row">
-                  <h6 className="post-user col-4">
-                    {auth?.user.moderator && !userProfile ? (
+                <div className="card-header">
+                  <h6 className="post-user">
+                    {auth?.user.moderator && post.userId != auth.user.id ? (
                       <Button
                         className="btn btn-outline-primary btn-post"
                         disabled=""
@@ -280,9 +258,9 @@ const Posts = ({ userProfile, myProfile }) => {
                       <div>{<User id={post.userId} />}</div>
                     )}
                   </h6>
-                  <h6 className="post-title col-4">{post.titlePost}</h6>
+                  <h6 className="post-title">{post.titlePost}</h6>
                   {auth?.user.moderator ? (
-                    <div className="col-4 container-moderate">
+                    <div className="container-moderate">
                       <i
                         onClick={() => moderatePost(post.id)}
                         className="btn-moderate far fa-times-circle fa-2x"

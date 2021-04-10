@@ -121,7 +121,7 @@ const Comments = ({ postId }) => {
                     <div className="container-moderate">
                       <i
                         onClick={() => moderateComment(comment.id)}
-                        className="btn-moderate far fa-times-circle fa-2x"
+                        className="btn-moderate-comment far fa-times-circle fa-2x"
                       ></i>
                     </div>
                   ) : null}
