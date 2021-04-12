@@ -15,6 +15,7 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
   const token = localStorage.getItem("token");
 
   const [errorLogin, setErrorLogin] = useState(false);
+  const [errorSignup, setErrorSignup] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [validFirstName, setValidFirstName] = useState(false);
   const [lastName, setLastName] = useState("");
@@ -86,6 +87,7 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
         localStorage.setItem("token", result.data.token);
       }
     } catch (error) {
+      setErrorSignup(error.response.data.error);
       console.log(error);
     }
   };
@@ -120,7 +122,13 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
 
   return (
     <form
-      className={updateUserInfos || updateUserPassword ? "update-form" : null}
+      className={
+        updateUserInfos || updateUserPassword
+          ? "update-form"
+          : logIn || signIn
+          ? "form-log-sign"
+          : null
+      }
     >
       {update ? (
         <Modal
@@ -150,12 +158,7 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
           />
 
           <Input name="Nom" onChange={handleChangeLastname} value={lastName} />
-          <Input
-            type="email"
-            name="Email"
-            onChange={handleChangeEmail}
-            value={email}
-          />
+          <Input name="Email" onChange={handleChangeEmail} value={email} />
 
           {email && !validEmail ? (
             <p className="msgInvalid">Cet email n'est pas valide</p>
@@ -189,7 +192,10 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
                 ? ""
                 : "disabled"
             }
+            className="btn btn-outline-primary btn-form"
           />
+
+          {errorSignup ? <p className="msgInvalid">{errorSignup}</p> : null}
         </div>
       ) : null}
 
@@ -215,6 +221,7 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
             disabled={
               validPasswordLog && validEmailLog === true ? "" : "disabled"
             }
+            className="btn btn-outline-primary btn-form"
           />
           {errorLogin ? (
             <p className="msgInvalid">Ces informations sont erronées</p>
@@ -248,7 +255,7 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
               <p className="msgValidSidebar">Cet email est valide</p>
             ) : null}
             <Button
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary btn-form"
               onClick={confirmUpdateProfile}
               disabled={
                 validEmail && validFirstName && validLastName === true
@@ -277,14 +284,14 @@ const Form = ({ signIn, logIn, updateUserInfos, updateUserPassword }) => {
 
           {confirmUpdatePassword ? (
             <Button
-              className="btn btn-outline-danger btn-confirm"
+              className="btn btn-outline-danger btn-form"
               onClick={updateNewPassword}
               disabled={validPassword && validNewPassword ? "" : "disabled"}
               value="Confirmer la modification du mot de passe"
             />
           ) : (
             <Button
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary btn-form"
               onClick={() => setConfirmUpdatePassword(true)}
               disabled={validPassword && validNewPassword ? "" : "disabled"}
             />

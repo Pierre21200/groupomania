@@ -32,6 +32,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
+      tuto: { type: Sequelize.BOOLEAN, defaultValue: false },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE

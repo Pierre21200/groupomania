@@ -10,7 +10,6 @@ const Sidebar = () => {
   const [dropdownUpdateInfos, setDropdownUpdateInfos] = useState(false);
   const [dropdownUpdatePassword, setDropdownUpdatePassword] = useState(false);
   const [deleteProfile, setDeleteProfile] = useState(false);
-
   const token = localStorage.getItem("token");
 
   const logout = () => {

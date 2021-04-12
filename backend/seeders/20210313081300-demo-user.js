@@ -23,6 +23,7 @@ module.exports = {
           email: "admin@gmail.com",
           password: await bcrypt.hash("administrateur123", 10),
           moderator: true,
+          tuto: true,
           createdAt: new Date(),
           updatedAt: new Date()
         },

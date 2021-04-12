@@ -29,7 +29,7 @@ exports.signup = async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
 
     if (!hash) {
-      throw new Error("pas de hash");
+      throw new Error("Un problème est survenu");
     }
 
     const newUser = await model.User.create({
@@ -40,7 +40,7 @@ exports.signup = async (req, res) => {
     });
 
     if (!newUser) {
-      throw new Error("L'inscription a échoué");
+      throw new Error("Un problème est survenu");
     }
     res.status(201).json({
       user: newUser,

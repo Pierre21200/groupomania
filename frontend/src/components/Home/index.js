@@ -11,8 +11,6 @@ const Home = ({ userProfile }) => {
   const auth = useContext(UserContext);
   const [myProfile, setMyProfile] = useState(null);
 
-  console.log(userProfile, myProfile);
-
   return (
     <div className="home-container">
       <div className="home-header">
@@ -54,21 +52,6 @@ const Home = ({ userProfile }) => {
               value="Retour aux posts"
             />
           ) : null}
-          {/* {myProfile ? (
-            <Button
-              onClick={() => setMyProfile(null)}
-              disabled=""
-              className="btn sidebar-btn btn-light "
-              value="Retour aux posts"
-            />
-          ) : (
-            <Button
-              onClick={() => setMyProfile(auth.user.id)}
-              disabled=""
-              className="btn sidebar-btn btn-light "
-              value="Mon Profil"
-            />
-          )} */}
         </div>
       </div>
 
@@ -105,7 +88,6 @@ const Home = ({ userProfile }) => {
         </div>
 
         <div className="section-container">
-          {auth?.user.moderator ? <Modal infos={true} /> : null}
           {myProfile ? <Posts myProfile={true} /> : null}
           {userProfile ? <Posts userProfile={true} /> : null}
           {!userProfile && !myProfile ? <Posts /> : null}

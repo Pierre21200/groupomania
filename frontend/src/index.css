@@ -131,6 +131,11 @@ h2 {
   border-radius: 30px;
 }
 
+.container-form-create-post {
+  width: 60%;
+  margin: auto;
+}
+
 .modif-profile {
   background-color: red;
   position: fixed;
@@ -176,27 +181,14 @@ h2 {
 
 .card-header {
   display: flex;
-  text-align: center;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.btn-post {
-  margin: 0;
 }
 
 .post-user {
   text-align: left;
-  margin: 0px;
 }
 
-.post-moderate {
-  text-align: right;
-}
-
-.post-title {
+.btn-post {
   margin: 0;
-  text-align: center;
 }
 
 .post-content {
@@ -222,6 +214,10 @@ h2 {
   color: red;
 }
 
+.btn-form {
+  margin-top: 20px;
+}
+
 .msg-no-comment {
   font-style: italic;
 }
@@ -234,6 +230,7 @@ h2 {
 
 .user {
   font-weight: bold;
+  margin-right: 10px;
 }
 
 .btn-see-comments {
@@ -339,7 +336,7 @@ h2 {
 }
 
 .login-header {
-  height: 20%;
+  height: 25%;
   align-items: center;
 }
 
@@ -364,12 +361,12 @@ h2 {
 
 .login-subtitle {
   font-size: 30px;
-  margin-left: 400px;
+  margin-left: 40%;
 }
 
 .form-container {
   display: flex;
-  height: 80%;
+  height: 75%;
   padding: 0px 80px 50px 80px;
 }
 
@@ -405,10 +402,12 @@ form {
 /* Modal */
 .modal-confirm {
   background-color: rgb(39, 111, 228);
-  position: fixed;
-  width: 50%;
+  position: absolute;
+  width: 60%;
   margin: auto;
-  left: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
   padding: 20px;
   border-radius: 30px;
@@ -418,11 +417,12 @@ form {
 
 .modal-infos {
   background-color: rgb(39, 111, 228);
-  position: fixed;
+  position: absolute;
   width: 60%;
   margin: auto;
-  top: 200px;
-  left: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
   padding: 20px;
   border-radius: 30px;
@@ -504,23 +504,52 @@ form {
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 767px) {
   .container-profile-infos {
     width: 80%;
   }
   .buttons-profile {
     width: 80%;
   }
+  .login-subtitle {
+    display: none;
+  }
+  .login-title {
+    margin: auto;
+    font-size: 40px;
+  }
+  .login-header {
+    height: 15%;
+  }
+  .login-logo {
+    display: none;
+  }
+  .login-container-title {
+    padding: 0;
+    height: 100%;
+  }
+  .form-container {
+    flex-direction: column;
+  }
+  .form-log-sign {
+    margin-top: 30px;
+  }
+  .modal-confirm-laptop {
+    display: none;
+  }
+  .modal-confirm-buttons {
+    flex-direction: column;
+    padding: 5px;
+  }
+  .modal-confirm-content {
+    font-size: 15px;
+  }
+  .modal-confirm-title {
+    font-size: 18px;
+  }
 }
 
 @media screen and (max-width: 425px) {
-  h1 {
-    color: red;
-  }
-  h2 {
-    color: green;
-  }
-
   .card-header {
     display: flex;
     flex-direction: column;
@@ -542,5 +571,20 @@ form {
 
   .comment {
     flex-direction: column;
+  }
+  .modal-infos-content {
+    font-size: 15px;
+  }
+  .h1 {
+    font-size: 18px;
+  }
+  .post-user {
+    text-align: center;
+    margin: auto;
+    margin-bottom: 10px;
+  }
+  .post-title {
+    text-align: center;
+    margin: auto;
   }
 }
