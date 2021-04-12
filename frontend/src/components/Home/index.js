@@ -1,11 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import Sidebar from "./Sidebar/index.js";
-import Posts from "./Posts/index.js";
-import Modal from "../SubComponents/Modal/index.js";
+import Layout from "./Layout/index.js";
 import logo from "../../icons/icon-c.png";
 import { UserContext } from "../../App.js";
 import Button from "../SubComponents/Button/index.js";
-import { Redirect } from "react-router";
 
 const Home = ({ userProfile }) => {
   const auth = useContext(UserContext);
@@ -88,9 +85,9 @@ const Home = ({ userProfile }) => {
         </div>
 
         <div className="section-container">
-          {myProfile ? <Posts myProfile={true} /> : null}
-          {userProfile ? <Posts userProfile={true} /> : null}
-          {!userProfile && !myProfile ? <Posts /> : null}
+          {myProfile ? <Layout myProfile={true} /> : null}
+          {userProfile ? <Layout userProfile={true} /> : null}
+          {!userProfile && !myProfile ? <Layout /> : null}
         </div>
       </div>
     </div>

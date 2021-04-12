@@ -21,7 +21,9 @@ import { Redirect, useParams } from "react-router-dom";
 
 const Posts = ({ userProfile, myProfile }) => {
   const userId = useParams();
+
   const auth = useContext(UserContext); // auth Context
+
   const token = localStorage.getItem("token"); // token localStorage
 
   // if userProfile/myProfile is true

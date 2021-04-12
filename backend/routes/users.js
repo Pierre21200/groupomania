@@ -24,10 +24,10 @@ router.put("/profile", auth, multer, userCtrl.updateUserProfile);
 router.put("/profile/password", auth, userCtrl.updatePassword);
 
 // Delete a profil
-router.put("/profile/delete", userCtrl.deleteProfile);
+router.put("/profile/delete", auth, userCtrl.deleteProfile);
 
 //delete a profil pour modo
-router.put("/update", userCtrl.inactiveUser);
+router.put("/update", auth, userCtrl.inactiveUser);
 
 // Execution
 module.exports = router;

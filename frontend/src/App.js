@@ -1,9 +1,6 @@
-// #
-// ``
 import LogIn from "./components/LogIn/index.js";
 import Home from "./components/Home/index.js";
 import Page404 from "./components/Utils/Page404/index.js";
-
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { PrivateRoute } from "./components/Utils/PrivateRoute/index";

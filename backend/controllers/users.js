@@ -3,10 +3,6 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const model = require("../models");
-// const modelC = require("../models/comment");
-// const modelP = require("../models/post");
-
-// Database Route
 
 // POST Signup User
 exports.signup = async (req, res) => {
