@@ -18,7 +18,7 @@ Développement Backend: node.js, express, jsonwebtoken, helmet et bcrypt.
 
 - Pour finir, tapez la commande "npm start"
 
-## Pour la base de donnée : MySql et l'orm sequelize
+## Concernant le backend :
 
 - Dans le dossier backend, renommer le fichier .env.example par .env, puis remplissez les variables du fichier
 
