@@ -19,7 +19,7 @@ import {
 import { getUser, updateProfile } from "../../Utils/FetchData/Users/index";
 import { Redirect, useParams } from "react-router-dom";
 
-const Posts = ({ userProfile, myProfile }) => {
+const Layout = ({ userProfile, myProfile }) => {
   const userId = useParams();
 
   const auth = useContext(UserContext); // auth Context
@@ -38,7 +38,6 @@ const Posts = ({ userProfile, myProfile }) => {
 
   // Concernant toutes les logiques pour déployer des fenêtres
   const [dropdownCreatePost, setDropdownCreatePost] = useState(false); // faire apparaitre création de poste
-  const [dropdownUpdateProfile, setDropdownUpdateProfile] = useState(false);
   const [dropdownUpdateInfos, setDropdownUpdateInfos] = useState(false);
   const [dropdownUpdatePassword, setDropdownUpdatePassword] = useState(false);
   const [deleteProfile, setDeleteProfile] = useState(false);
@@ -324,4 +323,4 @@ const Posts = ({ userProfile, myProfile }) => {
   );
 };
 
-export default Posts;
+export default Layout;

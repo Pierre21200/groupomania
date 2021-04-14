@@ -4,7 +4,6 @@ import {
   updateComment
 } from "../../../Utils/FetchData/Comments/index";
 import { Redirect } from "react-router-dom";
-
 import User from "../../../SubComponents/User/index";
 import Button from "../../../SubComponents/Button/index";
 import { UserContext } from "../../../../App.js";

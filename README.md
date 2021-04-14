@@ -1,10 +1,18 @@
-Groupomania : Développement d'un réseau social interne
+# Groupomania : Développement d'un réseau social interne
 
-Développement Front-end : react (utilisation des hooks), react router, jsonwebtoken pour l'authentification.
+## Développement Front-end : react (utilisation des hooks), react router, jsonwebtoken pour l'authentification.
 
-Développement Backend : node.js, express, jsonwebtoken, helmet et bcrypt.
+- npm install :
 
-Pour la base de donnée : MySql et l'orm sequelize
+  - axios
+  - bcrypt
+  - jsonwebtoken
+
+- Concernant le frontend, déplacez vous dans le dossier frontend à l’aide de la commande "cd frontend", puis tapez "npm start".
+
+## Développement Backend : node.js, express, jsonwebtoken, helmet et bcrypt.
+
+## Pour la base de donnée : MySql et l'orm sequelize
 
 - Git clôner le projet
 
@@ -18,11 +26,20 @@ Pour la base de donnée : MySql et l'orm sequelize
   - Si vous souhaitez remplir la base de données avec des informations, tapez la commande "npm run fill_db"
   - Pour finir, tapez la commande "npm start"
 
-Concernant le frontend, déplacez vous dans le dossier frontend à l’aide de la commande "cd frontend", puis tapez "npm start".
-
 Vous pouvez maintenant vous connecter avec le compte modérateur suivant :
 
 Email : administrateur: admin@gmail.com
 Mot de passe: administrateur123
 
 Ou créer un compte normal.
+
+PORT=4200
+
+SQL_HOST=localhost
+SQL_DB=groupomania
+JWT_SECRET=t2uxm0dsvf1
+JWT_EXPIRES=24h
+
+REACT_APP_API_URL=http://localhost:4200
+
+REACT_APP_JWT_SECRET=t2uxm0dsvf1

@@ -39,6 +39,7 @@ module.exports = {
       }
     });
   },
+  // permet d'annuler la migration qu'on vient de faire
   down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Users");
   }
