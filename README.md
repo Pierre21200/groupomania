@@ -10,11 +10,7 @@ Développement Backend: node.js, express, jsonwebtoken, helmet et bcrypt.
 
 - Dans le dossier frontend, renommer le fichier .env.example par .env, puis remplissez les variables du fichier
 
-- Dans l'invite de commande déplacez vous dans le dossier frontend avec la commande cd frontend, puis installez les dépendances avec la commande "npm install" suivi du nom de la dépendance :
-
-  - axios
-  - bcrypt
-  - jsonwebtoken
+- Dans l'invite de commande déplacez vous dans le dossier frontend avec la commande cd frontend, puis installez les dépendances avec la commande "npm install"
 
 - Pour finir, tapez la commande "npm start"
 
@@ -24,12 +20,7 @@ Développement Backend: node.js, express, jsonwebtoken, helmet et bcrypt.
 
 - Dans le dossier backend > config > config.json : remplacez les valeur username et password par les valeurs souhaitées.
 
-- Dans l'invite de commande déplacez vous dans le dossier backend avec la commande cd backend, puis installez les dépendances avec la commande "npm install" suivi du nom de la dépendance :
-
-  - sequelize
-  - mysql
-  - jsonwebtoken
-  - bcrypt
+- Dans l'invite de commande déplacez vous dans le dossier backend avec la commande cd backend, puis installez les dépendances avec la commande "npm install"
 
 - Au même niveau :
   - Tapez la commande "npm run create_db"
