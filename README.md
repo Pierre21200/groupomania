@@ -35,5 +35,5 @@ Mot de passe: administrateur123
 Ou créer un compte normal
 
 
-Pour lancer avec github : https://Pierre21200.github.io/groupomania
+
 
