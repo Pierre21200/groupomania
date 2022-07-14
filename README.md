@@ -32,4 +32,8 @@ Vous pouvez maintenant vous connecter avec le compte modérateur suivant :
 Email : administrateur: admin@gmail.com
 Mot de passe: administrateur123
 
-Ou créer un compte normal.
+Ou créer un compte normal
+
+
+Pour lancer avec github : https://Pierre21200.github.io/groupomania
+
